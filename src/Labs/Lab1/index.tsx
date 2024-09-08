@@ -250,10 +250,8 @@ export default function Lab1() {
             </div>
 
             <h4>Anchor tag</h4>
-            Please
-            <a id="wd-lipsum" href="https://www.lipsum.com">click here</a>
-            to get dummy text<br/>
-            <a id="wd-github">todo: set the href attribute to be the github repo!</a>
+            Please <a id="wd-lipsum" href="https://www.lipsum.com">click here</a> to get dummy text<br/>
+            source code repository <a id="wd-github" href="https://github.com/estelita24601/kanbas-react-app">here</a>
         </div>
     );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 //create an element called Lab1 that will be used inside of Labs/index.ts
 export default function Lab1() {
     return (

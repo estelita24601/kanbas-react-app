@@ -1,9 +1,6 @@
-//import logo from './logo.svg';
 import './App.css';
 import Labs from "./Labs";
-import React from 'react';
-import {HashRouter, Route, Routes, Navigate} from "react-router-dom";
-import Lab1 from "./Labs/Lab1";
+import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import Kanbas from "./Kanbas";
 
 function App() {
@@ -13,7 +10,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to="Labs" />} />
                     <Route path="/Labs/*" element={<Labs />} />
-                    <Route path="/Kanbas" element={<Kanbas />} />
+                    <Route path="/Kanbas/*" element={<Kanbas />} />
                 </Routes>
             </div>
         </HashRouter>

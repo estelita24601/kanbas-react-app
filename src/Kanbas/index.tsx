@@ -12,10 +12,11 @@ export default function Kanbas() {
             <table>
                 <tbody>
                 <tr>
-                    <td valign="top" width="100px" style={{backgroundColor: "lavenderblush"}}>
+                    <td valign="top" width="100px" style={{backgroundColor: "#D2E0FB", padding:"10px"}}>
                         <KanbasNavigation/>
                     </td>
 
+                    {/*column just for spacing*/}
                     <td width="25px"></td>
 
                     <td valign="top">

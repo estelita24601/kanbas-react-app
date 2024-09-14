@@ -6,13 +6,13 @@ export default function Home() {
         <div>
             <table>
                 <tbody>
-                <tr>
-                    <td><Modules/></td>
+                    <tr>
+                        <td><Modules /></td>
 
-                    <td width="20px"></td>
+                        <td width="20px"></td>
 
-                    <td valign={"top"} style = {{backgroundColor: "#fff7f7", padding:"10px"}}><CourseStatus/></td>
-                </tr>
+                        <td valign={"top"} style={{ backgroundColor: "#fff7f7", padding: "10px" }}><CourseStatus /></td>
+                    </tr>
                 </tbody>
 
             </table>

@@ -27,14 +27,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/dbms.png" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5200
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #2
+                            Database Management Systems
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>
@@ -43,14 +43,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/android_logo.png" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5520
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #3
+                            Mobile Application Development
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>
@@ -59,14 +59,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/python.png" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5001
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #4
+                            Intensive Foundations of Computer Science
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>
@@ -75,14 +75,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/fibonacci.png" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5002
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #5
+                            Discrete Structures
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>
@@ -91,14 +91,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/design.jpeg" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5004
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #6
+                            Object-Oriented Design
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>
@@ -107,30 +107,14 @@ export default function Dashboard() {
                 </div>
 
                 <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
+                    <img src="/images/dsa.png" width={200}/>
                     <div>
                         <Link className="wd-dashboard-course-link"
                               to="/Kanbas/Courses/1234/Home">
-                            todo
+                            CS 5008
                         </Link>
                         <p className="wd-dashboard-course-title">
-                            TODO: class #7
-                        </p>
-                        <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
-                        <hr color="lightgray"/>
-                        <br/>
-                    </div>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <img src="/images/reactjs.jpg" width={200}/>
-                    <div>
-                        <Link className="wd-dashboard-course-link"
-                              to="/Kanbas/Courses/1234/Home">
-                            todo
-                        </Link>
-                        <p className="wd-dashboard-course-title">
-                            TODO: class #2
+                            Data Structures and Algorithms
                         </p>
                         <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
                         <hr color="lightgray"/>

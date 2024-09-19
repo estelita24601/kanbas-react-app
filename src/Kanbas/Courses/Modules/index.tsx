@@ -7,7 +7,7 @@ export default function Modules() {
 
             <select>
                 <option>Publish All</option>
-                <option>Save All</option>
+                <option>Publish</option>
                 <option>Export All</option>
             </select>
 

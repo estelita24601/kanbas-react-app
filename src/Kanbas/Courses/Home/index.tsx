@@ -4,18 +4,17 @@ import CourseStatus from "./Status";
 export default function Home() {
     return (
         <div>
-            <table>
-                <tbody>
-                    <tr>
-                        <td><Modules /></td>
+            <div className="d-flex" id="wd-home">
 
-                        <td width="20px"></td>
+                <div className="flex-fill">
+                    <Modules />
+                </div>
 
-                        <td valign={"top"} style={{ backgroundColor: "#fff7f7", padding: "10px" }}><CourseStatus /></td>
-                    </tr>
-                </tbody>
+                <div className="d-none d-md-block">
+                    <CourseStatus />
+                </div>
 
-            </table>
+            </div>
         </div>
     );
 }

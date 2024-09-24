@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 export default function Dashboard() {
     return (
@@ -24,7 +25,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Full Stack software developer
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -43,7 +44,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Database Management Systems
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -62,7 +63,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Mobile Application Development
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -81,7 +82,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Intensive Foundations of Computer Science
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -100,7 +101,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Object Oriented Design
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -119,7 +120,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Data Structures and Algorithms
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>
@@ -138,7 +139,7 @@ export default function Dashboard() {
                                     <p className="wd-dashboard-course-title card-text">
                                         Discrete Structures
                                     </p>
-                                    <button className="btn btn-primary"> Go </button>
+                                    <button className="btn btn-primary"> <FaHome /> </button>
                                 </div>
                             </Link>
                         </div>

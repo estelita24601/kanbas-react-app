@@ -1,24 +1,47 @@
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import { BsGripVertical } from "react-icons/bs";
+import ModuleControlButtons from "../Modules/ModuleControlButtons";
+
 export default function Assignments() {
     return (
-        <div id="wd-assignments">
+        <div id="wd-assignments" className="ms-4">
             <input id="wd-search-assignment" placeholder="Search for Assignments" />
             <button id="wd-add-assignment-group">+ Group</button>
             <button id="wd-add-assignment">+ Assignment</button>
-            <h3 id="wd-assignments-title">
-                ASSIGNMENTS 40% of Total <button>+</button>
-            </h3>
-            <ul id="wd-assignment-list">
-                <li className="wd-assignment-list-item">
-                    <a
-                        className="wd-assignment-link"
-                        href="#/Kanbas/Courses/1234/Assignments/123"
-                    >
-                        A1 - ENV + HTML
-                    </a><br />
-                    Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13
-                    at 11:59pm | 100 pts
+
+            <br /><br />
+
+            <ul id="wd-assignment-list list-group rounded-0">
+
+                <li className="list-group-item p-0 mb-5 fs-5 border-gray">
+                    <div className="wd-title p-3 ps-2 bg-secondary">
+                        <BsGripVertical className="me-2 fs-3" />
+                        ASSIGNMENTS
+                        <BiDotsVerticalRounded className="mx-2 fs-3 float-end" />
+                        <button className="float-end ms-4">+</button>
+                        <i className="float-end">40% of Total</i>
+                    </div>
                 </li>
-                <li className="wd-assignment-list-item">
+
+                <ul className="wd-lessons list-group rounded-0">
+                    <li className="wd-assignment-list-item list-group-item p-3 ps-1">
+                        <BsGripVertical className="me-2 fs-3" />
+                        <a
+                            className="wd-assignment-link"
+                            href="#/Kanbas/Courses/1234/Assignments/123"
+                        >
+                            A1 - ENV + HTML
+                        </a><br />
+                        Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13
+                        at 11:59pm | 100 pts
+
+                    </li>
+
+                </ul>
+
+
+
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
                     <a
                         className="wd-assignment-link"
                         href="#/Kanbas/Courses/1234/Assignments/123"
@@ -28,7 +51,8 @@ export default function Assignments() {
                     Multiple Modules | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20
                     at 11:59pm | 100 pts
                 </li>
-                <li className="wd-assignment-list-item">
+
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
                     <a
                         className="wd-assignment-link"
                         href="#/Kanbas/Courses/1234/Assignments/123"
@@ -38,7 +62,8 @@ export default function Assignments() {
                     Multiple Modules | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27
                     at 11:59pm | 100 pts
                 </li>
-                <li className="wd-assignment-list-item">
+
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
                     <a
                         className="wd-assignment-link"
                         href="#/Kanbas/Courses/1234/Assignments/123"

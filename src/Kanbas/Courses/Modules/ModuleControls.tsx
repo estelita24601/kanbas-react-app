@@ -18,6 +18,7 @@ export default function ModulesControls() {
                     <GreenCheckmark />
                     Publish All
                 </button>
+
                 <ul className="dropdown-menu">
                     <li>
                         <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item py-2" href="#">
@@ -45,8 +46,20 @@ export default function ModulesControls() {
                     </li>
 
                 </ul>
+
+
             </div>
-            {/* TODO: Implement the View Progress and Collapse All buttons with IDs wd-view-progress and wd-collapse-all */}
+
+            <button id="wd-view-progress" className="btn btn-lg btn-secondary me-1 float-end"
+                type="button">
+                View Progress
+            </button>
+
+            <button id="wd-collapse-all" className="btn btn-lg btn-secondary me-1 float-end"
+                type="button">
+                Collapse All
+            </button>
+
         </div>
     );
 }

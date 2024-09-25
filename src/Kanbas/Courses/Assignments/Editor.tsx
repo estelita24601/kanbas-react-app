@@ -1,6 +1,6 @@
 export default function AssignmentEditor() {
     return (
-        <div id="wd-assignments-editor">
+        <div id="wd-assignments-editor" className="ms-4">
 
             <label>
                 <h3>Assignment Name</h3>

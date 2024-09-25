@@ -8,7 +8,7 @@ import PeopleTable from "./People/Table";
 
 export default function Courses() {
     return (
-        <div id="wd-courses">
+        <div id="wd-courses" className="ms-4">
             <h2 className="text-danger">Course 1234 </h2> <hr />
 
             <div className="d-flex">

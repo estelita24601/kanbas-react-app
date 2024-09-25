@@ -25,7 +25,7 @@ export default function Modules() {
                     <ul className="wd-lessons list-group rounded-0">
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            LEARNING OBJECTIVES
+                            <b>LEARNING OBJECTIVES</b>
                             <LessonControlButtons />
                         </li>
 
@@ -57,7 +57,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            READING
+                            <b>READING</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -73,7 +73,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            SLIDES
+                            <b>SLIDES</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -153,7 +153,7 @@ export default function Modules() {
                     <ul className="wd-lessons list-group rounded-0">
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            LEARNING OBJECTIVES
+                            <b>LEARNING OBJECTIVES</b>
                             <LessonControlButtons />
                         </li>
 
@@ -177,7 +177,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            READING
+                            <b>READING</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -193,7 +193,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            SLIDES
+                            <b>SLIDES</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -223,7 +223,7 @@ export default function Modules() {
                     <ul className="wd-lessons list-group rounded-0">
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            LEARNING OBJECTIVES
+                            <b>LEARNING OBJECTIVES</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -254,7 +254,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            READING
+                            <b>READING</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">
@@ -265,7 +265,7 @@ export default function Modules() {
 
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
-                            SLIDES
+                            <b>SLIDES</b>
                             <LessonControlButtons />
                         </li>
                         <li className="wd-content-item list-group-item ps-1">

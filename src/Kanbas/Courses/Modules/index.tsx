@@ -11,6 +11,7 @@ export default function Modules() {
             <br />
             <br />
 
+            {/* unordered list for all the modules */}
             <ul id="wd-modules" className="list-group rounded-0">
                 {/* MODULE 1 */}
                 <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
@@ -21,7 +22,7 @@ export default function Modules() {
                         <ModuleControlButtons />
                     </div>
 
-                    {/* Module Content */}
+                    {/* list for one module's content */}
                     <ul className="wd-lessons list-group rounded-0">
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />

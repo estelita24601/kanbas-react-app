@@ -36,6 +36,8 @@ body * {
     --bs-list-group-border-color: gray;
 }
 
-.wd-lesson {
-    border-left: 3px solid green !important;
+/* makes the little green bar on the left */
+.wd-lesson,
+.wd-assignment-list-item {
+    border-left: 4px solid green !important;
 }

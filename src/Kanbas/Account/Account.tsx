@@ -4,6 +4,7 @@ import Signup from "./Signup";
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AccountNavigation from "./Navigation";
 
+// FIXME: content is too far left
 export default function Account() {
     return (<div id="wd-account-screen" className="container">
         <h2>Account</h2>

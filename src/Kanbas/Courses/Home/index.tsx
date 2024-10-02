@@ -4,6 +4,7 @@ import CourseStatus from "./Status";
 export default function Home() {
     return (
         <div>
+            {/* FIXME: looks bad when really skinny */}
             <div className="d-flex" id="wd-home">
 
                 <div className="flex-fill">

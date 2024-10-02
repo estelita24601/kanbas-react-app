@@ -15,11 +15,11 @@ export default function AssignmentEditor() {
             {/* FIXME: doesn't look exactly like the picture */}
             <div className="mt-3 mb-5">
                 <textarea id="wd-description" className="form-control form-control-lg" cols={30} rows={10}>
-                    The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following: Your full name and section, Links to each of the lab assignments, Link to the Kanbas application, Links to all relevant source code repositories. The Kanvas application should include a link to navigate back to the landing page.
+                    The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following: Your full name and section, Links to each of the lab assignments, Link to the Kanbas application, Links to all relevant source code repositories. The Kanbas application should include a link to navigate back to the landing page.
                 </textarea>
             </div>
 
-            {/* FIXME: doesn't actualy justify all the way to end */}
+            {/* FIXME: doesn't actually justify all the way to end */}
             <div className="container d-flex flex-column justify-content-end">
                 {/* Points Section */}
                 <div className="row my-4">

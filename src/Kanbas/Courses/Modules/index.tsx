@@ -4,15 +4,11 @@ import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 export default function Modules() {
     return (
-        <div className="mx-5">
+        <div className="d-flex flex-column">
             <ModulesControls />
-            <br />
-            <br />
-            <br />
-            <br />
 
             {/* unordered list for all the modules */}
-            <ul id="wd-modules" className="list-group rounded-0">
+            <ul id="wd-modules" className="list-group rounded-0 mt-4">
                 {/* MODULE 1 */}
                 <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
                     {/* Module Title Bar */}

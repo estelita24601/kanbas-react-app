@@ -6,13 +6,11 @@ import AccountNavigation from "./Navigation";
 
 // FIXME: content is too far left
 export default function Account() {
-    return (<div id="wd-account-screen" className="container">
-        <h2>Account</h2>
-        <div className="row">
-            <div className="col">
+    return (
+        <div id="wd-account-screen">
+            <h2>Account</h2>
+            <div className="d-flex">
                 <AccountNavigation />
-            </div>
-            <div className="col">
                 <Routes>
                     {/*Make the default path go to the sign in page*/}
                     <Route path="/" element={<Navigate to="/Kanbas/Account/Signin" />} />
@@ -21,9 +19,9 @@ export default function Account() {
                     <Route path="/Signup" element={<Signup />} />
                 </Routes>
             </div>
+
+
+
         </div>
-
-
-
-    </div>);
+    );
 }

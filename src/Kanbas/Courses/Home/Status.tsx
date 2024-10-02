@@ -11,7 +11,7 @@ import { LiaFileImportSolid } from "react-icons/lia";
 
 export default function CourseStatus() {
     return (
-        <div id="wd-course-status" style={{ width: "300px" }}>
+        <div id="wd-course-status" className="ms-5 d-none d-xl-block" style={{ width: "300px" }}>
             <h2>Course Status</h2>
 
             {/* publish and unpublish buttons */}

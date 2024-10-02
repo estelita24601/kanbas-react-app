@@ -13,11 +13,11 @@ export default function Courses() {
 
             <div className="d-flex">
 
-                <div className="d-none d-md-block">
+                <div className="d-none d-lg-block me-5">
                     <CoursesNavigation />
                 </div>
 
-                <div className="flex-fill">
+                <div className="flex-lg-grow-1">
                     <Routes>
                         <Route path="/" element={<Navigate to="Home" />} />
                         <Route path="/Home" element={<Home />} />

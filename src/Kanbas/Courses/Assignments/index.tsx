@@ -6,7 +6,7 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 
 export default function Assignments() {
     return (
-        <div id="wd-assignments" className="ms-4">
+        <div id="wd-assignments" className="">
 
             {/* search bar and buttons */}
             <span id="wd-assignment-search-bar">

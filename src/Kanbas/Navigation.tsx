@@ -26,7 +26,7 @@ export default function KanbasNavigation() {
                 Dashboard
             </Link>
 
-            <Link to="/Kanbas/Dashboard" id="wd-course-link" className="list-group-item text-white bg-black text-center border-0">
+            <Link to="/Kanbas/Courses/1234" id="wd-course-link" className="list-group-item text-white bg-black text-center border-0">
                 <LiaBookSolid className="fs-1 text-danger" /><br />
                 Courses
             </Link>

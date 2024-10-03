@@ -1,4 +1,4 @@
-// FIXME: GreenCheck and RedCross don't look the same in dropdown menu
+// FIXME: white circle isn't perfectly aligned
 import RedCrossMark from "./RedCrossmark";
 import GreenCheckmark from "./GreenCheckmark";
 import { FaPlus } from "react-icons/fa6";

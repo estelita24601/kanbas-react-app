@@ -1,5 +1,3 @@
-//TODO: section 3.3.5
-
 export default function ScreenSizeLabel() {
     return (
         <div id="wd-screen-size-label">

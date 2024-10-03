@@ -25,7 +25,7 @@ export default function BootstrapNavigation() {
                 <div className="card"
                     style={{ width: "18rem" }}>
 
-                    {/* TODO: choose my own picture */}
+                    {/* FIXME: put a picture here! */}
                     <img src="images/stacked.jpg"
                         className="card-img-top" />
                     <div className="card-body">

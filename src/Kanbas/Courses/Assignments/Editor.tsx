@@ -142,7 +142,8 @@ export default function AssignmentEditor() {
                             </div>
 
                             {/* FIXME: two columns turn into one row when screen is smaller */}
-                            <div className="row">
+                            <div className="row text-nowrap">
+
                                 <div className="col">
                                     <label className="form-label d-flex flex-column">
                                         <b>Available From:</b>
@@ -156,6 +157,7 @@ export default function AssignmentEditor() {
                                         <input id="wd-available-until" className="form-control" type="date" />
                                     </label>
                                 </div>
+
                             </div>
                         </div>
                     </div>

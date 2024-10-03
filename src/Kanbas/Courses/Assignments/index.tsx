@@ -6,24 +6,30 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 
 export default function Assignments() {
     return (
-        <div id="wd-assignments" className="">
+        <div id="wd-assignments" className="d-flex flex-column">
 
-            {/* search bar and buttons */}
-            <span id="wd-assignment-search-bar">
-                {/* TODO: get this search icon inside of the input form */}
-                <BsSearch className="fs-4" />
-                <input id="wd-search-assignment" className="rounded-1 fs-4" placeholder="Search..." />
-            </span>
-            <button id="wd-add-assignment" className="btn btn-lg btn-danger me-1 float-end">+ Assignment</button>
-            <button id="wd-add-assignment-group" className="btn btn-lg btn-secondary dropdown-toggle me-1 float-end">+ Group</button>
-            <br /><br />
+            <div className="d-flex align-items-center mb-4">
+                {/* search bar*/}
+                <span className="input-group me-5 px-2 ms-4">
+                    <span className="input-group-text" id="basic-addon1">
+                        <BsSearch className="fs-5" />
+                    </span>
+                    <input id="wd-search-assignment" type="text" className="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1" />
+                </span>
+
+                {/* add assignment group button */}
+                <button id="wd-add-assignment-group" className="btn btn-lg btn-secondary dropdown-toggle mx-1" >+ Group</button>
+
+                {/* new assignment button */}
+                <button id="wd-add-assignment" className="btn btn-lg btn-danger ms-1 text-nowrap">+ Assignment</button>
+            </div>
+
 
             <ul id="wd-assignment-list list-group rounded-0">
 
                 <li className="list-group-item p-0 mb-5 fs-5 border-gray">
 
                     {/* title bar with controls */}
-                    {/* FIXME: doesn't look right when screen is really skinny */}
                     <div className="wd-title d-flex align-content-center justify-content-between p-3 ps-2 bg-secondary">
 
                         <span>
@@ -159,6 +165,6 @@ export default function Assignments() {
                 </li>
 
             </ul>
-        </div>
+        </div >
     );
 }

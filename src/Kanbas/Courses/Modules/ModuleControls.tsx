@@ -19,9 +19,10 @@ export default function ModulesControls() {
                     Publish All
                 </button>
 
+
                 <ul className="dropdown-menu">
                     <li>
-                        <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item py-2" href="#">
+                        <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item" href="#">
                             <GreenCheckmark />
                             Publish all modules and items
                         </a>
@@ -32,6 +33,7 @@ export default function ModulesControls() {
                             Publish modules only
                         </a>
                     </li>
+
                     <li>
                         <a id="wd-unpublish-all-modules-and-items" className="dropdown-item" href="#">
                             <RedCrossMark />

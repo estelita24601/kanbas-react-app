@@ -6,7 +6,7 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 
 export default function Assignments() {
     return (
-        <div id="wd-assignments" className="d-flex flex-column">
+        <div id="wd-assignments" className="d-flex flex-column me-4">
 
             <div className="d-flex align-items-center mb-4">
                 {/* search bar*/}

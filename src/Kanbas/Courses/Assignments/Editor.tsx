@@ -1,11 +1,11 @@
 export default function AssignmentEditor() {
     return (
-        <div id="wd-assignments-editor" className="ms-4">
+        <div id="wd-assignments-editor" className="mx-3">
 
             {/* Assignment Name Section */}
-            <div className="my-4">
+            <div className="my-4 me-3">
                 <label htmlFor="wd-name" className="form-label">
-                    <h3>Assignment Name</h3>
+                    <h5>Assignment Name</h5>
                 </label>
 
                 <input id="wd-name" type="text" className="form-control form-control-lg" placeholder="Assignment Name" value={"A1 - ENV + HTML"} />
@@ -13,7 +13,7 @@ export default function AssignmentEditor() {
 
             {/* Assignment Description Section */}
             {/* FIXME: doesn't look exactly like the picture */}
-            <div className="mt-3 mb-5">
+            <div className="mt-3 mb-5 me-3">
                 <textarea id="wd-description" className="form-control form-control-lg" cols={30} rows={10}>
                     The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following: Your full name and section, Links to each of the lab assignments, Link to the Kanbas application, Links to all relevant source code repositories. The Kanbas application should include a link to navigate back to the landing page.
                 </textarea>
@@ -29,7 +29,7 @@ export default function AssignmentEditor() {
                         </label>
                     </div>
 
-                    <div className="col align-items-center d-flex align-items-center">
+                    <div className="col align-items-center d-flex align-items-center justify-content-end">
                         <input id="wd-points" type="number" placeholder="100" min="0" className="form-control" />
                     </div>
                 </div>
@@ -68,7 +68,6 @@ export default function AssignmentEditor() {
                     </div>
                 </div>
 
-                {/* FIXME: the border isn't the same size */}
                 {/* Submission Type Section */}
                 <div className="row my-4">
                     <div className="col d-flex align-items-center justify-content-end">

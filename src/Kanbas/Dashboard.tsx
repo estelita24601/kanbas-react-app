@@ -9,7 +9,6 @@ export default function Dashboard() {
 
             <div id="wd-dashboard-courses" className="row">
 
-
                 <div className="row row-cols-1 row-cols-md-5 g-4">
 
                     {/* CS 1234 */}
@@ -19,13 +18,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/reactjs.jpg" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS1234 React JS
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Full Stack software developer
+                                        <div className="fst-italic text-secondary pt-1">2024 Fall</div>
                                     </p>
-                                    <button className="btn btn-primary "><AiOutlineHome /> </button>
+                                    <button className="btn btn-primary ">Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -38,13 +38,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/dbms.png" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5200
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Database Management Systems
+                                        <div className="fst-italic text-secondary pt-1">2024 Summer</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -57,13 +58,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/android_logo.png" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5520
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Mobile Application Development
+                                        <div className="fst-italic text-secondary pt-1">2024 Summer</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -76,13 +78,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/python.png" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5001
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
-                                        Intensive Foundations of Computer Science
+                                        Foundations of Computer Science
+                                        <div className="fst-italic text-secondary pt-1">2023 Fall</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -95,13 +98,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/design.jpeg" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5004
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Object Oriented Design
+                                        <div className="fst-italic text-secondary pt-1">2024 Spring</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -114,13 +118,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/dsa.png" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5008
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Data Structures and Algorithms
+                                        <div className="fst-italic text-secondary pt-1">2024 Spring</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>
@@ -133,13 +138,14 @@ export default function Dashboard() {
                                 to="/Kanbas/Courses/1234/Home">
                                 <img src="/images/fibonacci.png" width="100%" height={160} />
                                 <div className="card-body">
-                                    <h5 className="wd-dashboard-course-title card-title">
+                                    <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                                         CS 5002
                                     </h5>
                                     <p className="wd-dashboard-course-title card-text">
                                         Discrete Structures
+                                        <div className="fst-italic text-secondary pt-1">2023 Fall</div>
                                     </p>
-                                    <button className="btn btn-primary"> <AiOutlineHome /> </button>
+                                    <button className="btn btn-primary"> Go </button>
                                 </div>
                             </Link>
                         </div>

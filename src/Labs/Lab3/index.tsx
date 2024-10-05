@@ -1,4 +1,6 @@
 import BooleanVariables from "./BooleanVariables";
+import IfElse from "./IfElse";
+import TernaryOperator from "./TernaryOperator";
 import VariablesAndConstants from "./VariablesAndConstants";
 import VariableTypes from "./VariableTypes";
 
@@ -9,6 +11,8 @@ export default function Lab3() {
             <VariablesAndConstants />
             <VariableTypes />
             <BooleanVariables />
+            <IfElse />
+            <TernaryOperator />git s
         </div>
     );
 }

@@ -1,8 +1,14 @@
+import BooleanVariables from "./BooleanVariables";
+import VariablesAndConstants from "./VariablesAndConstants";
+import VariableTypes from "./VariableTypes";
+
 export default function Lab3() {
     return (
-        <div>
-            <h2>Lab 3</h2>
-            <p>due Thursday 10/17 at 9pm PST</p>
+        <div id="wd-lab3">
+            <h3>Lab 3</h3>
+            <VariablesAndConstants />
+            <VariableTypes />
+            <BooleanVariables />
         </div>
     );
 }

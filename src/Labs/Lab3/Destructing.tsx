@@ -5,6 +5,8 @@ export default function Destructing() {
     // const age = person.age
     const numbers = ["one", "two", "three"];
     const [ first, second, third ] = numbers;
+
+    
     return (
         <div id="wd-destructing">
             <h2>Destructing</h2>

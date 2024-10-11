@@ -1,3 +1,5 @@
+// SECTION 2.4.9 - JSON
+
 export default function House() {
     const house = {
         bedrooms: 4,
@@ -12,6 +14,7 @@ export default function House() {
         },
         owners: ["Alice", "Bob"],
     };
+    
     return (
         <div id="wd-house">
             <h4>House</h4>

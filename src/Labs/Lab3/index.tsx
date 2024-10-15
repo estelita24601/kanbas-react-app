@@ -30,8 +30,12 @@ import Styles from "./Styles";
 import Add from "./Add";
 import Square from "./Square"
 import Highlight from "./Highlight";
+import PathParameters from './PathParameters';
+import AddPathParameters from "./AddPathParameters";
 
 export default function Lab3() {
+    console.log('Hello World!');
+    
     return (
         <div id="wd-lab3">
             <h3>Lab 3</h3>
@@ -73,7 +77,10 @@ export default function Lab3() {
                 vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
             </Highlight>
 
-            {/* NOTE: finished 2.6.1 now need to do 2.6.2 */}
+            {/* SECTION 2.6.3 */}
+            <PathParameters />
+            <AddPathParameters />
+
 
         </div>
     );

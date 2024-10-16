@@ -1,8 +1,9 @@
 import * as db from "../../Database"
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function AssignmentEditor() {
-    //const cid = useParams().cid;
+    const cid = useParams().cid;
     const aid = useParams().aid;
     const assignment = db.assignments.filter((a) => a._id === aid)[0];
 
@@ -76,7 +77,6 @@ export default function AssignmentEditor() {
                     </div>
                 </div>
 
-                {/* TODO */}
                 {/* Submission Type Section */}
                 <div className="row my-4">
                     <div className="col d-flex align-items-center justify-content-end">
@@ -86,11 +86,13 @@ export default function AssignmentEditor() {
                     </div>
 
                     <div className="col ms-3 me-2 form-control d-flex flex-column align-items-start ">
+                        {/* TODO: select an option based on JSON? */}
                         <select id="wd-submission-type" className="form-select mt-2 mb-4">
                             <option selected>Online</option>
                             <option>Physical</option>
                         </select>
 
+                        {/* TODO: select checkboxes based on JSON? */}
                         <b>Online Entry Options</b>
                         <form className="form-check">
                             <label className="form-check-label my-2">
@@ -118,12 +120,9 @@ export default function AssignmentEditor() {
                                 File Uploads
                             </label><br />
                         </form>
-
-
                     </div>
                 </div>
 
-                {/* TODO */}
                 {/* Assign Section */}
                 <div className="row my-4">
                     <div className="col d-flex align-items-center justify-content-end">
@@ -137,6 +136,7 @@ export default function AssignmentEditor() {
                             <div className="row">
                                 <label className="form-label">
                                     <b>Assign To</b>
+                                    {/* TODO: maybe have value come from the JSON? */}
                                     <input className="form-control" id="wd-assign-to" value="Everyone" />
                                 </label>
                             </div>
@@ -169,18 +169,20 @@ export default function AssignmentEditor() {
                     </div>
                 </div>
 
-                {/* TODO: go back to assignment screen after hitting either buttons */}
                 {/* Buttons */}
                 <div className="row my-5">
                     <hr />
                     <div className="d-flex justify-content-end">
-                        <button type="button" className="btn btn-secondary btn-lg mx-2">Cancel</button>
-                        <button type="button" className="btn btn-danger btn-large btn-lg mx-2">Save</button>
+                        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                            <button type="button" className="btn btn-secondary btn-lg mx-2">Cancel</button>
+                        </Link>
+                        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                            <button type="button" className="btn btn-danger btn-large btn-lg mx-2">Save</button>
+                        </Link>
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 }
+

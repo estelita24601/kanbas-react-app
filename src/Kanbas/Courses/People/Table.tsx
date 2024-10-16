@@ -1,7 +1,13 @@
+// TODO: section 3.9
+import { useParams } from "react-router-dom";
+import * as db from "../../Database";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 
 export default function PeopleTable() {
+    const { cid } = useParams();
+    const { users, enrollments } = db;
+
     return (
         <div id="wd-people-table" className="ms-4">
             <table className="table table-striped table-responsive-xxl">

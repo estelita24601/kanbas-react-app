@@ -7,6 +7,10 @@ export default function AssignmentEditor() {
     const aid = useParams().aid;
     const assignment = db.assignments.filter((a) => a._id === aid)[0];
 
+    const groupOptions = ["ASSIGNMENTS", "QUIZZES", "EXAMS", "PROJECTS"]
+    const gradeDisplayOptions = ["Percentage", "Letter Grade"]
+    const submissionTypeOptions = ["Online", "Physical"]
+    const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"]
 
     return (
         <div id="wd-assignments-editor" className="mx-3">
@@ -41,7 +45,6 @@ export default function AssignmentEditor() {
                     </div>
                 </div>
 
-                {/* TODO */}
                 {/* Assignment Group Section */}
                 <div className="row my-4">
                     <div className="col d-flex align-items-center justify-content-end">
@@ -52,15 +55,19 @@ export default function AssignmentEditor() {
 
                     <div className="col align-items-center d-flex align-items-center">
                         <select id="wd-group" className="form-select">
-                            <option selected>ASSIGNMENTS</option>
-                            <option>QUIZZES</option>
-                            <option>EXAMS</option>
-                            <option>PROJECT</option>
+                            {
+                                groupOptions.map((group) => {
+                                    if (assignment.group === group) {
+                                        return (<option selected value={group}>{group}</option>)
+                                    } else {
+                                        return (<option value={group}>{group}</option>);
+                                    }
+                                })
+                            }
                         </select>
                     </div>
                 </div>
 
-                {/* TODO */}
                 {/* Display Grade Section */}
                 <div className="row my-4">
                     <div className="col d-flex align-items-center justify-content-end">
@@ -71,8 +78,13 @@ export default function AssignmentEditor() {
 
                     <div className="col align-items-center d-flex align-items-center">
                         <select id="wd-display-group-as" className="form-select">
-                            <option selected>Percentage</option>
-                            <option>Letter Grade</option>
+                            {gradeDisplayOptions.map((display) => {
+                                if (assignment.grade_display === display) {
+                                    return (<option selected value={display}>{display}</option>);
+                                } else {
+                                    return (<option value={display}>{display}</option>);
+                                }
+                            })}
                         </select>
                     </div>
                 </div>
@@ -86,39 +98,43 @@ export default function AssignmentEditor() {
                     </div>
 
                     <div className="col ms-3 me-2 form-control d-flex flex-column align-items-start ">
-                        {/* TODO: select an option based on JSON? */}
                         <select id="wd-submission-type" className="form-select mt-2 mb-4">
-                            <option selected>Online</option>
-                            <option>Physical</option>
+                            {submissionTypeOptions.map((submissionType) => {
+                                if (assignment.submission_type === submissionType) {
+                                    return (<option selected value={submissionType}>{submissionType}</option>);
+                                } else {
+                                    return (<option value={submissionType}>{submissionType}</option>);
+                                }
+                            })}
                         </select>
 
-                        {/* TODO: select checkboxes based on JSON? */}
                         <b>Online Entry Options</b>
                         <form className="form-check">
-                            <label className="form-check-label my-2">
-                                <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
-                                Text Entry
-                            </label><br />
-
-                            <label className="form-check-label my-2">
-                                <input name="wd-entry-options" type="checkbox" id="wd-website-url" className="form-check-input" />
-                                Website URL
-                            </label><br />
-
-                            <label className="form-check-label my-2">
-                                <input name="wd-entry-options" type="checkbox" id="wd-media-recordings" className="form-check-input" />
-                                Media Recordings
-                            </label><br />
-
-                            <label className="form-check-label my-2">
-                                <input name="wd-entry-options" type="checkbox" id="wd-student-annotation" className="form-check-input" />
-                                Student Annotation
-                            </label><br />
-
-                            <label className="form-check-label my-2">
-                                <input name="wd-entry-options" type="checkbox" id="wd-file-upload" className="form-check-input" />
-                                File Uploads
-                            </label><br />
+                            {entryOptions.map((entry) => {
+                                if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
+                                    return (
+                                        <div>
+                                            <label className="form-check-label my-2">
+                                                <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
+                                                {entry}
+                                            </label>
+                                            <br />
+                                        </div>
+                                    );
+                                }
+                                else {
+                                    console.log(`${entry} WAS found inside [${assignment.entry_options}]!`)
+                                    return (
+                                        <div>
+                                            <label className="form-check-label my-2">
+                                                <input checked name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
+                                                {entry}
+                                            </label>
+                                            <br />
+                                        </div>
+                                    );
+                                }
+                            })}
                         </form>
                     </div>
                 </div>
@@ -136,7 +152,6 @@ export default function AssignmentEditor() {
                             <div className="row">
                                 <label className="form-label">
                                     <b>Assign To</b>
-                                    {/* TODO: maybe have value come from the JSON? */}
                                     <input className="form-control" id="wd-assign-to" value="Everyone" />
                                 </label>
                             </div>

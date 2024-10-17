@@ -7,12 +7,12 @@ import { BsGripVertical } from "react-icons/bs";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 
 
-//TODO: SECTION 3.8
+//SECTION 3.8
 /*
     -[x] Use the useParams() hook to retrieve the course's ID and then find all the assignments for that course from the database's assignments array.
     -[x] Render the assignments as links that encode the course's ID and the assignment's ID in the URL's path.
     -[x] The assignment's ID will be used by a router to render the corresponding assignment in the AssignmentEditor screen.
-    -[ ] Modify assignments.json as needed.
+    -[x] Modify assignments.json as needed.
 */
 
 export default function Assignments() {
@@ -79,11 +79,8 @@ export default function Assignments() {
                                                 {assignment.title}
                                             </a>
 
-                                            {/* TODO: add number of points to json */}
-                                            {/* FIXME: whitespace inside of the span */}
                                             <span>
-                                                <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> {assignment.available_date} at {assignment.available_time} | <b>Due</b> {assignment.due_by_date}
-                                                at {assignment.due_by_time} | 100 pts
+                                                <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> {assignment.available_date} at {assignment.available_time} | <b>Due</b> {assignment.due_by_date} at {assignment.due_by_time} | {assignment.points} pts
                                             </span>
                                         </div>
 

@@ -1,4 +1,3 @@
-// TODO: section 3.9
 import { useParams } from "react-router-dom";
 import * as db from "../../Database";
 import React from "react";

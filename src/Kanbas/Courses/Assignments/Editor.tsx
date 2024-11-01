@@ -2,12 +2,12 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
+import { deleteAssignment, updateAssignment } from "./reducer";
+import { useState } from "react";
 
 export default function AssignmentEditor() {
-    const cid = useParams().cid;
-    const aid = useParams().aid;
-
+    const { cid, aid } = useParams();
+    const dispatch = useDispatch();
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
     const assignment = assignments.find((curr: any) => curr._id === aid);
 
@@ -15,6 +15,28 @@ export default function AssignmentEditor() {
     const gradeDisplayOptions = ["Percentage", "Letter Grade"];
     const submissionTypeOptions = ["Online", "Physical"];
     const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"];
+
+    type AssignmentType = {
+        title: string;
+        description: string;
+        points: number;
+        due_by_date: string;
+        available_date: string;
+        available_until: string;
+        group?: string;
+        grade_display?: string;
+        submission_type?: string;
+        entry_options?: string[];
+    }
+
+    const [editedAssignment, setEditedAssignment] = useState<AssignmentType>({
+        title: assignment.title,
+        description: assignment.description,
+        points: assignment.points,
+        due_by_date: assignment.due_by_date,
+        available_date: assignment.available_date,
+        available_until: assignment.available_until
+    });
 
     return (
         <FacultyPrivileges>
@@ -26,14 +48,25 @@ export default function AssignmentEditor() {
                         <h5>Assignment Name</h5>
                     </label>
 
-                    <input id="wd-name" type="text" className="form-control form-control-lg" placeholder="Assignment Name" value={assignment.title} />
+                    <input id="wd-name"
+                        type="text"
+                        className="form-control form-control-lg"
+                        placeholder="Assignment Name"
+                        defaultValue={assignment.title}
+                        onChange={(e) => {
+                            setEditedAssignment({ ...assignment, title: e.target.value });
+                        }}
+                    />
                 </div>
 
                 {/* Assignment Description Section */}
                 <div className="mt-3 mb-5 me-3">
-                    <textarea id="wd-description" className="form-control form-control-lg" cols={30} rows={10}>
-                        {assignment.description}
-                    </textarea>
+                    <textarea id="wd-description"
+                        className="form-control form-control-lg"
+                        cols={30} rows={10} defaultValue={assignment.description}
+                        onChange={(e) => {
+                            setEditedAssignment({ ...assignment, description: e.target.value });
+                        }} />
                 </div>
 
                 <div className="container d-flex flex-column justify-content-end">
@@ -46,7 +79,14 @@ export default function AssignmentEditor() {
                         </div>
 
                         <div className="col align-items-center d-flex align-items-center justify-content-end">
-                            <input id="wd-points" type="number" placeholder="100" min="0" value={assignment.points} className="form-control" />
+                            <input id="wd-points"
+                                type="number"
+                                placeholder="100" min="0"
+                                defaultValue={assignment.points}
+                                className="form-control"
+                                onChange={(e) => {
+                                    setEditedAssignment({ ...assignment, points: e.target.value });
+                                }} />
                         </div>
                     </div>
 
@@ -157,14 +197,16 @@ export default function AssignmentEditor() {
                                 <div className="row">
                                     <label className="form-label">
                                         <b>Assign To</b>
-                                        <input className="form-control" id="wd-assign-to" value="Everyone" />
+                                        <input className="form-control" id="wd-assign-to" defaultValue="Everyone" />
                                     </label>
                                 </div>
 
                                 <div className="row">
                                     <label className="form-label">
                                         <b>Due</b>
-                                        <input className="form-control" id="wd-due-date" type="date" value={assignment.due_by_date} />
+                                        <input className="form-control" id="wd-due-date" type="date" defaultValue={assignment.due_by_date} onChange={(e) => {
+                                            setEditedAssignment({ ...assignment, due_by_date: e.target.value });
+                                        }} />
                                     </label>
                                 </div>
 
@@ -173,14 +215,18 @@ export default function AssignmentEditor() {
                                     <div className="col">
                                         <label className="form-label d-flex flex-column">
                                             <b>Available From:</b>
-                                            <input id="wd-available-from" className="form-control" type="date" value={assignment.available_date} />
+                                            <input id="wd-available-from" className="form-control" type="date" defaultValue={assignment.available_date} onChange={(e) => {
+                                                setEditedAssignment({ ...assignment, available_date: e.target.value });
+                                            }} />
                                         </label>
                                     </div>
 
                                     <div className="col">
                                         <label className="form-label d-flex flex-column">
                                             <b>Until:</b>
-                                            <input id="wd-available-until" className="form-control" type="date" />
+                                            <input id="wd-available-until" className="form-control" type="date" defaultValue={assignment.available_until} onChange={(e) => {
+                                                setEditedAssignment({ ...assignment, available_until: e.target.value });
+                                            }} />
                                         </label>
                                     </div>
 
@@ -199,7 +245,9 @@ export default function AssignmentEditor() {
                                 </button>
                             </Link>
                             <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                                <button type="button" className="btn btn-danger btn-large btn-lg mx-2" onClick={e => updateAssignment(assignment)}>
+                                <button type="button" className="btn btn-danger btn-large btn-lg mx-2" onClick={(e) => {
+                                    dispatch(updateAssignment(editedAssignment))
+                                }}>
                                     Save
                                 </button>
                             </Link>

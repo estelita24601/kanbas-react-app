@@ -20,7 +20,6 @@ export default function Assignments() {
 
   //deletes an assignment
   const deleteCurrAssignment = (assignmentId: string) => {
-    
     dispatch(deleteAssignment(assignmentId));
   };
 

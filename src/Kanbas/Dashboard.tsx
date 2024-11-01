@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import * as db from "./Database";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
 import StudentPrivileges from "./Account/StudentPrivileges";
+import React, { useState } from "react";
 
 
 export default function Dashboard(
@@ -19,6 +20,20 @@ export default function Dashboard(
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = db;
 
+  const [enrollmentMode, setEnrollmentMode] = useState(false);
+
+  const switchEnrollmentView = () => {
+    setEnrollmentMode(!enrollmentMode);
+  }
+
+  const getCourses = () => {
+    if (enrollmentMode) {
+      return courses;
+    } else {
+      return courses.filter((course) => enrollments.some(
+        (enrollment) => enrollment.user === currentUser._id && enrollment.course === course._id));
+    }
+  }
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -57,7 +72,7 @@ export default function Dashboard(
       </FacultyPrivileges>
 
       <StudentPrivileges>
-        <button className="btn btn-primary float-end">Enrollments</button>
+        <button className="btn btn-primary float-end" onClick={switchEnrollmentView}>Enrollments</button>
       </StudentPrivileges>
 
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
@@ -65,9 +80,7 @@ export default function Dashboard(
       <div id="wd-dashboard-courses" className="row">
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {courses
-            .filter((course) => enrollments.some(
-              (enrollment) => enrollment.user === currentUser._id && enrollment.course === course._id))
+          {getCourses()
             .map(course => (
               <div className="wd-dashboard-course col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as db from "./Database";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
+import StudentPrivileges from "./Account/StudentPrivileges";
 
 
 export default function Dashboard(
@@ -17,6 +18,7 @@ export default function Dashboard(
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = db;
+
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -53,6 +55,10 @@ export default function Dashboard(
         />
         <hr />
       </FacultyPrivileges>
+
+      <StudentPrivileges>
+        <button className="btn btn-primary float-end">Enrollments</button>
+      </StudentPrivileges>
 
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
 

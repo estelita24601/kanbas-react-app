@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as db from "./Database";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
 import StudentPrivileges from "./Account/StudentPrivileges";
 import React, { useState } from "react";
+import { enroll, unenroll } from "./Account/reducer";
+
 
 
 export default function Dashboard(
@@ -21,7 +23,6 @@ export default function Dashboard(
   const { enrollments } = db;
 
   const [enrollmentMode, setEnrollmentMode] = useState(false);
-
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
   }
@@ -30,8 +31,41 @@ export default function Dashboard(
     if (enrollmentMode) {
       return courses;
     } else {
-      return courses.filter((course) => enrollments.some(
-        (enrollment) => enrollment.user === currentUser._id && enrollment.course === course._id));
+      return courses.filter((course) => currentUser.userEnrollments.includes(course._id))
+    }
+  }
+
+  const dispatch = useDispatch();
+  const getEnrollmentButtons = (courseId: string) => {
+    console.log(`enrollment mode = ${enrollmentMode}`)
+    if (!enrollmentMode) {
+      return (<button className="btn btn-primary ">Go </button>);
+    }
+
+    const currCourseEnrolled = enrollments.some((entry) => entry.user === currentUser._id && entry.course === courseId)
+
+    if (currCourseEnrolled) {
+      console.log(`already enrolled in course ${courseId}`)
+      return (
+        <button className="btn btn-danger me-1"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log("trying to UN ENROLL")
+            dispatch(unenroll(courseId));
+          }}>
+          Unenroll
+        </button>);
+    } else {
+      console.log(`not yet enrolled in course ${courseId}`)
+      return (
+        <button className="btn btn-success me-1"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log("trying to ENROLL")
+            dispatch(enroll(courseId));
+          }}>
+          Enroll
+        </button>);
     }
   }
 
@@ -96,7 +130,7 @@ export default function Dashboard(
                         {course.description}
                       </p>
 
-                      <button className="btn btn-primary ">Go </button>
+
 
                       <FacultyPrivileges>
                         <button id="wd-delete-course-click" className="btn btn-danger float-end"
@@ -108,6 +142,8 @@ export default function Dashboard(
                           Delete
                         </button>
                       </FacultyPrivileges>
+
+                      {getEnrollmentButtons(course._id)}
 
                       <FacultyPrivileges>
                         <button id="id-wd-edit-course-click" className="btn btn-warning float-end me-2"

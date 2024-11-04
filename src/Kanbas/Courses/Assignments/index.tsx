@@ -75,8 +75,7 @@ export default function Assignments() {
 
       {/* list of assignments */}
       <ul id="wd-assignment-list list-group rounded-0">
-
-        <li className="list-group-item p-0 mb-5 fs-5 border-gray">
+        <li className="list-group-item p-0 mb-5 fs-5 border-gray" key="list-of-assignments">
 
           {/* title bar with controls */}
           <div className="wd-title d-flex align-content-center justify-content-between p-3 ps-2 bg-secondary">

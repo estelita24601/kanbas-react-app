@@ -6,6 +6,7 @@ import StudentPrivileges from "./Account/StudentPrivileges";
 import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
 import { Enrollment } from "./Types";
 import CourseNavCard from "./Courses/CourseNavCard";
+import { current } from "@reduxjs/toolkit";
 
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse, deleteCourse, updateCourse }: {
@@ -33,25 +34,9 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
     setEnrollmentMode(!enrollmentMode);
   }
 
-  // FIXME: function that gets the courses we want to display
-  const getCourses = () => {
-    // if enrollment mode is ON the show all the courses
-    if (enrollmentMode) {
-      return courses;
-    }
-    // if enrollment mode is OFF then only show courses current user is enrolled in
-    else {
+  //return boolean for if the current user is enrolled in a given course
+  const isUserEnrolled = (currCourse: any) => enrollments.some((currEnroll: Enrollment) => currEnroll.user_id === currentUser && currEnroll.course_id === currCourse._id);
 
-      const userEnrollments = enrollments.filter((enroll: Enrollment) => enroll.user_id === currentUser._id);
-
-      return courses.filter((course) => {
-        if (userEnrollments.find((e: Enrollment) => e.course_id === course) !== undefined) {
-          return true;
-        }
-        return false;
-      })
-    }
-  }
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -104,35 +89,55 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
-            .map(course => (
-              //
-              <div className="wd-dashboard-course col" style={{ width: "300px" }}>
-                <div className="card rounded-3 overflow-hidden">
-                  <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                    className="wd-dashboard-course-link text-decoration-none text-dark"
-                  >
-
-                    <CourseNavCard
-                      course={course}
-                      enrollmentMode={enrollmentMode}
-                      deleteCourse={deleteCourse}
-                      setCourse={setCourse}
-                    />
-
-                  </Link>
-
-                </div>
-
-                {/* end of div for a single course */}
-              </div>
-            ))}
+            .filter(course => {
+              if (currentUser.role === "FACULTY") {
+                return true;
+              } else if (currentUser.role === "STUDENT" && enrollmentMode) {
+                return true;
+              } else {
+                return isUserEnrolled(course);
+              }
+            })
+            .map(course => {
+              if (enrollmentMode && !isUserEnrolled(course)) {
+                return (
+                  <div className="wd-dashboard-course col" style={{ width: "300px" }}>
+                    <div className="card rounded-3 overflow-hidden">
+                      <CourseNavCard
+                        course={course}
+                        enrollmentMode={enrollmentMode}
+                        deleteCourse={deleteCourse}
+                        setCourse={setCourse}
+                      />
+                    </div>
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="wd-dashboard-course col" style={{ width: "300px" }}>
+                    <div className="card rounded-3 overflow-hidden">
+                      <Link to={`/Kanbas/Courses/${course._id}/Home`}
+                        className="wd-dashboard-course-link text-decoration-none text-dark"
+                      >
+                        <CourseNavCard
+                          course={course}
+                          enrollmentMode={enrollmentMode}
+                          deleteCourse={deleteCourse}
+                          setCourse={setCourse}
+                        />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+            })
+          }
         </div>
 
-        {/* end of div for all courses */}
       </div>
 
-
     </div>
+
   );
 }
 

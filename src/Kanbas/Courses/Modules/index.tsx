@@ -10,27 +10,29 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 export default function Modules() {
-  const cid = useParams();
-  const [moduleName, setModuleName] = useState("");
-  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const cid = useParams(); //get from url path
+  const [moduleName, setModuleName] = useState(""); //local state variable
+  const { modules } = useSelector((state: any) => state.modulesReducer); //redux
   const dispatch = useDispatch();
 
   console.log(`CURRENT COURSE = ${cid.cid}`)
+
   return (
     <div className="d-flex flex-column">
       <ModulesControls
         moduleName={moduleName}
         setModuleName={setModuleName}
         addModule={() => {
+          //add module to the store using the addModule reducer for the modules slice
           dispatch(addModule({ name: moduleName, course: cid }));
+
+          //set the value for the local state variable
           setModuleName("");
         }}
       />
 
       <ul id="wd-modules" className="list-group rounded-0">
         {modules.map((module: any) => {
-          console.log(`\t\tcurrent module = ${module.name}`)
-
           return (
             <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
               {/* module title */}
@@ -38,7 +40,7 @@ export default function Modules() {
 
                 <BsGripVertical className="me-2 fs-3 float-start" />
 
-                {/* FIXME: if module name becomes too long it ruins the layout */}
+                {/*NOTE: if module name becomes too long it ruins the layout */}
                 <div className=" fw-bold">
                   {!module.editing && module.name}
                   {module.editing && (

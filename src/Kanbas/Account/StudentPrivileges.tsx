@@ -5,6 +5,6 @@ export default function StudentPrivileges({ children }: { children: any }) {
     if (currentUser.role === "STUDENT") {
         return children;
     } else {
-        console.log(`account with role of ${currentUser.role} is NOT allowed access`)
+        // console.log(`STUDENTS ONLY\n\taccount with role of ${currentUser.role} is NOT allowed access`)
     }
 }

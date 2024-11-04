@@ -5,6 +5,6 @@ export default function FacultyPrivileges({ children }: { children: any }) {
     if (currentUser.role === "FACULTY") {
         return children;
     } else {
-        console.log(`account with role of ${currentUser.role} is NOT allowed access`)
+        // console.log(`FACULTY ONLY\n\taccount with role of ${currentUser.role} is NOT allowed access`)
     }
 }

@@ -31,8 +31,14 @@ export default function Assignments() {
     navigate(`/Kanbas/Courses/${cid}/Assignments/${new_id}`);
   }
 
+  //TODO: return a link no matter what but then the editor needs to be made read only for students
   // depending on user permissions choose if assignment name is a link or not
   const assignmentDisplayName = (curr_assignment: any) => {
+    return (
+      <a className="wd-assignment-link fw-bold fs-4" href={`#/Kanbas/Courses/${cid}/Assignments/${curr_assignment._id}`}>
+        {curr_assignment.title}
+      </a>);
+
     if (currentUser.role !== "FACULTY") {
       return (
         <p className="fw-bold text-decoration-underline fs-4">
@@ -109,7 +115,6 @@ export default function Assignments() {
                       <MdAssignment className="me-2 fs-3" />
                     </div>
 
-                    {/* assignment title inside of a link */}
                     <div className="col d-flex flex-column align-items-start">
 
                       {assignmentDisplayName(assignment)}

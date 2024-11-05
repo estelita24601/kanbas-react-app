@@ -95,9 +95,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
               console.log(`current user role = ${currentUser.role}`);
               console.log(`user enrollment in course ${course._id} = ${isEnrolled}`);
 
-              // if (currentUser.role === "FACULTY") {
-              //   return true;
-              // }
               if (currentUser.role === "STUDENT" && enrollmentMode) {
                 return true;
               } else {

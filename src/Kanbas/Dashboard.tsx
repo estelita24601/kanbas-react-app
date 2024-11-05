@@ -13,7 +13,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
   courses: any[];
   course: any;
   setCourse: (course: any) => void;
-  addNewCourse: () => void;
+  addNewCourse: () => string;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
 }
@@ -33,7 +33,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
   }
-  
+
   return (
     <div id="wd-dashboard" className="ms-4">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
@@ -44,7 +44,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
           {/* button for adding new courses */}
           <button id="wd-add-new-course-click"
             className="btn btn-primary float-end"
-            onClick={addNewCourse}
+            onClick={(e) => {
+              e.preventDefault();
+              const new_id = addNewCourse();
+              dispatch(addEnrollment({ user_id: currentUser._id, course_id: new_id }));
+            }}
           >
             Add
           </button>
@@ -91,9 +95,10 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
               console.log(`current user role = ${currentUser.role}`);
               console.log(`user enrollment in course ${course._id} = ${isEnrolled}`);
 
-              if (currentUser.role === "FACULTY") {
-                return true;
-              } else if (currentUser.role === "STUDENT" && enrollmentMode) {
+              // if (currentUser.role === "FACULTY") {
+              //   return true;
+              // }
+              if (currentUser.role === "STUDENT" && enrollmentMode) {
                 return true;
               } else {
                 return isEnrolled;

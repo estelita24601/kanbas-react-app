@@ -29,17 +29,20 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
         // return the red unenroll button or the green enroll button
         if (currCourseEnrolled) {
             return (
-                <button className="btn btn-danger me-1"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        console.log(`dispatch(removeEnrollment()) with user_id = ${currentUser._id} and course_id = ${courseId}`)
-                        dispatch(removeEnrollment({ user_id: currentUser._id, course_id: courseId }));
-                    }}>
-                    Unenroll
-                </button>);
+                <span>
+                    <button className="btn btn-primary">Go </button>
+                    <button className="btn btn-danger me-1 float-end"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            console.log(`dispatch(removeEnrollment()) with user_id = ${currentUser._id} and course_id = ${courseId}`)
+                            dispatch(removeEnrollment({ user_id: currentUser._id, course_id: courseId }));
+                        }}>
+                        Unenroll
+                    </button>
+                </span>);
         } else {
             return (
-                <button className="btn btn-success me-1"
+                <button className="btn btn-success me-1 mb-3 float-end"
                     onClick={(e) => {
                         e.preventDefault();
                         console.log(`dispatch(addEnrollment()) with user_id = ${currentUser._id} and course_id = ${courseId}`)

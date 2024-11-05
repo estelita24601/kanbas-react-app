@@ -27,18 +27,24 @@ export default function Kanbas() {
         }
     );
 
+
+
     //function to add a new course to `courses`
     //user input for the name and description, generates timestamp for _id then the rest is default values
     const addNewCourse = () => {
+        const timestamp = new Date().getTime().toString();
+
         //object for the new course
         const newCourse = {
             ...course, //start with the values from the default course object
-            _id: new Date().getTime().toString() //override the course id from the default course
+            _id: timestamp
         }
         console.log(`adding course to list of courses\n${JSON.stringify(newCourse, null, 2)}`)
 
         //update value of the state variable
         setCourses([...courses, { ...course, ...newCourse }])
+
+        return timestamp;
     }
 
     //function to delete a course from `courses`

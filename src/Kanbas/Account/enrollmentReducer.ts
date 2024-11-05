@@ -5,19 +5,19 @@ import { Enrollment } from "../Types";
 //state.enrollments is a list of Enrollment objects
 const initialState = {
     enrollments: enrollments.map((enroll) => {
-        return {user_id: enroll.user, course_id: enroll.course} as Enrollment;
+        return { user_id: enroll.user, course_id: enroll.course } as Enrollment;
     })
 };
 
 const enrollmentsSlice = createSlice({
     name: "enrollments",
     initialState,
-    reducers:{
-        addEnrollment: (state, {payload: enrollment}) => {
+    reducers: {
+        addEnrollment: (state, { payload: enrollment }) => {
             const newEnrollment = enrollment as Enrollment;
             state.enrollments = [...state.enrollments, newEnrollment];
         },
-        removeEnrollment: (state, {payload: enrollment}) => {
+        removeEnrollment: (state, { payload: enrollment }) => {
             const deleteEnrollment = enrollment as Enrollment;
             console.log(`TRYING TO DELETE: ${JSON.stringify(deleteEnrollment, null, 2)}`);
 
@@ -26,9 +26,9 @@ const enrollmentsSlice = createSlice({
                 const same_user = enroll.user_id === deleteEnrollment.user_id;
                 const same_course = enroll.course_id === deleteEnrollment.course_id
 
-                if(same_user && !same_course){
+                if (same_user && !same_course) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             });
@@ -37,4 +37,4 @@ const enrollmentsSlice = createSlice({
 });
 
 export default enrollmentsSlice.reducer;
-export const {addEnrollment, removeEnrollment} = enrollmentsSlice.actions;
+export const { addEnrollment, removeEnrollment } = enrollmentsSlice.actions;

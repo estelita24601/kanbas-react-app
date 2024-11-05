@@ -6,7 +6,7 @@ import enrollmentsReducer from "./Account/enrollmentReducer"
 
 const store = configureStore({
   reducer: {
-    modulesReducer,accountReducer, assignmentsReducer, enrollmentsReducer
+    modulesReducer, accountReducer, assignmentsReducer, enrollmentsReducer
   },
 });
 export default store;

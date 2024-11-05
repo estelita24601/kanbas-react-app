@@ -31,28 +31,6 @@ export default function Assignments() {
     navigate(`/Kanbas/Courses/${cid}/Assignments/${new_id}`);
   }
 
-  //TODO: return a link no matter what but then the editor needs to be made read only for students
-  // depending on user permissions choose if assignment name is a link or not
-  const assignmentDisplayName = (curr_assignment: any) => {
-    return (
-      <a className="wd-assignment-link fw-bold fs-4" href={`#/Kanbas/Courses/${cid}/Assignments/${curr_assignment._id}`}>
-        {curr_assignment.title}
-      </a>);
-
-    if (currentUser.role !== "FACULTY") {
-      return (
-        <p className="fw-bold text-decoration-underline fs-4">
-          {curr_assignment.title}
-        </p>
-      );
-    } else {
-      return (
-        <a className="wd-assignment-link" href={`#/Kanbas/Courses/${cid}/Assignments/${curr_assignment._id}`}>
-          {curr_assignment.title}
-        </a>);
-    }
-  }
-
   return (
     <div id="wd-assignments" className="d-flex flex-column me-4">
 
@@ -117,7 +95,9 @@ export default function Assignments() {
 
                     <div className="col d-flex flex-column align-items-start">
 
-                      {assignmentDisplayName(assignment)}
+                      <a className="wd-assignment-link fw-bold fs-4" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                        {assignment.title}
+                      </a>
 
                       <span>
                         <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> {assignment.available_date} at {assignment.available_time} | <b>Due</b> {assignment.due_by_date} at {assignment.due_by_time} | {assignment.points} pts
@@ -138,5 +118,3 @@ export default function Assignments() {
     </div >
   );
 }
-
-// const assignments = db.assignments.filter(assignment => (assignment.course === cid));

@@ -31,10 +31,10 @@ const modulesSlice = createSlice({
       ) as any;
     },
     editModule: (state, { payload: moduleId }) => {
-      state.modules = state.modules.map((m: any) =>
-        { //if this is the module with the correct id
-          //map to a new object {} that has all the old fields but has editing set to true
-          return m._id === moduleId ? { ...m, editing: true } : m}
+      state.modules = state.modules.map((m: any) => { //if this is the module with the correct id
+        //map to a new object {} that has all the old fields but has editing set to true
+        return m._id === moduleId ? { ...m, editing: true } : m
+      }
       ) as any;
     },
   },

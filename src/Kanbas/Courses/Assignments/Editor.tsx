@@ -11,12 +11,7 @@ export default function AssignmentEditor() {
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
     const assignment = assignments.find((curr: any) => curr._id === aid);
 
-    const groupOptions = ["ASSIGNMENTS", "QUIZZES", "EXAMS", "PROJECTS"];
-    const gradeDisplayOptions = ["Percentage", "Letter Grade"];
-    const submissionTypeOptions = ["Online", "Physical"];
-    const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"];
-
-    type AssignmentType = {
+    type Assignment = {
         title: string;
         description: string;
         points: number;
@@ -29,7 +24,7 @@ export default function AssignmentEditor() {
         entry_options?: string[];
     }
 
-    const [editedAssignment, setEditedAssignment] = useState<AssignmentType>({
+    const [editedAssignment, setEditedAssignment] = useState<Assignment>({
         title: assignment.title,
         description: assignment.description,
         points: assignment.points,
@@ -42,154 +37,20 @@ export default function AssignmentEditor() {
         <FacultyPrivileges>
             <div id="wd-assignments-editor" className="mx-3">
 
-                {/* Assignment Name Section */}
-                <div className="my-4 me-3">
-                    <label htmlFor="wd-name" className="form-label">
-                        <h5>Assignment Name</h5>
-                    </label>
-
-                    <input id="wd-name"
-                        type="text"
-                        className="form-control form-control-lg"
-                        placeholder="Assignment Name"
-                        defaultValue={assignment.title}
-                        onChange={(e) => {
-                            setEditedAssignment({ ...assignment, title: e.target.value });
-                        }}
-                    />
-                </div>
-
-                {/* Assignment Description Section */}
-                <div className="mt-3 mb-5 me-3">
-                    <textarea id="wd-description"
-                        className="form-control form-control-lg"
-                        cols={30} rows={10} defaultValue={assignment.description}
-                        onChange={(e) => {
-                            setEditedAssignment({ ...assignment, description: e.target.value });
-                        }} />
-                </div>
+                {assignmentNameEditor(assignment, setEditedAssignment)}
+                {assignmentDescriptionEditor(assignment, setEditedAssignment)}
 
                 <div className="container d-flex flex-column justify-content-end">
-                    {/* Points Section */}
-                    <div className="row my-4">
-                        <div className="col d-flex align-items-center justify-content-end">
-                            <label htmlFor="wd-points" className="form-label">
-                                <h5>Points</h5>
-                            </label>
-                        </div>
 
-                        <div className="col align-items-center d-flex align-items-center justify-content-end">
-                            <input id="wd-points"
-                                type="number"
-                                placeholder="100" min="0"
-                                defaultValue={assignment.points}
-                                className="form-control"
-                                onChange={(e) => {
-                                    setEditedAssignment({ ...assignment, points: e.target.value });
-                                }} />
-                        </div>
-                    </div>
-
-                    {/* Assignment Group Section */}
-                    <div className="row my-4">
-                        <div className="col d-flex align-items-center justify-content-end">
-                            <label htmlFor="wd-group" className="form-label">
-                                <h5>Assignment Group</h5>
-                            </label>
-                        </div>
-
-                        <div className="col align-items-center d-flex align-items-center">
-                            <select id="wd-group" className="form-select">
-                                {
-                                    groupOptions.map((group) => {
-                                        if (assignment.group === group) {
-                                            return (<option selected value={group}>{group}</option>)
-                                        } else {
-                                            return (<option value={group}>{group}</option>);
-                                        }
-                                    })
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Display Grade Section */}
-                    <div className="row my-4">
-                        <div className="col d-flex align-items-center justify-content-end">
-                            <label htmlFor="wd-display-group-as" className="form-label">
-                                <h5>Display Grade As</h5>
-                            </label>
-                        </div>
-
-                        <div className="col align-items-center d-flex align-items-center">
-                            <select id="wd-display-group-as" className="form-select">
-                                {gradeDisplayOptions.map((display) => {
-                                    if (assignment.grade_display === display) {
-                                        return (<option selected value={display}>{display}</option>);
-                                    } else {
-                                        return (<option value={display}>{display}</option>);
-                                    }
-                                })}
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Submission Type Section */}
-                    <div className="row my-4">
-                        <div className="col d-flex align-items-center justify-content-end">
-                            <label className="form-label">
-                                <h5>Submission Type</h5>
-                            </label>
-                        </div>
-
-                        <div className="col ms-3 me-2 form-control d-flex flex-column align-items-start ">
-                            <select id="wd-submission-type" className="form-select mt-2 mb-4">
-                                {submissionTypeOptions.map((submissionType) => {
-                                    if (assignment.submission_type === submissionType) {
-                                        return (<option selected value={submissionType}>{submissionType}</option>);
-                                    } else {
-                                        return (<option value={submissionType}>{submissionType}</option>);
-                                    }
-                                })}
-                            </select>
-
-                            <b>Online Entry Options</b>
-                            <form className="form-check">
-                                {entryOptions.map((entry) => {
-                                    if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
-                                        return (
-                                            <div>
-                                                <label className="form-check-label my-2">
-                                                    <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
-                                                    {entry}
-                                                </label>
-                                                <br />
-                                            </div>
-                                        );
-                                    }
-                                    else {
-                                        console.log(`${entry} WAS found inside [${assignment.entry_options}]!`)
-                                        return (
-                                            <div>
-                                                <label className="form-check-label my-2">
-                                                    <input checked name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
-                                                    {entry}
-                                                </label>
-                                                <br />
-                                            </div>
-                                        );
-                                    }
-                                })}
-                            </form>
-                        </div>
-                    </div>
+                    {pointsEditor(assignment, setEditedAssignment)}
+                    {assignmentGroupEditor(assignment)}
+                    {gradeDisplayChooser(assignment)}
+                    {submissionTypeChooser(assignment)}
 
                     {/* Assign Section */}
                     <div className="row my-4">
                         <div className="col d-flex align-items-center justify-content-end">
-                            <label className="form-label">
-                                <h5>Assign</h5>
-                            </label>
+                            <label className="form-label"> <h5>Assign</h5> </label>
                         </div>
 
                         <div className="col ms-4 me-2 form-control d-flex flex-column align-items-start ">
@@ -201,36 +62,7 @@ export default function AssignmentEditor() {
                                     </label>
                                 </div>
 
-                                <div className="row">
-                                    <label className="form-label">
-                                        <b>Due</b>
-                                        <input className="form-control" id="wd-due-date" type="date" defaultValue={assignment.due_by_date} onChange={(e) => {
-                                            setEditedAssignment({ ...assignment, due_by_date: e.target.value });
-                                        }} />
-                                    </label>
-                                </div>
-
-                                <div className="row text-nowrap">
-
-                                    <div className="col">
-                                        <label className="form-label d-flex flex-column">
-                                            <b>Available From:</b>
-                                            <input id="wd-available-from" className="form-control" type="date" defaultValue={assignment.available_date} onChange={(e) => {
-                                                setEditedAssignment({ ...assignment, available_date: e.target.value });
-                                            }} />
-                                        </label>
-                                    </div>
-
-                                    <div className="col">
-                                        <label className="form-label d-flex flex-column">
-                                            <b>Until:</b>
-                                            <input id="wd-available-until" className="form-control" type="date" defaultValue={assignment.available_until} onChange={(e) => {
-                                                setEditedAssignment({ ...assignment, available_until: e.target.value });
-                                            }} />
-                                        </label>
-                                    </div>
-
-                                </div>
+                                {assignmentDateEditors(assignment, setEditedAssignment)}
                             </div>
                         </div>
                     </div>
@@ -253,11 +85,199 @@ export default function AssignmentEditor() {
                             </Link>
                         </div>
                     </div>
+
                 </div>
             </div>
         </FacultyPrivileges>
     );
 }
 
+function assignmentDateEditors(assignment: any, setEditedAssignment: any) {
+    return <span>
+        <div className="row">
+            <label className="form-label">
+                <b>Due</b>
+                <input className="form-control" id="wd-due-date" type="date" defaultValue={assignment.due_by_date} onChange={(e) => {
+                    setEditedAssignment({ ...assignment, due_by_date: e.target.value });
+                }} />
+            </label>
+        </div>
 
-// const assignment = db.assignments.filter((a) => a._id === aid)[0];
+        <div className="row text-nowrap">
+
+            <div className="col">
+                <label className="form-label d-flex flex-column">
+                    <b>Available From:</b>
+                    <input id="wd-available-from" className="form-control" type="date" defaultValue={assignment.available_date} onChange={(e) => {
+                        setEditedAssignment({ ...assignment, available_date: e.target.value });
+                    }} />
+                </label>
+            </div>
+
+            <div className="col">
+                <label className="form-label d-flex flex-column">
+                    <b>Until:</b>
+                    <input id="wd-available-until" className="form-control" type="date" defaultValue={assignment.available_until} onChange={(e) => {
+                        setEditedAssignment({ ...assignment, available_until: e.target.value });
+                    }} />
+                </label>
+            </div>
+
+        </div>
+    </span>;
+}
+
+function submissionTypeChooser(assignment: any) {
+    const submissionTypeOptions = ["Online", "Physical"];
+    const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"];
+
+    return <div className="row my-4">
+        <div className="col d-flex align-items-center justify-content-end">
+            <label className="form-label">
+                <h5>Submission Type</h5>
+            </label>
+        </div>
+
+        <div className="col ms-3 me-2 form-control d-flex flex-column align-items-start ">
+            <select id="wd-submission-type" className="form-select mt-2 mb-4">
+                {submissionTypeOptions.map((submissionType) => {
+                    if (assignment.submission_type === submissionType) {
+                        return (<option selected value={submissionType}>{submissionType}</option>);
+                    } else {
+                        return (<option value={submissionType}>{submissionType}</option>);
+                    }
+                })}
+            </select>
+
+            <b>Online Entry Options</b>
+            {entryOptionsEditor(entryOptions, assignment)}
+
+        </div>
+    </div>;
+}
+
+function gradeDisplayChooser(assignment: any) {
+    const gradeDisplayOptions = ["Percentage", "Letter Grade"];
+    return <div className="row my-4">
+        <div className="col d-flex align-items-center justify-content-end">
+            <label htmlFor="wd-display-group-as" className="form-label">
+                <h5>Display Grade As</h5>
+            </label>
+        </div>
+
+        <div className="col align-items-center d-flex align-items-center">
+            <select id="wd-display-group-as" className="form-select">
+                {gradeDisplayOptions.map((display) => {
+                    if (assignment.grade_display === display) {
+                        return (<option selected value={display}>{display}</option>);
+                    } else {
+                        return (<option value={display}>{display}</option>);
+                    }
+                })}
+            </select>
+        </div>
+    </div>;
+}
+
+function assignmentGroupEditor(assignment: any) {
+    const groupOptions = ["ASSIGNMENTS", "QUIZZES", "EXAMS", "PROJECTS"];
+
+    return <div className="row my-4">
+        <div className="col d-flex align-items-center justify-content-end">
+            <label htmlFor="wd-group" className="form-label">
+                <h5>Assignment Group</h5>
+            </label>
+        </div>
+
+        <div className="col align-items-center d-flex align-items-center">
+            <select id="wd-group" className="form-select">
+                {groupOptions.map((group) => {
+                    if (assignment.group === group) {
+                        return (<option selected value={group}>{group}</option>);
+                    } else {
+                        return (<option value={group}>{group}</option>);
+                    }
+                })}
+            </select>
+        </div>
+    </div>;
+}
+
+function assignmentDescriptionEditor(assignment: any, setEditedAssignment: any) {
+    return <div className="mt-3 mb-5 me-3">
+        <textarea id="wd-description"
+            className="form-control form-control-lg"
+            cols={30} rows={10} defaultValue={assignment.description}
+            onChange={(e) => {
+                setEditedAssignment({ ...assignment, description: e.target.value });
+            }} />
+    </div>;
+}
+
+function assignmentNameEditor(assignment: any, setEditedAssignment: any) {
+    return <div className="my-4 me-3">
+        <label htmlFor="wd-name" className="form-label">
+            <h5>Assignment Name</h5>
+        </label>
+
+        <input id="wd-name"
+            type="text"
+            className="form-control form-control-lg"
+            placeholder="Assignment Name"
+            defaultValue={assignment.title}
+            onChange={(e) => {
+                setEditedAssignment({ ...assignment, title: e.target.value });
+            }} />
+    </div>;
+}
+
+function entryOptionsEditor(entryOptions: string[], assignment: any) {
+    return <form className="form-check">
+        {entryOptions.map((entry) => {
+            if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
+                return (
+                    <div>
+                        <label className="form-check-label my-2">
+                            <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
+                            {entry}
+                        </label>
+                        <br />
+                    </div>
+                );
+            }
+            else {
+                console.log(`${entry} WAS found inside [${assignment.entry_options}]!`);
+                return (
+                    <div>
+                        <label className="form-check-label my-2">
+                            <input checked name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" />
+                            {entry}
+                        </label>
+                        <br />
+                    </div>
+                );
+            }
+        })}
+    </form>;
+}
+
+function pointsEditor(assignment: any, setEditedAssignment: any) {
+    return <div className="row my-4">
+        <div className="col d-flex align-items-center justify-content-end">
+            <label htmlFor="wd-points" className="form-label">
+                <h5>Points</h5>
+            </label>
+        </div>
+
+        <div className="col align-items-center d-flex align-items-center justify-content-end">
+            <input id="wd-points"
+                type="number"
+                placeholder="100" min="0"
+                defaultValue={assignment.points}
+                className="form-control"
+                onChange={(e) => {
+                    setEditedAssignment({ ...assignment, points: e.target.value });
+                }} />
+        </div>
+    </div>;
+}

@@ -33,11 +33,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
   }
-
-  //return boolean for if the current user is enrolled in a given course
-  const isUserEnrolled = (currCourse: any) => enrollments.some((currEnroll: Enrollment) => currEnroll.user_id === currentUser && currEnroll.course_id === currCourse._id);
-
-
+  
   return (
     <div id="wd-dashboard" className="ms-4">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
@@ -90,18 +86,25 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
             .filter(course => {
+              const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
+
+              console.log(`current user role = ${currentUser.role}`);
+              console.log(`user enrollment in course ${course._id} = ${isEnrolled}`);
+
               if (currentUser.role === "FACULTY") {
                 return true;
               } else if (currentUser.role === "STUDENT" && enrollmentMode) {
                 return true;
               } else {
-                return isUserEnrolled(course);
+                return isEnrolled;
               }
             })
             .map(course => {
-              if (enrollmentMode && !isUserEnrolled(course)) {
+              const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
+
+              if (enrollmentMode && !isEnrolled) {
                 return (
-                  <div className="wd-dashboard-course col" style={{ width: "300px" }}>
+                  <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
                     <div className="card rounded-3 overflow-hidden">
                       <CourseNavCard
                         course={course}
@@ -114,7 +117,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
                 );
               } else {
                 return (
-                  <div className="wd-dashboard-course col" style={{ width: "300px" }}>
+                  <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
                     <div className="card rounded-3 overflow-hidden">
                       <Link to={`/Kanbas/Courses/${course._id}/Home`}
                         className="wd-dashboard-course-link text-decoration-none text-dark"

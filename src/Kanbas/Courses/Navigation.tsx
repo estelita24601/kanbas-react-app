@@ -1,40 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useParams } from "react-router";
 
 export default function CoursesNavigation() {
+    const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
+
+    const { cid } = useParams()
+    const { pathname } = useLocation()
+
     return (
         <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0 me-2">
 
-            <Link id="wd-course-home-link" to="/Kanbas/Courses/1234/Home" className="list-group-item border border-0 active">
-                Home
-            </Link>
-
-            <Link id="wd-course-modules-link" to="/Kanbas/Courses/1234/Modules" className="list-group-item border border-0 text-danger">
-                Modules
-            </Link>
-
-            <Link id="wd-course-piazza-link" to="/Kanbas/Courses/1234/Piazza" className="list-group-item border border-0 text-danger">
-                Piazza
-            </Link>
-
-            <Link id="wd-course-zoom-link" to="/Kanbas/Courses/1234/Zoom" className="list-group-item border border-0 text-danger">
-                Zoom
-            </Link>
-
-            <Link id="wd-course-quizzes-link" to="/Kanbas/Courses/1234/Assignments" className="list-group-item border border-0 text-danger">
-                Assignments
-            </Link>
-
-            <Link id="wd-course-assignments-link" to="/Kanbas/Courses/1234/Quizzes" className="list-group-item border border-0 text-danger">
-                Quizzes
-            </Link>
-
-            <Link id="wd-course-grades-link" to="/Kanbas/Courses/1234/Grades" className="list-group-item border border-0 text-danger">
-                Grades
-            </Link>
-
-            <Link id="wd-course-people-link" to="/Kanbas/Courses/1234/People" className="list-group-item border border-0 text-danger">
-                People
-            </Link>
+            {links.map((linkName) => (
+                <Link
+                    id="wd-course-home-link"
+                    to={`/Kanbas/Courses/${cid}/${linkName}`}
+                    className={`list-group-item border border-0 ${pathname.includes(linkName) ? `active` : `text-danger`}`}
+                >
+                    {linkName}
+                </Link>
+            ))
+            }
 
         </div>
     );

@@ -1,10 +1,25 @@
+import * as db from "../../Database"
+import { useParams } from "react-router";
 import { BsSearch } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 
+
+//SECTION 3.8
+/*
+    -[x] Use the useParams() hook to retrieve the course's ID and then find all the assignments for that course from the database's assignments array.
+    -[x] Render the assignments as links that encode the course's ID and the assignment's ID in the URL's path.
+    -[x] The assignment's ID will be used by a router to render the corresponding assignment in the AssignmentEditor screen.
+    -[x] Modify assignments.json as needed.
+*/
+
 export default function Assignments() {
+    const cid = useParams().cid;
+    const assignments = db.assignments.filter(assignment => (assignment.course === cid));
+    console.log(assignments)
+
     return (
         <div id="wd-assignments" className="d-flex flex-column me-4">
 
@@ -48,122 +63,38 @@ export default function Assignments() {
                     {/* list of actual assignments */}
                     <ul className="wd-lessons list-group rounded-0">
 
-                        {/* first assignment */}
-                        <li className="wd-assignment-list-item list-group-item p-3 ps-1">
+                        {assignments.map((assignment) => {
+                            return (
+                                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
+                                    <div className="row">
+                                        {/* left most icons */}
+                                        <div className="d-flex col-auto align-items-center">
+                                            <BsGripVertical className="me-2 fs-3" />
+                                            <MdAssignment className="me-2 fs-3" />
+                                        </div>
 
-                            <div className="row">
-                                {/* left most icons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <BsGripVertical className="me-2 fs-3" />
-                                    <MdAssignment className="me-2 fs-3" />
-                                </div>
+                                        {/* assignment title inside of a link */}
+                                        <div className="col d-flex flex-column align-items-start">
+                                            <a className="wd-assignment-link" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                                                {assignment.title}
+                                            </a>
 
-                                {/* assignment title inside of a link */}
-                                <div className="col d-flex flex-column align-items-start">
-                                    <a className="wd-assignment-link" href="#/Kanbas/Courses/1234/Assignments/123">
-                                        A1 - ENV + HTML
-                                    </a>
-                                    <span>
-                                        <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13
-                                        at 11:59pm | 100 pts
-                                    </span>
-                                </div>
+                                            <span>
+                                                <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> {assignment.available_date} at {assignment.available_time} | <b>Due</b> {assignment.due_by_date} at {assignment.due_by_time} | {assignment.points} pts
+                                            </span>
+                                        </div>
 
-                                {/* rightmost buttons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <LessonControlButtons />
-                                </div>
-                            </div>
-                        </li>
-
-                        {/* second assignment */}
-                        <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-
-                            <div className="row">
-                                {/* left most icons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <BsGripVertical className="me-2 fs-3" />
-                                    <MdAssignment className="me-2 fs-3" />
-                                </div>
-
-                                {/* assignment title inside of a link */}
-                                <div className="col d-flex flex-column align-items-start">
-                                    <a className="wd-assignment-link" href="#/Kanbas/Courses/1234/Assignments/123">
-                                        A2 - CSS + BOOTSTRAP
-                                    </a>
-                                    <span>
-                                        <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20
-                                        at 11:59pm | 100 pts
-                                    </span>
-                                </div>
-
-                                {/* rightmost buttons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <LessonControlButtons />
-                                </div>
-                            </div>
-                        </li>
-
-                        {/* third assignment */}
-                        <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-
-                            <div className="row">
-                                {/* left most icons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <BsGripVertical className="me-2 fs-3" />
-                                    <MdAssignment className="me-2 fs-3" />
-                                </div>
-
-                                {/* assignment title inside of a link */}
-                                <div className="col d-flex flex-column align-items-start">
-                                    <a className="wd-assignment-link" href="#/Kanbas/Courses/1234/Assignments/123">
-                                        A3 - JAVASCRIPT + REACT
-                                    </a>
-                                    <span>
-                                        <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27
-                                        at 11:59pm | 100 pts
-                                    </span>
-                                </div>
-
-                                {/* rightmost buttons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <LessonControlButtons />
-                                </div>
-                            </div>
-                        </li>
-
-                        {/* fourth assignment */}
-                        <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-
-                            <div className="row">
-                                {/* left most icons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <BsGripVertical className="me-2 fs-3" />
-                                    <MdAssignment className="me-2 fs-3" />
-                                </div>
-
-                                {/* assignment title inside of a link */}
-                                <div className="col d-flex flex-column align-items-start">
-                                    <a className="wd-assignment-link" href="#/Kanbas/Courses/1234/Assignments/123">
-                                        A4
-                                    </a>
-                                    <span>
-                                        <span className="text-danger fw-bold">Multiple Modules </span> | <b>Not available until</b> Oct 5 at 12:00am | <b>Due</b> Oct 31
-                                        at 11:59pm | 100 pts
-                                    </span>
-                                </div>
-
-                                {/* rightmost buttons */}
-                                <div className="d-flex col-auto align-items-center">
-                                    <LessonControlButtons />
-                                </div>
-                            </div>
-                        </li>
-
+                                        {/* rightmost buttons */}
+                                        <div className="d-flex col-auto align-items-center">
+                                            <LessonControlButtons />
+                                        </div>
+                                    </div>
+                                </li>
+                            );
+                        })
+                        }
                     </ul>
-
                 </li>
-
             </ul>
         </div >
     );

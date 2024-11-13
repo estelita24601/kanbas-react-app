@@ -3,13 +3,18 @@ import { Link } from "react-router-dom";
 export default function Signup() {
     return (
         <div>
-            <h3>Sign Up</h3>
-            <input placeholder="Username" /> <br />
-            <input type="password" placeholder="Password" /> <br />
-            <input type="password" placeholder="Verify Password" /> <br />
-            <Link to="/Kanbas/Account/Profile">Sign Up</Link>
-            <br /> <br />
-            <Link to="/Kanbas/Account/Signin">Sign In</Link>
+            <h2>Sign Up</h2>
+            <input placeholder="Username" className="form-control mb-2 mt-2" />
+            <input type="password" placeholder="Password" className="form-control mb-2" />
+            <input type="password" placeholder="Verify Password" className="form-control mb-2" />
+
+            <Link to="/Kanbas/Account/Profile" className="btn btn-primary w-100 mb-3 mt-3">
+                Sign Up
+            </Link>
+
+            <Link to="/Kanbas/Account/Signin" className="w-100 mb-2">
+                Sign In
+            </Link>
         </div>
     );
 }

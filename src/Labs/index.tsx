@@ -1,12 +1,13 @@
 //imports the function called Lab1 from file with a relative path of ./Lab1
+import { Route, Routes, Navigate } from "react-router"
+import { Provider } from "react-redux";
+import store from "./store";
+import TOC from "./TOC";
 import Lab1 from "./Lab1";
 import Lab2 from "./Lab2";
 import Lab3 from "./Lab3";
 import Lab4 from "./Lab4";
-import TOC from "./TOC";
-import { Route, Routes, Navigate } from "react-router"
-import store from "./store";
-import { Provider } from "react-redux";
+import Lab5 from "./Lab5";
 
 //create an element called Labs that will be used inside of App.tsx
 export default function Labs() {
@@ -23,6 +24,7 @@ export default function Labs() {
                     <Route path="Lab2" element={<Lab2 />} />
                     <Route path="Lab3/*" element={<Lab3 />} />
                     <Route path="Lab4/*" element={<Lab4 />} />
+                    <Route path="Lab5/*" element={<Lab5 />} />
                 </Routes>
             </div>
         </Provider>

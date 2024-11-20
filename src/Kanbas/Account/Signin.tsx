@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setCurrentUser } from "./accountReducer";
 import { useDispatch } from "react-redux";
-import * as db from "../Database";
 import { useSelector } from "react-redux";
+import * as client from "./client";
 
 export default function Signin() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -12,16 +12,13 @@ export default function Signin() {
     const navigate = useNavigate();
 
     // function for when we click the sign in button
-    const signin = () => {
-        const user = db.users.find(
-            (u: any) => u.username === credentials.username && u.password === credentials.password);
-        if (!user) {
-            console.log(`unable to find user that matches\n\tusername: ${credentials.username}\n\tpassword: ${credentials.password}`);
-            return;
-        }
+    const signin = async () => {
+        const user = await client.signin(credentials);
+        if (!user) return;
         dispatch(setCurrentUser(user));
         navigate("/Kanbas/Dashboard");
     };
+
 
     return (
         <div id="wd-signin-screen">

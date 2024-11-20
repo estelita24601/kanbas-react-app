@@ -5,13 +5,17 @@ import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
 import "./styles.css";
 import React, { useState } from "react";
-import * as db from "./Database";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import Session from "./Account/Session";
+import * as courseClient from "./Courses/client";
+import * as userClient from "./Account/client";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function Kanbas() {
     //state variable named `courses` of type any[] which means it's an array of values of any data type
     //the state variable initially starts with what it gets from db.courses
-    const [courses, setCourses] = useState<any[]>(db.courses);
+    const [courses, setCourses] = useState<any[]>([]);
 
     //state variable named `course` of type any
     const [course, setCourse] = useState<any>(
@@ -26,8 +30,6 @@ export default function Kanbas() {
             description: "New Description"
         }
     );
-
-
 
     //function to add a new course to `courses`
     //user input for the name and description, generates timestamp for _id then the rest is default values
@@ -73,38 +75,55 @@ export default function Kanbas() {
         );
     };
 
+    //4.4.1
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const fetchCourses = async () => {
+        try {
+            const courses = await userClient.findMyCourses();
+            setCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    useEffect(() => {
+        fetchCourses();
+    }, [currentUser]);
+
+
 
     return (
-        <div id="wd-kanbas">
-            <div className="d-none d-lg-block">
-                <KanbasNavigation />
-            </div>
+        <Session>
+            <div id="wd-kanbas">
+                <div className="d-none d-lg-block">
+                    <KanbasNavigation />
+                </div>
 
-            <div className="wd-main-content-offset p-3">
-                <Routes>
-                    <Route path="/" element={<Navigate to="Account" />} />
-                    <Route path="/Account/*" element={<Account />} />
-                    <Route path="/Dashboard" element={
-                        <ProtectedRoute>
-                            <Dashboard
-                                courses={courses}
-                                course={course}
-                                setCourse={setCourse}
-                                addNewCourse={addNewCourse}
-                                deleteCourse={deleteCourse}
-                                updateCourse={updateCourse} />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/Courses/:cid/*" element={
-                        <ProtectedRoute>
-                            <Courses courses={courses} />
-                        </ProtectedRoute>}
-                    />
-                    <Route path="/Calendar" element={<h1>TODO:Calendar</h1>} />
-                    <Route path="/Inbox" element={<h1>TODO:Inbox</h1>} />
-                </Routes>
-            </div>
+                <div className="wd-main-content-offset p-3">
+                    <Routes>
+                        <Route path="/" element={<Navigate to="Account" />} />
+                        <Route path="/Account/*" element={<Account />} />
+                        <Route path="/Dashboard" element={
+                            <ProtectedRoute>
+                                <Dashboard
+                                    courses={courses}
+                                    course={course}
+                                    setCourse={setCourse}
+                                    addNewCourse={addNewCourse}
+                                    deleteCourse={deleteCourse}
+                                    updateCourse={updateCourse} />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/Courses/:cid/*" element={
+                            <ProtectedRoute>
+                                <Courses courses={courses} />
+                            </ProtectedRoute>}
+                        />
+                        <Route path="/Calendar" element={<h1>TODO:Calendar</h1>} />
+                        <Route path="/Inbox" element={<h1>TODO:Inbox</h1>} />
+                    </Routes>
+                </div>
 
-        </div>
+            </div>
+        </Session>
     );
 }

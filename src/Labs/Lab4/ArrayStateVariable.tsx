@@ -16,7 +16,6 @@ export default function ArrayStateVariable() {
     };
 
     //TODO: add bootstrap classes for formatting
-    //FIXME: delete button is too tall, entire thing might be too wide?
     return (
         <div id="wd-array-state-variables" className="container">
 

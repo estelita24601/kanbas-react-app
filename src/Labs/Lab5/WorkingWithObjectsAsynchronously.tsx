@@ -40,7 +40,7 @@ export default function WorkingWithObjectsAsynchronously() {
             </button>
 
             <pre>{JSON.stringify(assignment, null, 2)}</pre>
-            
+
             <hr />
         </div>
     );

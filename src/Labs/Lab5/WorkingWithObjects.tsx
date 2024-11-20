@@ -24,7 +24,6 @@ export default function WorkingWithObjects() {
             {/* QUESTION: state resets when I return to this page so then title gets displayed incorrectly */}
             <h4>Modifying Properties</h4>
 
-            {/* FIXME: layout when screen is very small */}
             <ul className="list-group">
                 <li className="list-group-item border-0 my-2 my-2 my-2 my-2 my-2">
                     <a id="wd-update-assignment-title"

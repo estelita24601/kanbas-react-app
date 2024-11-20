@@ -13,14 +13,12 @@ export default function HttpClient() {
         setWelcomeOnClick(welcomeMessage);
     };
 
-    //state variable for welcome message when component first loads
+    //3.5.4 - RETRIEVE DATA ON LOAD
     const [welcomeOnLoad, setWelcomeOnLoad] = useState("");
-    //function that fetches the welcome message from the client
     const fetchWelcomeOnLoad = async () => {
         const welcomeMessage = await client.fetchWelcomeMessage();
         setWelcomeOnLoad(welcomeMessage);
     };
-    //trigger when we first load the page
     useEffect(() => { fetchWelcomeOnLoad(); }, []);
 
 

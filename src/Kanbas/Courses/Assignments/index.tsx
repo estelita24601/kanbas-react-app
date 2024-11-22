@@ -85,7 +85,7 @@ export default function Assignments() {
 
             {assignments.map((assignment: any) => {
               return (
-                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
+                <li key={`li-${assignment._id}`} className="wd-assignment-list-item list-group-item p-3 ps-1">
                   <div className="row">
                     {/* left most icons */}
                     <div className="d-flex col-auto align-items-center">

@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import FacultyPrivileges from "./Account/FacultyPrivileges";
-import StudentPrivileges from "./Account/StudentPrivileges";
-import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
-import { Enrollment } from "./Types";
-import CourseNavCard from "./Courses/CourseNavCard";
 import { current } from "@reduxjs/toolkit";
+import { Enrollment } from "./Types";
+import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
+
+import CourseNavCard from "./Courses/CourseNavCard";
+import StudentPrivileges from "./Account/StudentPrivileges";
+import FacultyPrivileges from "./Account/FacultyPrivileges";
 
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse, deleteCourse, updateCourse }: {
   courses: any[];
   course: any;
   setCourse: (course: any) => void;
-  addNewCourse: () => string;
+  addNewCourse: () => Promise<void>;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
 }
@@ -45,9 +46,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
           <button id="wd-add-new-course-click"
             className="btn btn-primary float-end"
             onClick={(e) => {
+              //FIXME?
               e.preventDefault();
-              const new_id = addNewCourse();
-              dispatch(addEnrollment({ user_id: currentUser._id, course_id: new_id }));
+              addNewCourse();
+              // const new_id = addNewCourse();
+              //dispatch(addEnrollment({ user_id: currentUser._id, course_id: new_id }));
             }}
           >
             Add
@@ -89,18 +92,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
-            .filter(course => {
-              const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
-
-              console.log(`current user role = ${currentUser.role}`);
-              console.log(`user enrollment in course ${course._id} = ${isEnrolled}`);
-
-              if (currentUser.role === "STUDENT" && enrollmentMode) {
-                return true;
-              } else {
-                return isEnrolled;
-              }
-            })
             .map(course => {
               const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
 
@@ -147,3 +138,17 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
 }
 
 
+/*
+.filter(course => {
+              const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
+
+              console.log(`current user role = ${currentUser.role}`);
+              console.log(`user enrollment in course ${course._id} = ${isEnrolled}`);
+
+              if (currentUser.role === "STUDENT" && enrollmentMode) {
+                return true;
+              } else {
+                return isEnrolled;
+              }
+            })
+*/

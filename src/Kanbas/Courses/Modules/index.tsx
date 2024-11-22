@@ -1,40 +1,57 @@
-import { BsGripVertical } from "react-icons/bs";
 import { useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import LessonControlButtons from "./LessonControlButtons";
+import { setModules, addModule, editModule, updateModule, deleteModule }
+  from "./reducer";
+import * as coursesClient from "../client";
+
+//icons and react components
+import { BsGripVertical } from "react-icons/bs";
 import ModulesControls from "./ModuleControls";
 import ModuleControlButtons from "./ModuleControlButtons";
-import LessonControlButtons from "./LessonControlButtons";
-import { useState } from "react";
-import { addModule, editModule, updateModule, deleteModule }
-  from "./reducer";
-import { useSelector, useDispatch } from "react-redux";
 
 
 export default function Modules() {
   const cid = useParams(); //get from url path
-  const [moduleName, setModuleName] = useState(""); //local state variable
-  const { modules } = useSelector((state: any) => state.modulesReducer); //redux
+
+  const [moduleName, setModuleName] = useState(""); //local state variable for name of current module
+
+  const { modules } = useSelector((state: any) => state.modulesReducer); //redux, list of modules
   const dispatch = useDispatch();
 
-  console.log(`CURRENT COURSE = ${cid.cid}`)
+  //get list of modules from the server
+  const fetchModules = async () => {
+    const serverModules = await coursesClient.findModulesForCourse(cid.toString());
+    dispatch(setModules(serverModules));
+  };
+  //automatically fetch modules from the server when we load this component
+  useEffect(() => {
+    fetchModules();
+  }, []);
+
+  //4.5.2
+  const createModuleForCourse = async () => {
+    if (!cid) return;
+    const newModule = { name: moduleName, course: cid };
+    const module = await coursesClient.createModuleForCourse(cid.toString(), newModule);
+    dispatch(addModule(module));
+  };
+
 
   return (
     <div className="d-flex flex-column">
       <ModulesControls
-        moduleName={moduleName}
         setModuleName={setModuleName}
-        addModule={() => {
-          //add module to the store using the addModule reducer for the modules slice
-          dispatch(addModule({ name: moduleName, course: cid }));
-
-          //set the value for the local state variable
-          setModuleName("");
-        }}
+        moduleName={moduleName}
+        addModule={createModuleForCourse}
       />
+
 
       <ul id="wd-modules" className="list-group rounded-0">
         {modules.map((module: any) => {
           return (
-            <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
+            <li key={`$li-${module.name}-${module._id}`} className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
               {/* module title */}
               <div className="wd-title p-3 ps-2 bg-secondary clearfix">
 
@@ -81,12 +98,9 @@ export default function Modules() {
                   ))}
                 </ul>)
               }
-
             </li>
           );
-        }
-        )
-        }
+        })}
       </ul>
 
     </div>

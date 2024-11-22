@@ -1,16 +1,20 @@
 import { Route, Routes, Navigate } from "react-router"
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import "./styles.css";
+import { useEffect } from "react";
+
+//import clients
+import * as courseClient from "./Courses/client";
+import * as userClient from "./Account/client";
+
+//import react components
 import Account from "./Account/Account";
+import ProtectedRoute from "./Account/ProtectedRoute";
+import Session from "./Account/Session";
 import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
-import "./styles.css";
-import React, { useState } from "react";
-import ProtectedRoute from "./Account/ProtectedRoute";
-import Session from "./Account/Session";
-import * as courseClient from "./Courses/client";
-import * as userClient from "./Account/client";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 export default function Kanbas() {
     //state variable named `courses` of type any[] which means it's an array of values of any data type
@@ -33,20 +37,14 @@ export default function Kanbas() {
 
     //function to add a new course to `courses`
     //user input for the name and description, generates timestamp for _id then the rest is default values
-    const addNewCourse = () => {
-        const timestamp = new Date().getTime().toString();
+    const addNewCourse = async () => {
 
-        //object for the new course
-        const newCourse = {
-            ...course, //start with the values from the default course object
-            _id: timestamp
-        }
-        console.log(`adding course to list of courses\n${JSON.stringify(newCourse, null, 2)}`)
+        //4.4.2 get object for the new course from the server
+        const newCourse = await userClient.createCourse(course);
+        //console.log(`adding course to list of courses\n${JSON.stringify(newCourse, null, 2)}`)
 
         //update value of the state variable
         setCourses([...courses, { ...course, ...newCourse }])
-
-        return timestamp;
     }
 
     //function to delete a course from `courses`
@@ -62,11 +60,13 @@ export default function Kanbas() {
     }
 
     //function for updating a course
-    const updateCourse = () => {
+    const updateCourse = async () => {
+        //4.4.4
+        await courseClient.updateCourse(course);
         setCourses(
             courses.map((curr_course) => {
                 if (curr_course._id === course._id) {
-                    console.log(`replacing course ${JSON.stringify(curr_course, null, 2)}\nNEW COURSE = ${JSON.stringify(course, null, 2)}`)
+                    //console.log(`replacing course ${JSON.stringify(curr_course, null, 2)}\nNEW COURSE = ${JSON.stringify(course, null, 2)}`)
                     return course;
                 } else {
                     return curr_course;
@@ -77,6 +77,7 @@ export default function Kanbas() {
 
     //4.4.1
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+
     const fetchCourses = async () => {
         try {
             const courses = await userClient.findMyCourses();
@@ -85,6 +86,7 @@ export default function Kanbas() {
             console.error(error);
         }
     };
+
     useEffect(() => {
         fetchCourses();
     }, [currentUser]);

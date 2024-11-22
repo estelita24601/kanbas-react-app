@@ -24,7 +24,6 @@ export default function Signin() {
         <div id="wd-signin-screen">
             <h2>Sign In</h2>
 
-            {/* fixme: don't think the default value is working..? */}
             <input id="wd-username"
                 placeholder="Username"
                 defaultValue={credentials.username}

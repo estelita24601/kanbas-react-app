@@ -1,14 +1,20 @@
 //SECTION 3.3.4 - Module Reducer
 
 import { createSlice } from "@reduxjs/toolkit";
-import { modules } from "../../Database";
+
+
 const initialState = {
-  modules: modules,
+  modules: [],
 };
+
 const modulesSlice = createSlice({
   name: "modules",
   initialState,
   reducers: {
+    //4.5.1 - set the list of modules
+    setModules: (state, action) => {
+      state.modules = action.payload;
+    },
     addModule: (state, { payload: module }) => {
       // using the module from payload create a new module
       const newModule: any = {
@@ -39,6 +45,6 @@ const modulesSlice = createSlice({
     },
   },
 });
-export const { addModule, deleteModule, updateModule, editModule } =
+export const { setModules, addModule, deleteModule, updateModule, editModule } =
   modulesSlice.actions;
 export default modulesSlice.reducer;

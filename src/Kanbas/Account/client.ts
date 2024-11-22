@@ -39,4 +39,10 @@ export const findMyCourses = async () => {
     return data;
 };
 
+//4.4.2
+export const createCourse = async (course: any) => {
+    const { data } = await axiosWithCredentials.post(`${USERS_API}/current/courses`, course);
+    return data;
+};
+
 

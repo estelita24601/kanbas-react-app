@@ -1,34 +1,49 @@
-import { useParams } from "react-router";
-import { BsSearch } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
-import FacultyPrivileges from "../../Account/FacultyPrivileges";
+import { BsSearch } from "react-icons/bs";
+
+import { useParams } from "react-router";
 import { useNavigate } from 'react-router-dom';
-import { addAssignment, deleteAssignment }
-  from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+
+import { addAssignment, deleteAssignment, setAssignments } from "./reducer";
+import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import AssignmentControlButtons from "./AssignmentControlButtons";
+import * as assignmentsClient from "./client";
 
 export default function Assignments() {
-  const {cid} = useParams<{ cid: string }>();
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer)
+  const { cid } = useParams<{ cid: string }>();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  //get assignments from our server when we first load
+  const fetchAssignments = async () => {
+    if (typeof cid === "string") {
+      const serverAssignments = await assignmentsClient.getAssignments(cid);
+      dispatch(setAssignments(serverAssignments));
+    } else {
+      throw new TypeError(`'cid' should be a string but is actually ${typeof cid}`)
+    }
+  };
+  useEffect(() => { fetchAssignments(); }, []);
+
   //deletes an assignment
-  const deleteCurrAssignment = (assignmentId: string) => {
+  const deleteCurrAssignment = async (assignmentId: string) => {
+    await assignmentsClient.deleteAssignment(assignmentId);
     dispatch(deleteAssignment(assignmentId));
   };
 
   //create new empty assignment and navigate to editor
-  const newAssignment = () => {
-    const new_id = new Date().getTime().toString();
-    dispatch(addAssignment({ _id: new_id, course: cid }));
-    console.log(`creating new assignment with id = ${new_id}`)
-    navigate(`/Kanbas/Courses/${cid}/Assignments/${new_id}`);
+  const createNewAssignment = async () => {
+    const newAssignment = await assignmentsClient.createAssignment({ course: cid });
+    dispatch(addAssignment(newAssignment));
+
+    navigate(`/Kanbas/Courses/${cid}/Assignments/${newAssignment._id}`);
   }
 
   return (
@@ -50,7 +65,7 @@ export default function Assignments() {
           <button id="wd-add-assignment-group" className="btn btn-lg btn-secondary dropdown-toggle mx-1" >+ Group</button>
 
           {/* new assignment button */}
-          <button id="wd-add-assignment" className="btn btn-lg btn-danger ms-1 text-nowrap" onClick={newAssignment}>
+          <button id="wd-add-assignment" className="btn btn-lg btn-danger ms-1 text-nowrap" onClick={createNewAssignment}>
             + Assignment
           </button>
         </FacultyPrivileges>

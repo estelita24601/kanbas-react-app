@@ -1,109 +1,136 @@
-import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import FacultyPrivileges from "../../Account/FacultyPrivileges";
+import { useParams } from "react-router";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteAssignment, updateAssignment } from "./reducer";
-import { useState } from "react";
+import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import StudentPrivileges from "../../Account/StudentPrivileges";
+import * as assignmentsClient from "./client";
+import assignmentsSlice from './reducer';
+import Assignments from './index';
 
 export default function AssignmentEditor() {
-    const { cid, aid } = useParams<{ cid: string, aid: string }>();
     const dispatch = useDispatch();
-    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-    const assignment = assignments.find((curr: any) => curr._id === aid);
+
+    const { cid, aid } = useParams<{ cid: string, aid: string }>();
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     type Assignment = {
+        _id: string;
         title: string;
-        description: string;
-        points: number;
-        due_by_date: string;
-        available_date: string;
-        available_until: string;
+        course: string;
+        //making these optional to prevent issues with new or empty assignments
+        available_date?: string;
+        available_time?: string;
+        due_by_date?: string;
+        due_by_time?: string;
+        until_date?: string;
+        until_time?: string;
+        description?: string;
+        points?: string;
         group?: string;
         grade_display?: string;
         submission_type?: string;
         entry_options?: string[];
+        assigned_to?: string;
     }
 
-    const [editedAssignment, setEditedAssignment] = useState<Assignment>({
-        title: assignment.title,
-        description: assignment.description,
-        points: assignment.points,
-        due_by_date: assignment.due_by_date,
-        available_date: assignment.available_date,
-        available_until: assignment.available_until
-    });
+    const { assignments } = useSelector((state: any) => state.Assignments);
+    const currentAssignment = assignments.find((a: any) => a._id === aid);
+
+    //assignment with changes we haven't saved yet
+    const [editedAssignment, setEditedAssignment] = useState<Assignment>(currentAssignment);
+
+    // const fetchAssignment = async () => {
+    //     if (typeof cid === "string" && typeof aid === "string") {
+    //         const serverAssignment = await assignmentsClient.getAssignment(aid, cid);
+    //         setCurrentAssignment(serverAssignment);
+    //         setEditedAssignment(serverAssignment);
+    //         console.log(`fetchAssignment - \n${JSON.stringify(assignment)}`)
+    //     } else {
+    //         throw new Error("unable to find assignment!");
+    //     }
+    // }
+    // useEffect(() => { fetchAssignment() }, []);
+
 
     return (
 
         <div id="wd-assignments-editor" className="mx-3">
+            {/* don't render if assignment is undefined */}
+            {currentAssignment ?
+                (<div id="wd-assignment-undefined-barrier">
+                    {assignmentNameEditor(currentAssignment, setEditedAssignment, currentUser)}
+                    {assignmentDescriptionEditor(currentAssignment, setEditedAssignment, currentUser)}
 
-            {assignmentNameEditor(assignment, setEditedAssignment, currentUser)}
-            {assignmentDescriptionEditor(assignment, setEditedAssignment, currentUser)}
+                    <div className="container d-flex flex-column justify-content-end">
 
-            <div className="container d-flex flex-column justify-content-end">
+                        {pointsEditor(currentAssignment, setEditedAssignment, currentUser)}
+                        {assignmentGroupEditor(currentAssignment, currentUser)}
+                        {gradeDisplayChooser(currentAssignment, currentUser)}
+                        {submissionTypeChooser(currentAssignment, currentUser)}
 
-                {pointsEditor(assignment, setEditedAssignment, currentUser)}
-                {assignmentGroupEditor(assignment, currentUser)}
-                {gradeDisplayChooser(assignment, currentUser)}
-                {submissionTypeChooser(assignment, currentUser)}
-
-                {/* Assign Section */}
-                <div className="row my-4">
-                    <div className="col d-flex align-items-center justify-content-end">
-                        <label className="form-label"> <h5>Assign</h5> </label>
-                    </div>
-
-                    <div className="col ms-4 me-2 form-control d-flex flex-column align-items-start ">
-                        <div className="container">
-                            <div className="row">
-                                <label className="form-label">
-                                    <b>Assign To</b>
-                                    <input className="form-control" id="wd-assign-to" defaultValue="Everyone" readOnly={currentUser.role === "STUDENT"} />
-                                </label>
+                        {/* Assign Section */}
+                        <div className="row my-4">
+                            <div className="col d-flex align-items-center justify-content-end">
+                                <label className="form-label"> <h5>Assign</h5> </label>
                             </div>
 
-                            {assignmentDateEditors(assignment, setEditedAssignment, currentUser)}
+                            <div className="col ms-4 me-2 form-control d-flex flex-column align-items-start ">
+                                <div className="container">
+                                    <div className="row">
+                                        <label className="form-label">
+                                            <b>Assign To</b>
+                                            <input className="form-control" id="wd-assign-to" defaultValue="Everyone" readOnly={currentUser.role === "STUDENT"} />
+                                        </label>
+                                    </div>
+
+                                    {assignmentDateEditors(currentAssignment, setEditedAssignment, currentUser)}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="row my-5">
+                            <hr />
+                            <div className="d-flex justify-content-end">
+                                <StudentPrivileges>
+                                    <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                                        <button type="button" className="btn btn-secondary btn-lg mx-2">
+                                            Back
+                                        </button>
+                                    </Link>
+                                </StudentPrivileges>
+                                <FacultyPrivileges>
+                                    <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                                        <button type="button" className="btn btn-secondary btn-lg mx-2" onClick={e => deleteAssignment(currentAssignment._id)}>
+                                            Cancel
+                                        </button>
+                                    </Link>
+
+                                    <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                                        <button type="button" className="btn btn-danger btn-large btn-lg mx-2" onClick={(e) => {
+                                            dispatch(updateAssignment(editedAssignment))
+                                        }}>
+                                            Save
+                                        </button>
+                                    </Link>
+                                </FacultyPrivileges>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                {/* Buttons */}
-                <div className="row my-5">
-                    <hr />
-                    <div className="d-flex justify-content-end">
-                        <StudentPrivileges>
-                            <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                                <button type="button" className="btn btn-secondary btn-lg mx-2">
-                                    Back
-                                </button>
-                            </Link>
-                        </StudentPrivileges>
-                        <FacultyPrivileges>
-                            <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                                <button type="button" className="btn btn-secondary btn-lg mx-2" onClick={e => deleteAssignment(assignment._id)}>
-                                    Cancel
-                                </button>
-                            </Link>
-
-                            <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                                <button type="button" className="btn btn-danger btn-large btn-lg mx-2" onClick={(e) => {
-                                    dispatch(updateAssignment(editedAssignment))
-                                }}>
-                                    Save
-                                </button>
-                            </Link>
-                        </FacultyPrivileges>
-                    </div>
-                </div>
-            </div>
+                </div>)
+                :
+                (<p>ERROR: unable to find assignment!</p>)
+            }
         </div>
     );
 }
 
 function assignmentNameEditor(assignment: any, setEditedAssignment: any, currentUser: any) {
     const isStudent = currentUser.role === "STUDENT";
+
+    console.log(`\ttrying to find assignment title: ${assignment.title}`);
 
     return <div className="my-4 me-3">
         <label htmlFor="wd-name" className="form-label">
@@ -180,9 +207,9 @@ function assignmentGroupEditor(assignment: any, currentUser: any) {
             <select id="wd-group" className="form-select">
                 {groupOptions.map((group) => {
                     if (assignment.group === group) {
-                        return (<option selected value={group} disabled={isStudent}>{group}</option>);
+                        return (<option selected value={group} disabled={isStudent} key={group}>{group}</option>);
                     } else {
-                        return (<option value={group} disabled={isStudent}>{group}</option>);
+                        return (<option value={group} disabled={isStudent} key={group}>{group}</option>);
                     }
                 })}
             </select>

@@ -8,7 +8,7 @@ import PeopleTable from "./People/Table";
 import { FaAlignJustify } from "react-icons/fa6";
 
 export default function Courses({ courses }: { courses: any[]; }) {
-    const { cid } = useParams();
+    const { cid } = useParams<{ cid: string }>();
     const { pathname } = useLocation();
 
     const course = courses.find((course) => course._id === cid);

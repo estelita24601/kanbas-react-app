@@ -2,8 +2,7 @@ import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LessonControlButtons from "./LessonControlButtons";
-import { setModules, addModule, editModule, updateModule, deleteModule }
-  from "./reducer";
+import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
 import * as coursesClient from "../client";
 
 //icons and react components
@@ -13,7 +12,7 @@ import ModuleControlButtons from "./ModuleControlButtons";
 
 
 export default function Modules() {
-  const cid = useParams(); //get from url path
+  const { cid } = useParams<{ cid: string }>(); //get from url path
 
   const [moduleName, setModuleName] = useState(""); //local state variable for name of current module
 
@@ -22,8 +21,13 @@ export default function Modules() {
 
   //get list of modules from the server
   const fetchModules = async () => {
-    const serverModules = await coursesClient.findModulesForCourse(cid.toString());
-    dispatch(setModules(serverModules));
+    //first ensure cid is a string and isn't undefined
+    if (typeof cid === "string") {
+      const serverModules = await coursesClient.findModulesForCourse(cid);
+      dispatch(setModules(serverModules));
+    } else {
+      throw new TypeError(`'cid' should be a string but is actually ${typeof cid}`)
+    }
   };
   //automatically fetch modules from the server when we load this component
   useEffect(() => {

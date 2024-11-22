@@ -46,7 +46,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
           <button id="wd-add-new-course-click"
             className="btn btn-primary float-end"
             onClick={(e) => {
-              //FIXME?
               e.preventDefault();
               addNewCourse();
               // const new_id = addNewCourse();

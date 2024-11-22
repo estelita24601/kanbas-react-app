@@ -7,7 +7,7 @@ import { useState } from "react";
 import StudentPrivileges from "../../Account/StudentPrivileges";
 
 export default function AssignmentEditor() {
-    const { cid, aid } = useParams();
+    const { cid, aid } = useParams<{ cid: string, aid: string }>();
     const dispatch = useDispatch();
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
     const assignment = assignments.find((curr: any) => curr._id === aid);

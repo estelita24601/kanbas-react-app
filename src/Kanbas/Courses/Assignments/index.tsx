@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 
 export default function Assignments() {
-  const cid = useParams().cid;
+  const {cid} = useParams<{ cid: string }>();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer)
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 

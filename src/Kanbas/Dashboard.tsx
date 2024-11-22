@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { current } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import { Enrollment } from "./Types";
-import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
+//import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
 
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
@@ -20,7 +19,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
 }
 ) {
 
-  const dispatch = useDispatch();
   //redux for user
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
@@ -30,9 +28,10 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
   //redux for list of enrollments
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
-  // function that changes swaps enrollment mode
+  // function that swaps enrollment mode
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
+    console.log(`enrollment mode set to ${!enrollmentMode}`);
   }
 
   return (
@@ -48,8 +47,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
             onClick={(e) => {
               e.preventDefault();
               addNewCourse();
-              // const new_id = addNewCourse();
-              //dispatch(addEnrollment({ user_id: currentUser._id, course_id: new_id }));
             }}
           >
             Add
@@ -92,9 +89,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
             .map(course => {
+              //see if current user is enrolled in this specific course
               const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
 
               if (enrollmentMode && !isEnrolled) {
+                console.log(`not enrolled in ${course._id}`)
                 return (
                   <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
                     <div className="card rounded-3 overflow-hidden">
@@ -107,7 +106,8 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
                     </div>
                   </div>
                 );
-              } else {
+              }
+              else {
                 return (
                   <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
                     <div className="card rounded-3 overflow-hidden">

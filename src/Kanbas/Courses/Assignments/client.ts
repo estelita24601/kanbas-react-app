@@ -24,7 +24,7 @@ export const createAssignment = async (assignment: any) => {
 }
 
 //update assignment PUT
-export const updateAssignment = async (assignmentId: string, assignment: any) => {
+export const replaceAssignment = async (assignmentId: string, assignment: any) => {
     console.log(`ASSIGNMENT CLIENT: put ${ASSIGNMENTS_API}/${assignmentId}`)
     const response = await axios.put(`${ASSIGNMENTS_API}/${assignmentId}`, assignment);
     return response.data;

@@ -4,7 +4,14 @@ import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import { FaTrash } from "react-icons/fa";
 
 
-export default function AssignmentControlButtons({ assignmentId, deleteAssignment }: { assignmentId: string; deleteAssignment: (assignmentId: string) => Promise<void>; }) {
+export default function AssignmentControlButtons(
+    { assignmentId, deleteAssignment }:
+        {
+           assignmentId: string;
+            deleteAssignment: (assignmentId: string) => Promise<void>;
+        }) {
+
+
     //show pop up before we delete
     const confirmDelete = (assignmentId: string) => {
         const confirmed = window.confirm("Are you sure you want to delete this assignment?");

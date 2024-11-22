@@ -27,7 +27,7 @@ const assignmentsSlice = createSlice({
     },
 
     updateAssignment: (state, { payload: Assignment }) => {
-      console.log(`updating assignment\n${Assignment}`)
+      console.log(`updating assignment\n${JSON.stringify(Assignment, null, 2)}`)
       state.assignments = state.assignments.map((m: any) =>
         m._id === Assignment._id ? Assignment : m
       ) as any;

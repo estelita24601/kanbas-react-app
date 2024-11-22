@@ -6,8 +6,6 @@ import { deleteAssignment, updateAssignment } from "./reducer";
 import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import StudentPrivileges from "../../Account/StudentPrivileges";
 import * as assignmentsClient from "./client";
-import assignmentsSlice from './reducer';
-import Assignments from './index';
 
 export default function AssignmentEditor() {
     const dispatch = useDispatch();
@@ -35,29 +33,35 @@ export default function AssignmentEditor() {
         assigned_to?: string;
     }
 
-    const { assignments } = useSelector((state: any) => state.Assignments);
-    const currentAssignment = assignments.find((a: any) => a._id === aid);
+    // const { assignments } = useSelector((state: any) => state.assignmentsReducer.assignments);
 
-    //assignment with changes we haven't saved yet
-    const [editedAssignment, setEditedAssignment] = useState<Assignment>(currentAssignment);
+    const [editedAssignment, setEditedAssignment] = useState<Assignment>();
+    const [currentAssignment, setCurrentAssignment] = useState<any>();
 
-    // const fetchAssignment = async () => {
-    //     if (typeof cid === "string" && typeof aid === "string") {
-    //         const serverAssignment = await assignmentsClient.getAssignment(aid, cid);
-    //         setCurrentAssignment(serverAssignment);
-    //         setEditedAssignment(serverAssignment);
-    //         console.log(`fetchAssignment - \n${JSON.stringify(assignment)}`)
-    //     } else {
-    //         throw new Error("unable to find assignment!");
-    //     }
-    // }
-    // useEffect(() => { fetchAssignment() }, []);
+    const fetchAssignment = async () => {
+        if (typeof cid === "string" && typeof aid === "string") {
+            const serverAssignment = await assignmentsClient.getAssignment(aid, cid);
+            setCurrentAssignment(serverAssignment);
+            setEditedAssignment(serverAssignment);
+            //console.log(`assignment from server = \n${JSON.stringify(serverAssignment, null, 2)}`)
+        } else {
+            throw new Error("unable to find assignment!");
+        }
+    }
+    useEffect(() => { fetchAssignment() }, []);
 
+    //function that updates server AND updates redux state
+    const saveAssignment = async () => {
+        //update the server
+        await assignmentsClient.replaceAssignment(aid as string, editedAssignment);
+        dispatch(updateAssignment(editedAssignment));
+    };
 
+    console.log(`currentAssignment = \n${JSON.stringify(currentAssignment, null, 2)}`)
     return (
 
         <div id="wd-assignments-editor" className="mx-3">
-            {/* don't render if assignment is undefined */}
+
             {currentAssignment ?
                 (<div id="wd-assignment-undefined-barrier">
                     {assignmentNameEditor(currentAssignment, setEditedAssignment, currentUser)}
@@ -103,6 +107,7 @@ export default function AssignmentEditor() {
                                 </StudentPrivileges>
                                 <FacultyPrivileges>
                                     <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                                        {/* QUESTION: do I really want to delete with the cancel button?? */}
                                         <button type="button" className="btn btn-secondary btn-lg mx-2" onClick={e => deleteAssignment(currentAssignment._id)}>
                                             Cancel
                                         </button>
@@ -110,7 +115,7 @@ export default function AssignmentEditor() {
 
                                     <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
                                         <button type="button" className="btn btn-danger btn-large btn-lg mx-2" onClick={(e) => {
-                                            dispatch(updateAssignment(editedAssignment))
+                                            saveAssignment();
                                         }}>
                                             Save
                                         </button>
@@ -129,9 +134,6 @@ export default function AssignmentEditor() {
 
 function assignmentNameEditor(assignment: any, setEditedAssignment: any, currentUser: any) {
     const isStudent = currentUser.role === "STUDENT";
-
-    console.log(`\ttrying to find assignment title: ${assignment.title}`);
-
     return <div className="my-4 me-3">
         <label htmlFor="wd-name" className="form-label">
             <h5>Assignment Name</h5>
@@ -288,7 +290,6 @@ function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser
                 );
             }
             else {
-                console.log(`${entry} WAS found inside [${assignment.entry_options}]!`);
                 return (
                     <div>
                         <label className="form-check-label my-2">
@@ -338,3 +339,11 @@ function assignmentDateEditors(assignment: any, setEditedAssignment: any, curren
         </div>
     </span>;
 }
+
+// useEffect(() => {
+//     if (assignments) {
+//         const assignment = assignments.find((a: Assignment) => a._id === aid);
+//         console.log(assignment);
+//         setCurrentAssignment(assignment);
+//     }
+// }, [assignments, aid]);

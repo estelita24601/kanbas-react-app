@@ -83,7 +83,7 @@ export default function Kanbas() {
             const courses = await userClient.findMyCourses();
             setCourses(courses);
         } catch (error) {
-            console.error(error);
+            console.log(`unable to get courses - ${error}`);
         }
     };
 

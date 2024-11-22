@@ -4,8 +4,14 @@ import { FaPlus } from "react-icons/fa6";
 import ModuleEditor from "./ModuleEditor";
 import FacultyPrivileges from "../../Account/FacultyPrivileges";
 
-export default function ModulesControls({ moduleName, setModuleName, addModule }:
-    { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
+export default function ModulesControls(
+    { moduleName, setModuleName, addModule }:
+        {
+            moduleName: string;
+            setModuleName: (title: string) => void;
+            addModule: () => void;
+        }) {
+
     return (
         <FacultyPrivileges>
             <div id="wd-modules-controls" className="text-nowrap">

@@ -13,10 +13,13 @@ export default function Signin() {
 
     // function for when we click the sign in button
     const signin = async () => {
-        const user = await client.signin(credentials);
-        if (!user) return;
-        dispatch(setCurrentUser(user));
-        navigate("/Kanbas/Dashboard");
+        try {
+            const serverResponse = await client.signin(credentials);
+            dispatch(setCurrentUser(serverResponse.data));
+            navigate("/Kanbas/Dashboard");
+        } catch {
+            window.alert("unable to log in! please double check your username and password");
+        }
     };
 
 

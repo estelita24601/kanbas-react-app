@@ -7,7 +7,7 @@ export const USERS_API = `${REMOTE_SERVER}/api/users`;
 export const signin = async (credentials: any) => {
     console.log(`CLIENT signin - ${USERS_API}/signin`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
-    return response.data;
+    return response;
 };
 
 //4.2.2

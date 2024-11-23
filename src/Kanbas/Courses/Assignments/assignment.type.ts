@@ -4,12 +4,12 @@ export type Assignment = {
     title: string;
     course: string;
     available_date: string;
-    available_time: string;
     due_by_date: string;
-    due_by_time: string;
     points: string;
-    assigned_to: string;
     //optional attributes
+    due_by_time?: string;
+    available_time?: string;
+    assigned_to?: string;
     until_date?: string;
     until_time?: string;
     description?: string;
@@ -26,25 +26,20 @@ export const canBeAssignment = (obj: any) => {
         typeof obj.title === "string" &&
         typeof obj.course === "string" &&
         typeof obj.available_date === "string" &&
-        typeof obj.available_time === "string" &&
         typeof obj.due_by_date === "string" &&
-        typeof obj.due_by_time === "string" &&
-        typeof obj.points === "string" &&
-        typeof obj.assigned_to === "string");
+        typeof obj.points === "string");
 
     const empty: boolean = (
         obj._id === "" ||
         obj.title === "" ||
         obj.course === "" ||
         obj.available_date === "" ||
-        obj.available_time === "" ||
         obj.due_by_date === "" ||
-        obj.due_by_time === "" ||
-        obj.points === "" ||
-        obj.assigned_to === ""
+        obj.points === ""
     );
 
     //optional attributes should either be undefined or of the correct data type
+    //fixme later
     const optionalAttributes: boolean =
         (obj.until_date === undefined || typeof obj.until_date === "string") &&
         (obj.until_time === undefined || typeof obj.until_time === "string") &&

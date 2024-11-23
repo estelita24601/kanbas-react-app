@@ -67,9 +67,9 @@ export default function AssignmentEditor() {
           <div className="container d-flex flex-column justify-content-end">
 
             {pointsEditor(currentAssignment, assignmentEdits, setAssignmentEdits, currentUser)}
-            {assignmentGroupEditor(currentAssignment, currentUser)}
-            {gradeDisplayChooser(currentAssignment, currentUser)}
-            {submissionTypeChooser(currentAssignment, currentUser)}
+            {assignmentGroupEditor(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
+            {gradeDisplayChooser(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
+            {submissionTypeChooser(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
 
             {/* Assign Section */}
             <div className="row my-4">
@@ -206,8 +206,9 @@ function pointsEditor(assignment: any, assignmentEdits: any, setEditedAssignment
     </div>
   </div>;
 }
+
 //TODO
-function assignmentGroupEditor(assignment: any, currentUser: any) {
+function assignmentGroupEditor(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
 
   const groupOptions = ["ASSIGNMENTS", "QUIZZES", "EXAMS", "PROJECTS"];
@@ -221,7 +222,7 @@ function assignmentGroupEditor(assignment: any, currentUser: any) {
 
     {/* NOTE: Use the `defaultValue` or `value` props on <select> instead of setting `selected` on <option> */}
     <div className="col align-items-center d-flex align-items-center">
-      <select id="wd-group" className="form-select">
+      <select id="wd-group" className="form-select" onChange={(e) => { setEditedAssignment({ ...assignmentEdits, group: e.target.value }) }}>
         {groupOptions.map((group) => {
           if (assignment.group === group) {
             return (
@@ -241,7 +242,7 @@ function assignmentGroupEditor(assignment: any, currentUser: any) {
 }
 
 //TODO?
-function gradeDisplayChooser(assignment: any, currentUser: any) {
+function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
   const gradeDisplayOptions = ["Percentage", "Letter Grade"];
 
@@ -253,7 +254,7 @@ function gradeDisplayChooser(assignment: any, currentUser: any) {
     </div>
 
     <div className="col align-items-center d-flex align-items-center">
-      <select id="wd-display-group-as" className="form-select">
+      <select id="wd-display-group-as" className="form-select" onChange={(e) => setEditedAssignment({ ...assignmentEdits, grade_display: e.target.value })}>
         {gradeDisplayOptions.map((display) => {
           if (assignment.grade_display === display) {
             return (<option selected value={display} disabled={isStudent}>{display}</option>);
@@ -267,7 +268,7 @@ function gradeDisplayChooser(assignment: any, currentUser: any) {
 }
 
 //TODO
-function submissionTypeChooser(assignment: any, currentUser: any) {
+function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
   const submissionTypeOptions = ["Online", "Physical"];
   const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"];
@@ -280,7 +281,7 @@ function submissionTypeChooser(assignment: any, currentUser: any) {
     </div>
 
     <div className="col ms-3 me-2 form-control d-flex flex-column align-items-start ">
-      <select id="wd-submission-type" className="form-select mt-2 mb-4">
+      <select id="wd-submission-type" className="form-select mt-2 mb-4" onChange={(e) => setEditedAssignment({ ...assignmentEdits, submission_type: e.target.value })}>
         {submissionTypeOptions.map((submissionType) => {
           if (assignment.submission_type === submissionType) {
             return (
@@ -297,16 +298,16 @@ function submissionTypeChooser(assignment: any, currentUser: any) {
       </select>
 
       <b>Online Entry Options</b>
-      {entryOptionsEditor(entryOptions, assignment, currentUser)}
+      {entryOptionsEditor(entryOptions, assignment, currentUser, assignmentEdits, setEditedAssignment)}
     </div>
   </div>;
 }
 
 //TODO
-function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser: any) {
+function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
 
-  return <form className="form-check">
+  return <form className="form-check" >
     {entryOptions.map((entry) => {
       if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
         return (

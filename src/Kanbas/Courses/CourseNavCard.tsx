@@ -3,7 +3,7 @@ import FacultyPrivileges from "../Account/FacultyPrivileges";
 
 import { Enrollment } from "../Types";
 import { useSelector } from "react-redux";
-import { addEnrollment, removeEnrollment } from "../Account/enrollmentReducer";
+import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
 
 export default function CourseNavCard({ course, enrollmentMode, deleteCourse, setCourse }:
     {

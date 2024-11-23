@@ -13,13 +13,17 @@ const enrollmentsSlice = createSlice({
     name: "enrollments",
     initialState,
     reducers: {
+        setEnrollments: (state, action) => {
+            console.log("ENROLLMENTS REDUCER - setting assignments")
+            state.enrollments = action.payload;
+        },
         addEnrollment: (state, { payload: enrollment }) => {
             const newEnrollment = enrollment as Enrollment;
             state.enrollments = [...state.enrollments, newEnrollment];
         },
         removeEnrollment: (state, { payload: enrollment }) => {
             const deleteEnrollment = enrollment as Enrollment;
-            console.log(`TRYING TO DELETE: ${JSON.stringify(deleteEnrollment, null, 2)}`);
+            //console.log(`TRYING TO DELETE: ${JSON.stringify(deleteEnrollment, null, 2)}`);
 
             //compare every enrollment to the one we want to delete
             state.enrollments = state.enrollments.filter((enroll) => {
@@ -37,4 +41,4 @@ const enrollmentsSlice = createSlice({
 });
 
 export default enrollmentsSlice.reducer;
-export const { addEnrollment, removeEnrollment } = enrollmentsSlice.actions;
+export const { setEnrollments, addEnrollment, removeEnrollment } = enrollmentsSlice.actions;

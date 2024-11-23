@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Enrollment } from "./Types";
-//import { addEnrollment, removeEnrollment } from "./Account/enrollmentReducer";
 
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
@@ -40,7 +39,7 @@ export default function Dashboard(
     console.log(`enrollment mode set to ${!enrollmentMode}`);
   }
 
-  
+
 
   return (
     <div id="wd-dashboard" className="ms-4">

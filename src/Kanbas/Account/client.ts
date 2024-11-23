@@ -5,14 +5,14 @@ export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
 
 export const signin = async (credentials: any) => {
-    console.log(`signin - ${USERS_API}/signin`);
+    console.log(`CLIENT signin - ${USERS_API}/signin`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
     return response.data;
 };
 
 //4.2.2
 export const signup = async (user: any) => {
-    console.log(`signup - ${USERS_API}/signup`);
+    console.log(`CLIENT signup - ${USERS_API}/signup`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signup`, user);
     return response.data;
 };

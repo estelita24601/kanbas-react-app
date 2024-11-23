@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { Enrollment } from "./Types";
 
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
+import * as enrollmentsClient from './Enrollments/client';
+import * as enrollmentsReducer from './Enrollments/reducer';
 
 export default function Dashboard(
   { courses,
@@ -23,6 +26,7 @@ export default function Dashboard(
       updateCourse: () => void;
     }
 ) {
+  const dispatch = useDispatch();
 
   //redux for user
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -30,16 +34,14 @@ export default function Dashboard(
   //local state for enrollment mode
   const [enrollmentMode, setEnrollmentMode] = useState(false);
 
-  //redux for list of enrollments
-  const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-
   // function that swaps enrollment mode
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
     console.log(`enrollment mode set to ${!enrollmentMode}`);
   }
 
-
+  //redux for list of enrollments
+  const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -96,8 +98,10 @@ export default function Dashboard(
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
             .map(course => {
+              //fixme: this list is empty?
+              console.log(`DEBUG - enrollments\n${JSON.stringify(enrollments, null, 3)}`);
               //see if current user is enrolled in this specific course
-              const isEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id);
+              const isEnrolled = enrollments?.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id) || false;
 
               if (enrollmentMode && !isEnrolled) {
                 console.log(`not enrolled in ${course._id}`)

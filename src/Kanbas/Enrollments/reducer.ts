@@ -1,12 +1,9 @@
-import { enrollments } from "../Database";
 import { createSlice } from "@reduxjs/toolkit";
 import { Enrollment } from "../Types";
 
 //state.enrollments is a list of Enrollment objects
-const initialState = {
-    enrollments: enrollments.map((enroll) => {
-        return { user_id: enroll.user, course_id: enroll.course } as Enrollment;
-    })
+const initialState: { enrollments: Enrollment[] } = {
+    enrollments: []
 };
 
 const enrollmentsSlice = createSlice({
@@ -15,6 +12,7 @@ const enrollmentsSlice = createSlice({
     reducers: {
         setEnrollments: (state, action) => {
             console.log("ENROLLMENTS REDUCER - setting assignments")
+            console.log(`${JSON.stringify(action.payload)}`) //fixme: showing as undefined
             state.enrollments = action.payload;
         },
         addEnrollment: (state, { payload: enrollment }) => {
@@ -23,19 +21,13 @@ const enrollmentsSlice = createSlice({
         },
         removeEnrollment: (state, { payload: enrollment }) => {
             const deleteEnrollment = enrollment as Enrollment;
-            //console.log(`TRYING TO DELETE: ${JSON.stringify(deleteEnrollment, null, 2)}`);
 
-            //compare every enrollment to the one we want to delete
-            state.enrollments = state.enrollments.filter((enroll) => {
-                const same_user = enroll.user_id === deleteEnrollment.user_id;
-                const same_course = enroll.course_id === deleteEnrollment.course_id
+            const removalIndex = state.enrollments.findIndex((e) => e.user_id === deleteEnrollment.user_id && e.course_id === deleteEnrollment.course_id);
 
-                if (same_user && !same_course) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+            if (removalIndex !== -1) {
+                state.enrollments.splice(removalIndex, 1);
+                console.log("\tsuccessfully removed enrollment from state")
+            }
         },
     }
 });

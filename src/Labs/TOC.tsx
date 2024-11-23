@@ -50,7 +50,16 @@ export default function TOC() {
                     My GitHub
                 </a>
             </li>
-            {/* todo: link to render.com and github repo for server */}
+            <li className="nav-item">
+                <a id="wd-k" href="https://github.com/estelita24601/kanbas-node-server-app" className="nav-link">
+                    Server Repository
+                </a>
+            </li>
+            <li className="nav-item">
+                <a id="wd-k" href="https://kanbas-node-server-app-c12c.onrender.com" className="nav-link">
+                    Render.com Server
+                </a>
+            </li>
         </ul>
     );
 }

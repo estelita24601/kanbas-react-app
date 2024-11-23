@@ -1,4 +1,6 @@
 import { useLocation } from "react-router";
+
+
 export default function TOC() {
     const { pathname } = useLocation();
     return (
@@ -48,6 +50,7 @@ export default function TOC() {
                     My GitHub
                 </a>
             </li>
+            {/* todo: link to render.com and github repo for server */}
         </ul>
     );
 }

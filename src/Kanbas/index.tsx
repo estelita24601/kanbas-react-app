@@ -17,8 +17,7 @@ import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
 
 export default function Kanbas() {
-    //state variable named `courses` of type any[] which means it's an array of values of any data type
-    //the state variable initially starts with what it gets from db.courses
+    //start off with empty list for our courses
     const [courses, setCourses] = useState<any[]>([]);
 
     //state variable named `course` of type any
@@ -90,7 +89,6 @@ export default function Kanbas() {
     useEffect(() => {
         fetchCourses();
     }, [currentUser]);
-
 
 
     return (

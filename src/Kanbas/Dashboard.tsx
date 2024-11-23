@@ -8,15 +8,21 @@ import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
 
-
-export default function Dashboard({ courses, course, setCourse, addNewCourse, deleteCourse, updateCourse }: {
-  courses: any[];
-  course: any;
-  setCourse: (course: any) => void;
-  addNewCourse: () => Promise<void>;
-  deleteCourse: (course: any) => void;
-  updateCourse: () => void;
-}
+export default function Dashboard(
+  { courses,
+    course,
+    setCourse,
+    addNewCourse,
+    deleteCourse,
+    updateCourse }:
+    {
+      courses: any[];
+      course: any;
+      setCourse: (course: any) => void;
+      addNewCourse: () => Promise<void>;
+      deleteCourse: (course: any) => void;
+      updateCourse: () => void;
+    }
 ) {
 
   //redux for user
@@ -33,6 +39,8 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse, de
     setEnrollmentMode(!enrollmentMode);
     console.log(`enrollment mode set to ${!enrollmentMode}`);
   }
+
+  
 
   return (
     <div id="wd-dashboard" className="ms-4">

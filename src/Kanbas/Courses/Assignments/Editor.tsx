@@ -50,8 +50,8 @@ export default function AssignmentEditor() {
   //if we were making a new assignment but changed our mind cancel making the new assignment
   const cancelAssignment = async () => {
     if (mode === "new") {
-      dispatch(deleteAssignment(aid));
       await assignmentsClient.deleteAssignment(aid as string);
+      dispatch(deleteAssignment(aid));
     }
   };
 
@@ -121,7 +121,7 @@ export default function AssignmentEditor() {
                       saveAssignment().then((value) => {
                         if (value === false) {
                           console.log("FAILED TO SAVE ASSIGNMENT - I don't want to leave this page!")
-                          window.alert("Missing required values to save an assignment!");
+                          window.alert("Assignment must have a name, number of points and value for all dates!");
                         } else {
                           navigate(`/Kanbas/Courses/${cid}/Assignments`);
                         }
@@ -147,7 +147,7 @@ function assignmentNameEditor(assignment: any, assignmentEdits: any, setEditedAs
   const isStudent = currentUser.role === "STUDENT";
   return <div className="my-4 me-3">
     <label htmlFor="wd-name" className="form-label">
-      <h5>Assignment Name</h5>
+      <h5>Assignment Name*</h5>
     </label>
 
     <input id="wd-name"
@@ -187,14 +187,14 @@ function pointsEditor(assignment: any, assignmentEdits: any, setEditedAssignment
   return <div className="row my-4">
     <div className="col d-flex align-items-center justify-content-end">
       <label htmlFor="wd-points" className="form-label">
-        <h5>Points</h5>
+        <h5>Points*</h5>
       </label>
     </div>
 
     <div className="col align-items-center d-flex align-items-center justify-content-end">
       <input id="wd-points"
         type="number"
-        placeholder="100" min="0"
+        min="0"
         defaultValue={assignment.points}
         className="form-control"
         onChange={(e) => {
@@ -341,7 +341,7 @@ function assignmentDateEditors(assignment: any, assignmentEdits: any, setEditedA
   return <span>
     <div className="row">
       <label className="form-label">
-        <b>Due</b>
+        <b>Due*</b>
         <input className="form-control" id="wd-due-date" type="date" defaultValue={assignment.due_by_date} onChange={(e) => {
           const editedAssignment = { ...assignmentEdits, due_by_date: e.target.value };
           setEditedAssignment(editedAssignment);
@@ -353,7 +353,7 @@ function assignmentDateEditors(assignment: any, assignmentEdits: any, setEditedA
 
       <div className="col">
         <label className="form-label d-flex flex-column">
-          <b>Available From:</b>
+          <b>Available From:*</b>
           <input id="wd-available-from" className="form-control" type="date" defaultValue={assignment.available_date} onChange={(e) => {
             const editedAssignment = { ...assignmentEdits, available_date: e.target.value };
             setEditedAssignment(editedAssignment);
@@ -363,7 +363,7 @@ function assignmentDateEditors(assignment: any, assignmentEdits: any, setEditedA
 
       <div className="col">
         <label className="form-label d-flex flex-column">
-          <b>Until:</b>
+          <b>Until:*</b>
           <input id="wd-available-until" className="form-control" type="date" defaultValue={assignment.available_until} onChange={(e) => {
             const editedAssignment = { ...assignmentEdits, available_until: e.target.value };
             setEditedAssignment(editedAssignment);

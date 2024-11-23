@@ -43,7 +43,7 @@ export default function Assignments() {
     const newAssignment = await assignmentsClient.createAssignment({ course: cid });
     dispatch(addAssignment(newAssignment));
 
-    navigate(`/Kanbas/Courses/${cid}/Assignments/${newAssignment._id}`);
+    navigate(`/Kanbas/Courses/${cid}/Assignments/${newAssignment._id}/new`);
   }
 
   return (
@@ -110,7 +110,7 @@ export default function Assignments() {
 
                     <div className="col d-flex flex-column align-items-start">
 
-                      <a className="wd-assignment-link fw-bold fs-4" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                      <a className="wd-assignment-link fw-bold fs-4" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}/edit`}>
                         {assignment.title}
                       </a>
 

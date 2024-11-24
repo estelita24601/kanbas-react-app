@@ -8,7 +8,7 @@ import * as enrollmentClient from "../Enrollments/client";
 export default function CourseNavCard({ course, enrollmentMode, deleteCourse, setCourse }:
     {
         course: any;
-        enrollmentMode: boolean;
+        enrollmentMode: boolean; //is user allowed to modify their enrollment?
         deleteCourse: (course: any) => void;
         setCourse: (course: any) => void;
     }
@@ -25,7 +25,6 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
         dispatch(addEnrollment(enrollment))
     }
 
-    //fixme
     const deleteEnrollment = async () => {
         const enrollment = { user_id: currentUser._id, course_id: course._id };
         console.log(`going to delete enrollment - ${JSON.stringify(enrollment)}`);
@@ -34,37 +33,39 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
         await enrollmentClient.removeEnrollment(enrollment.user_id, enrollment.course_id);
     }
 
+    //see if current user is enrolled in this specific course
+    const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, course));
+
+    const goButton = <button className="btn btn-primary ">Go </button>;
+    const unEnrollButton =
+        <button className="btn btn-danger me-1 float-end"
+            onClick={(e) => {
+                e.preventDefault();
+                deleteEnrollment();
+            }}>
+            Unenroll
+        </button>
+    const enrollButton =
+        <button className="btn btn-success me-1 mb-3 float-end"
+            onClick={(e) => {
+                e.preventDefault();
+                newEnrollment();
+            }}>
+            Enroll
+        </button>
     const getCourseButtons = (courseId: string) => {
+
+        if (enrollmentMode) {
+            if (isEnrolled === true) {
+                //we're currently enrolled so we can go to course OR un enroll
+                return (<span>{goButton}{unEnrollButton}</span>);
+            } else {
+                //we're not currently enrolled so can't use go button
+                return enrollButton;
+            }
+        }
         //if we're not in enrollment mode just show the normal Go button
-        if (!enrollmentMode) {
-            return (<button className="btn btn-primary ">Go </button>);
-        }
-
-        const currCourseEnrolled = enrollments?.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === courseId) || false;
-
-        // return the red unenroll button or the green enroll button
-        if (currCourseEnrolled) {
-            return (
-                <span>
-                    <button className="btn btn-primary">Go </button>
-                    <button className="btn btn-danger me-1 float-end"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            deleteEnrollment();
-                        }}>
-                        Unenroll
-                    </button>
-                </span>);
-        } else {
-            return (
-                <button className="btn btn-success me-1 mb-3 float-end"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        newEnrollment();
-                    }}>
-                    Enroll
-                </button>);
-        }
+        return (goButton);
     }
 
     return (
@@ -103,4 +104,13 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
             </div>
         </div>
     );
+}
+
+function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
+    console.log(`ENROLLMENT ENTRY: ${JSON.stringify(enrollment)}`);
+    const sameUser = enrollment.user === currentUser._id;
+    console.log(`${sameUser}\tCURRENT USER: ${currentUser._id}`);
+    const sameCourse = enrollment.course === course._id;
+    console.log(`${sameCourse}\tCURRENT COURSE: ${course._id}`);
+    return sameUser && sameCourse;
 }

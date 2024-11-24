@@ -17,7 +17,7 @@ export const removeEnrollment = async (userID: string, courseID: string) => {
 };
 
 //fixme?
-export const getEnrollments = async (userID: string) => {
+export const getEnrollmentsForUser = async (userID: string) => {
     console.log(`CLIENT - getEnrollments ${API}/${userID}`);
     const { data } = await axios.get(`${API}/${userID}`);
     return data;

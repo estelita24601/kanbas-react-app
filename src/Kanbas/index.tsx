@@ -92,7 +92,7 @@ export default function Kanbas() {
 
     //fixme
     const fetchEnrollments = async () => {
-        const serverEnrollments = await enrollmentsClient.getEnrollments(currentUser._id);
+        const serverEnrollments = await enrollmentsClient.getEnrollmentsForUser(currentUser._id);
         dispatch(setEnrollments(serverEnrollments));
     }
 

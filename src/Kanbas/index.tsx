@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./styles.css";
 import { useEffect } from "react";
-
+import { useDispatch } from "react-redux";
 //import clients
 import * as courseClient from "./Courses/client";
 import * as userClient from "./Account/client";
+import * as enrollmentsClient from "./Enrollments/client";
 
 //import react components
 import Account from "./Account/Account";
@@ -15,8 +16,11 @@ import Session from "./Account/Session";
 import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
+import { setEnrollments } from "./Enrollments/reducer";
+import { current } from "@reduxjs/toolkit";
 
 export default function Kanbas() {
+    const dispatch = useDispatch();
     //start off with empty list for our courses
     const [courses, setCourses] = useState<any[]>([]);
 
@@ -86,10 +90,20 @@ export default function Kanbas() {
         }
     };
 
-    useEffect(() => {
-        fetchCourses();
-    }, [currentUser]);
+    //fixme
+    const fetchEnrollments = async () => {
+        const serverEnrollments = await enrollmentsClient.getEnrollments(currentUser._id);
+        dispatch(setEnrollments(serverEnrollments));
+    }
 
+    useEffect(() => {
+        if (currentUser) {
+            fetchCourses();
+            fetchEnrollments();
+        } else {
+            console.log("current user doesn't exist so not going to fetch courses or enrollments");
+        }
+    }, [currentUser]);
 
     return (
         <Session>

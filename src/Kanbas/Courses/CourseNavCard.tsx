@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import FacultyPrivileges from "../Account/FacultyPrivileges";
-
 import { Enrollment } from "../Types";
 import { useSelector } from "react-redux";
 import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
+import * as enrollmentClient from "../Enrollments/client";
 
 export default function CourseNavCard({ course, enrollmentMode, deleteCourse, setCourse }:
     {
@@ -13,10 +13,26 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
         setCourse: (course: any) => void;
     }
 ) {
-
     const dispatch = useDispatch();
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+    const newEnrollment = async () => {
+        const enrollment = { user_id: currentUser._id, course_id: course._id };
+        console.log(`new enrollment - ${JSON.stringify(enrollment)}`);
+
+        await enrollmentClient.addEnrollment(enrollment.user_id, enrollment.course_id);
+        dispatch(addEnrollment(enrollment))
+    }
+
+    //fixme
+    const deleteEnrollment = async () => {
+        const enrollment = { user_id: currentUser._id, course_id: course._id };
+        console.log(`going to delete enrollment - ${JSON.stringify(enrollment)}`);
+
+        dispatch(removeEnrollment(enrollment))
+        await enrollmentClient.removeEnrollment(enrollment.user_id, enrollment.course_id);
+    }
 
     const getCourseButtons = (courseId: string) => {
         //if we're not in enrollment mode just show the normal Go button
@@ -24,7 +40,7 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
             return (<button className="btn btn-primary ">Go </button>);
         }
 
-        const currCourseEnrolled = enrollments.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === courseId)
+        const currCourseEnrolled = enrollments?.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === courseId) || false;
 
         // return the red unenroll button or the green enroll button
         if (currCourseEnrolled) {
@@ -34,8 +50,7 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
                     <button className="btn btn-danger me-1 float-end"
                         onClick={(e) => {
                             e.preventDefault();
-                            console.log(`dispatch(removeEnrollment()) with user_id = ${currentUser._id} and course_id = ${courseId}`)
-                            dispatch(removeEnrollment({ user_id: currentUser._id, course_id: courseId }));
+                            deleteEnrollment();
                         }}>
                         Unenroll
                     </button>
@@ -45,8 +60,7 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
                 <button className="btn btn-success me-1 mb-3 float-end"
                     onClick={(e) => {
                         e.preventDefault();
-                        console.log(`dispatch(addEnrollment()) with user_id = ${currentUser._id} and course_id = ${courseId}`)
-                        dispatch(addEnrollment({ user_id: currentUser._id, course_id: courseId }));
+                        newEnrollment();
                     }}>
                     Enroll
                 </button>);

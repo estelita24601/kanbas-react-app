@@ -1,9 +1,10 @@
 import { Route, Routes, Navigate } from "react-router"
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import "./styles.css";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
 //import clients
 import * as courseClient from "./Courses/client";
 import * as userClient from "./Account/client";
@@ -16,15 +17,14 @@ import Session from "./Account/Session";
 import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
-import { setEnrollments } from "./Enrollments/reducer";
-import { current } from "@reduxjs/toolkit";
+
+//reducer stuff
+import { setEnrollments, addEnrollment, removeEnrollment } from './Enrollments/reducer';
+
 
 export default function Kanbas() {
-    const dispatch = useDispatch();
-    //start off with empty list for our courses
+    //STATE VARIABLES
     const [courses, setCourses] = useState<any[]>([]);
-
-    //state variable named `course` of type any
     const [course, setCourse] = useState<any>(
         // initial is an object with the default values for a course
         {
@@ -38,38 +38,40 @@ export default function Kanbas() {
         }
     );
 
-    //function to add a new course to `courses`
-    //user input for the name and description, generates timestamp for _id then the rest is default values
+    //REDUX
+    const dispatch = useDispatch();
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+    //add course to our server and our state variable
     const addNewCourse = async () => {
 
         //4.4.2 get object for the new course from the server
         const newCourse = await userClient.createCourse(course);
-        //console.log(`adding course to list of courses\n${JSON.stringify(newCourse, null, 2)}`)
 
         //update value of the state variable
         setCourses([...courses, { ...course, ...newCourse }])
     }
 
-    //function to delete a course from `courses`
-    const deleteCourse = (courseId: string) => {
-        console.log(`\ttrying to delete course with id = ${courseId}`)
+    //delete a course from the server and the state variable
+    const deleteCourse = async (courseId: string) => {
+        //send delete request to server
+        await courseClient.deleteCourse(courseId);
+
+        //update state variable
         setCourses(
-            //set `courses` value to be itself after filtering out the given course
-            courses.filter(
-                // keep the course if it's id doesn't match `courseId`
-                (course) => course._id !== courseId
-            )
+            courses.filter((course) => course._id !== courseId)
         );
     }
 
-    //function for updating a course
+    //update a course on the server and in the state variable
     const updateCourse = async () => {
-        //4.4.4
+        //update server
         await courseClient.updateCourse(course);
+
+        //update state variable
         setCourses(
             courses.map((curr_course) => {
                 if (curr_course._id === course._id) {
-                    //console.log(`replacing course ${JSON.stringify(curr_course, null, 2)}\nNEW COURSE = ${JSON.stringify(course, null, 2)}`)
                     return course;
                 } else {
                     return curr_course;
@@ -78,9 +80,7 @@ export default function Kanbas() {
         );
     };
 
-    //4.4.1
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
-
+    //get courses from the server to update the state variable
     const fetchCourses = async () => {
         try {
             const courses = await userClient.findMyCourses();
@@ -90,12 +90,13 @@ export default function Kanbas() {
         }
     };
 
-    //fixme
+    //get enrollments from the server and use it to update redux
     const fetchEnrollments = async () => {
         const serverEnrollments = await enrollmentsClient.getEnrollmentsForUser(currentUser._id);
         dispatch(setEnrollments(serverEnrollments));
     }
 
+    //if currentUser changes then fetch courses and enrollments for that user
     useEffect(() => {
         if (currentUser) {
             fetchCourses();

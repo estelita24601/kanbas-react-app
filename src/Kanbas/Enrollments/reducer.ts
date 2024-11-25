@@ -11,13 +11,14 @@ const enrollmentsSlice = createSlice({
     initialState,
     reducers: {
         setEnrollments: (state, action) => {
-            console.log("ENROLLMENTS REDUCER - setting assignments")
-            console.log(`${JSON.stringify(action.payload)}`) //fixme: showing as undefined
+            console.log("ENROLLMENTS REDUCER - setting assignments");
+            console.log(`${JSON.stringify(action.payload)}`);
             state.enrollments = action.payload;
         },
         addEnrollment: (state, { payload: enrollment }) => {
             const newEnrollment = enrollment as Enrollment;
             state.enrollments = [...state.enrollments, newEnrollment];
+            console.log("ENROLLMENTS REDUCER - added an enrollment")
         },
         removeEnrollment: (state, { payload: enrollment }) => {
             const deleteEnrollment = enrollment as Enrollment;
@@ -26,7 +27,7 @@ const enrollmentsSlice = createSlice({
 
             if (removalIndex !== -1) {
                 state.enrollments.splice(removalIndex, 1);
-                console.log("\tsuccessfully removed enrollment from state")
+                console.log("ENROLLMENTS REDUCER - removed an enrollment")
             }
         },
     }

@@ -4,15 +4,25 @@ import { Enrollment } from "../Types";
 import { useSelector } from "react-redux";
 import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
 import * as enrollmentClient from "../Enrollments/client";
+import { useNavigate } from "react-router";
 
-export default function CourseNavCard({ course, enrollmentMode, deleteCourse, setCourse }:
+
+export default function CourseNavCard(
     {
-        course: any;
-        enrollmentMode: boolean; //is user allowed to modify their enrollment?
-        deleteCourse: (course: any) => void;
-        setCourse: (course: any) => void;
-    }
+        course, //received from dashboard, current course we're turning into a nav card
+        enrollmentMode, //is user allowed to modify their enrollment?
+        deleteCourse, //index -> dashboard -> here
+        setCourse //index -> dashboard -> here
+    }:
+        {
+            course: any;
+            enrollmentMode: boolean;
+            deleteCourse: (course: any) => void;
+            setCourse: (course: any) => void;
+        }
 ) {
+
+    //REDUX
     const dispatch = useDispatch();
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -36,7 +46,12 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
     //see if current user is enrolled in this specific course
     const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, course));
 
-    const goButton = <button className="btn btn-primary ">Go </button>;
+    const navigate = useNavigate();
+    const goButton =
+        <button className="btn btn-primary "
+            onClick={e => navigate(`/Kanbas/Courses/${course._id}`)}>
+            Go
+        </button>;
     const unEnrollButton =
         <button className="btn btn-danger me-1 float-end"
             onClick={(e) => {
@@ -109,8 +124,8 @@ export default function CourseNavCard({ course, enrollmentMode, deleteCourse, se
 function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
     console.log(`ENROLLMENT ENTRY: ${JSON.stringify(enrollment)}`);
     const sameUser = enrollment.user === currentUser._id;
-    console.log(`${sameUser}\tCURRENT USER: ${currentUser._id}`);
+    console.log(`\t${sameUser}\tCURRENT USER: ${currentUser._id}`);
     const sameCourse = enrollment.course === course._id;
-    console.log(`${sameCourse}\tCURRENT COURSE: ${course._id}`);
+    console.log(`\t${sameCourse}\tCURRENT COURSE: ${course._id}`);
     return sameUser && sameCourse;
 }

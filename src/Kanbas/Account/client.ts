@@ -43,6 +43,7 @@ export const findMyCourses = async () => {
 
 //4.4.2
 export const createCourse = async (course: any) => {
+    //on the backend this also creates a new enrollment
     const { data } = await axiosWithCredentials.post(`${USERS_API}/current/courses`, course);
     return data;
 };

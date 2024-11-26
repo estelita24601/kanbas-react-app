@@ -18,7 +18,7 @@ import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
 
-//reducer stuff
+//redux stuff
 import { setEnrollments, addEnrollment, removeEnrollment } from './Enrollments/reducer';
 
 

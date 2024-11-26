@@ -5,14 +5,14 @@ import { useSelector } from "react-redux";
 import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
 import * as enrollmentClient from "../Enrollments/client";
 import { useNavigate } from "react-router";
-
+import { useEffect, useState } from "react";
 
 export default function CourseNavCard(
     {
         course, //received from dashboard, current course we're turning into a nav card
         enrollmentMode, //is user allowed to modify their enrollment?
-        deleteCourse, //index -> dashboard -> here
-        setCourse //index -> dashboard -> here
+        deleteCourse, //connects to server and updates `courses` state variable from the index
+        setCourse //sets the `course` state variable from the index
     }:
         {
             course: any;
@@ -22,36 +22,53 @@ export default function CourseNavCard(
         }
 ) {
 
+
     //REDUX
     const dispatch = useDispatch();
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-    const newEnrollment = async () => {
-        const enrollment = { user_id: currentUser._id, course_id: course._id };
-        console.log(`new enrollment - ${JSON.stringify(enrollment)}`);
+    //STATE VARIABLE
+    const [isEnrolled, setIsEnrolled] = useState<boolean>();
 
-        await enrollmentClient.addEnrollment(enrollment.user_id, enrollment.course_id);
+    useEffect(() => {
+        console.log("\t\t\tCourseNavCard - enrollments redux changed so updating enrollment status for the given course");
+        setIsEnrolled(enrollments.some(
+            (enrollment: any) => {
+                const sameUser = enrollment.user === currentUser._id;
+                const sameCourse = enrollment.course === course._id;
+                return sameUser && sameCourse;
+            })
+        );
+    }, [enrollments]);
+
+
+    //add enrollment to the server and to the redux
+    const newEnrollment = async () => {
+        const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
+        console.log(`\tnew enrollment - ${JSON.stringify(enrollment)}`);
+
+        await enrollmentClient.addEnrollment(enrollment.user, enrollment.course);
         dispatch(addEnrollment(enrollment))
     }
 
+    //remove enrollment from the server and from the redux
     const deleteEnrollment = async () => {
-        const enrollment = { user_id: currentUser._id, course_id: course._id };
-        console.log(`going to delete enrollment - ${JSON.stringify(enrollment)}`);
+        const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
+        console.log(`\tgoing to delete enrollment - ${JSON.stringify(enrollment)}`);
 
+        await enrollmentClient.removeEnrollment(enrollment.user, enrollment.course);
         dispatch(removeEnrollment(enrollment))
-        await enrollmentClient.removeEnrollment(enrollment.user_id, enrollment.course_id);
     }
 
-    //see if current user is enrolled in this specific course
-    const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, course));
-
     const navigate = useNavigate();
+
     const goButton =
         <button className="btn btn-primary "
             onClick={e => navigate(`/Kanbas/Courses/${course._id}`)}>
             Go
         </button>;
+
     const unEnrollButton =
         <button className="btn btn-danger me-1 float-end"
             onClick={(e) => {
@@ -60,6 +77,7 @@ export default function CourseNavCard(
             }}>
             Unenroll
         </button>
+
     const enrollButton =
         <button className="btn btn-success me-1 mb-3 float-end"
             onClick={(e) => {
@@ -68,12 +86,15 @@ export default function CourseNavCard(
             }}>
             Enroll
         </button>
-    const getCourseButtons = (courseId: string) => {
 
+    const getCourseButtons = (courseId: string) => {
         if (enrollmentMode) {
             if (isEnrolled === true) {
-                //we're currently enrolled so we can go to course OR un enroll
-                return (<span>{goButton}{unEnrollButton}</span>);
+                return (
+                    <span>
+                        {goButton}
+                        {unEnrollButton}
+                    </span>);
             } else {
                 //we're not currently enrolled so can't use go button
                 return enrollButton;
@@ -100,7 +121,7 @@ export default function CourseNavCard(
                 <FacultyPrivileges>
                     <button id="wd-delete-course-click" className="btn btn-danger float-end"
                         onClick={(clickEvent) => {
-                            console.log(`button click to delete course\n${JSON.stringify(course, null, 2)}`)
+                            console.log(`\tbutton click to delete course\n${JSON.stringify(course, null, 2)}`)
                             clickEvent.preventDefault(); //don't navigate like the Go button does
                             deleteCourse(course._id);
                         }}>
@@ -109,7 +130,7 @@ export default function CourseNavCard(
 
                     <button id="id-wd-edit-course-click" className="btn btn-warning float-end me-2"
                         onClick={(event) => {
-                            console.log(`button click to edit course\n${JSON.stringify(course, null, 2)}`)
+                            console.log(`\tbutton click to edit course\n${JSON.stringify(course, null, 2)}`)
                             event.preventDefault(); //don't navigate like the Go button does
                             setCourse(course);
                         }}>
@@ -119,13 +140,4 @@ export default function CourseNavCard(
             </div>
         </div>
     );
-}
-
-function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
-    console.log(`ENROLLMENT ENTRY: ${JSON.stringify(enrollment)}`);
-    const sameUser = enrollment.user === currentUser._id;
-    console.log(`\t${sameUser}\tCURRENT USER: ${currentUser._id}`);
-    const sameCourse = enrollment.course === course._id;
-    console.log(`\t${sameCourse}\tCURRENT COURSE: ${course._id}`);
-    return sameUser && sameCourse;
 }

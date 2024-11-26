@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Enrollment } from "../Types";
 
+/*
+export interface Enrollment {
+    user_id: string,
+    course_id: string
+}
+*/
+
 //state.enrollments is a list of Enrollment objects
 const initialState: { enrollments: Enrollment[] } = {
     enrollments: []
@@ -16,19 +23,24 @@ const enrollmentsSlice = createSlice({
             state.enrollments = action.payload;
         },
         addEnrollment: (state, { payload: enrollment }) => {
+            console.log("ENROLLMENTS REDUCER - trying to add an enrollment")
             const newEnrollment = enrollment as Enrollment;
             state.enrollments = [...state.enrollments, newEnrollment];
-            console.log("ENROLLMENTS REDUCER - added an enrollment")
         },
         removeEnrollment: (state, { payload: enrollment }) => {
             const deleteEnrollment = enrollment as Enrollment;
+            console.log(`ENROLLMENTS REDUCER - trying to remove ${JSON.stringify(deleteEnrollment)}`);
 
-            const removalIndex = state.enrollments.findIndex((e) => e.user_id === deleteEnrollment.user_id && e.course_id === deleteEnrollment.course_id);
+            state.enrollments = state.enrollments.filter((e) => {
+                console.log(`\tchecking ${JSON.stringify(e)}`);
+                if (e.course === deleteEnrollment.course && e.user === deleteEnrollment.user) {
+                    console.log(`\t\tREMOVING!`);
+                    return false;
+                } else {
+                    return true;
+                }
+            });
 
-            if (removalIndex !== -1) {
-                state.enrollments.splice(removalIndex, 1);
-                console.log("ENROLLMENTS REDUCER - removed an enrollment")
-            }
         },
     }
 });

@@ -33,7 +33,7 @@ export default function Dashboard(
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
-  //State Variables
+  //STATE VARIABLES
   const [enrollmentMode, setEnrollmentMode] = useState(false);
 
   // function that swaps enrollment mode
@@ -67,7 +67,6 @@ export default function Dashboard(
 
   );
 }
-
 
 function dashboardCourseControls(course: any, addNewCourse: () => Promise<void>, setCourse: (course: any) => void, updateCourse: () => void) {
   return (
@@ -147,14 +146,12 @@ function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMod
       <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
         <div className="card rounded-3 overflow-hidden"
         >
-
           <CourseNavCard
             course={courseToMap}
             enrollmentMode={enrollmentMode}
             deleteCourse={deleteCourse}
             setCourse={setCourse}
           />
-
         </div>
       </div>
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { Link, NavigateFunction } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Enrollment } from "./Types";
 import { useNavigate } from "react-router-dom";
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
@@ -144,48 +143,19 @@ function dashboardCourseControls(course: any, addNewCourse: () => Promise<void>,
   );
 }
 
-function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
-  const sameUser = enrollment.user_id === currentUser._id;
-  const sameCourse = enrollment.course_id === course._id;
-  return sameUser && sameCourse;
-}
 function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMode: boolean, currentUser: any, setCourse: (course: any) => void, deleteCourse: (course: any) => void, navigate: NavigateFunction) {
-  //see if current user is enrolled in this specific course
-  const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, courseToMap));
 
-  if (isEnrolled) {
-    return (
-      <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-        <div className="card rounded-3 overflow-hidden"
-        >
-          <Link to={`/Kanbas/Courses/${courseToMap._id}/Home`}
-            className="wd-dashboard-course-link text-decoration-none text-dark"
-          >
-            <CourseNavCard
-              course={courseToMap}
-              enrollmentMode={enrollmentMode}
-              deleteCourse={deleteCourse}
-              setCourse={setCourse}
-            />
-
-          </Link>
-        </div>
-      </div >
-    );
-  } else {
-    return (
-      <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-        <div className="card rounded-3 overflow-hidden"
-        >
-          <CourseNavCard
-            course={courseToMap}
-            enrollmentMode={enrollmentMode}
-            deleteCourse={deleteCourse}
-            setCourse={setCourse}
-          />
-        </div>
+  return (
+    <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
+      <div className="card rounded-3 overflow-hidden"
+      >
+        <CourseNavCard
+          course={courseToMap}
+          enrollmentMode={enrollmentMode}
+          deleteCourse={deleteCourse}
+          setCourse={setCourse}
+        />
       </div>
-
-    );
-  }
+    </div >
+  );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { useDispatch } from "react-redux";
 import FacultyPrivileges from "../Account/FacultyPrivileges";
 import { Enrollment } from "../Types";
@@ -27,26 +28,23 @@ export default function CourseNavCard(
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+    const determineEnrollment = (enrollment: any) => {
+        const sameUser = enrollment.user_id === currentUser._id;
+        const sameCourse = enrollment.course_id === course._id;
+        return sameUser && sameCourse;
+
+    }
+
     //STATE VARIABLE
     const [isEnrolled, setIsEnrolled] = useState<boolean>(
         enrollments.some(
-            (enrollment: any) => {
-                const sameUser = enrollment.user === currentUser._id;
-                const sameCourse = enrollment.course === course._id;
-                return sameUser && sameCourse;
-            }
-        )
+            (enrollment: any) => determineEnrollment(enrollment))
     );
-
+    //whenever enrollments change see if user is enrolled in the current course or not
     useEffect(() => {
         setIsEnrolled(enrollments.some(
-            (enrollment: any) => {
-                const sameUser = enrollment.user === currentUser._id;
-                const sameCourse = enrollment.course === course._id;
-                return sameUser && sameCourse;
-            })
+            (enrollment: any) => determineEnrollment(enrollment))
         );
-        //console.log(`\t\tuseEffect --> ${course._id} = ${isEnrolled}`);
     }, [enrollments]);
 
 
@@ -112,12 +110,29 @@ export default function CourseNavCard(
     }
 
     return (
-        <div id={`course-card-${course._id}`}>
-            <img src="/images/reactjs.jpg" width="100%" height={160} />
+        <div id={`course-card-${course._id}`} >
+            <img src="/images/reactjs.jpg"
+                width="100%"
+                height={160}
+                style={{ cursor: "pointer" }}
+                onClick={e => {
+                    if (isEnrolled) {
+                        navigate(`/Kanbas/Courses/${course._id}/Home`)
+                    }
+                }} />
             <div className="card-body">
-                <h5 className="wd-dashboard-course-title card-title fw-bold"  >
+
+                <h5 className="wd-dashboard-course-title card-title fw-bold fs-4"
+                    style={{ cursor: "pointer" }}
+                    onClick={e => {
+                        if (isEnrolled) {
+                            navigate(`/Kanbas/Courses/${course._id}/Home`)
+                        }
+                    }
+                    }>
                     {course.name}
                 </h5>
+
                 <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
                     {course.description}
                 </p>

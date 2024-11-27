@@ -18,13 +18,13 @@ const enrollmentsSlice = createSlice({
     initialState,
     reducers: {
         setEnrollments: (state, action) => {
-            console.log("ENROLLMENTS REDUCER - setting assignments");
-            console.log(`${JSON.stringify(action.payload)}`);
+            console.log("ENROLLMENTS REDUCER - setting enrollments");
+            console.log(`${JSON.stringify(action.payload, null, 2)}`);
             state.enrollments = action.payload;
         },
         addEnrollment: (state, { payload: enrollment }) => {
-            console.log("ENROLLMENTS REDUCER - trying to add an enrollment")
             const newEnrollment = enrollment as Enrollment;
+            console.log(`ENROLLMENTS REDUCER - trying to add an enrollment ${JSON.stringify(newEnrollment)}`);
             state.enrollments = [...state.enrollments, newEnrollment];
         },
         removeEnrollment: (state, { payload: enrollment }) => {
@@ -32,7 +32,6 @@ const enrollmentsSlice = createSlice({
             console.log(`ENROLLMENTS REDUCER - trying to remove ${JSON.stringify(deleteEnrollment)}`);
 
             state.enrollments = state.enrollments.filter((e) => {
-                console.log(`\tchecking ${JSON.stringify(e)}`);
                 if (e.course === deleteEnrollment.course && e.user === deleteEnrollment.user) {
                     console.log(`\t\tREMOVING!`);
                     return false;

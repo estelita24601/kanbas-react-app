@@ -122,6 +122,7 @@ export default function Kanbas() {
                                 <Dashboard
                                     courses={courses}
                                     course={course}
+                                    fetchCourses={fetchCourses}
                                     setCourse={setCourse}
                                     addNewCourse={addNewCourse}
                                     deleteCourse={deleteCourse}

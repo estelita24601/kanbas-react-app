@@ -22,17 +22,23 @@ export default function CourseNavCard(
         }
 ) {
 
-
     //REDUX
     const dispatch = useDispatch();
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     //STATE VARIABLE
-    const [isEnrolled, setIsEnrolled] = useState<boolean>();
+    const [isEnrolled, setIsEnrolled] = useState<boolean>(
+        enrollments.some(
+            (enrollment: any) => {
+                const sameUser = enrollment.user === currentUser._id;
+                const sameCourse = enrollment.course === course._id;
+                return sameUser && sameCourse;
+            }
+        )
+    );
 
     useEffect(() => {
-        console.log("\t\t\tCourseNavCard - enrollments redux changed so updating enrollment status for the given course");
         setIsEnrolled(enrollments.some(
             (enrollment: any) => {
                 const sameUser = enrollment.user === currentUser._id;
@@ -40,6 +46,7 @@ export default function CourseNavCard(
                 return sameUser && sameCourse;
             })
         );
+        //console.log(`\t\tuseEffect --> ${course._id} = ${isEnrolled}`);
     }, [enrollments]);
 
 
@@ -48,8 +55,8 @@ export default function CourseNavCard(
         const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
         console.log(`\tnew enrollment - ${JSON.stringify(enrollment)}`);
 
-        await enrollmentClient.addEnrollment(enrollment.user, enrollment.course);
         dispatch(addEnrollment(enrollment))
+        await enrollmentClient.addEnrollment(enrollment.user, enrollment.course);
     }
 
     //remove enrollment from the server and from the redux
@@ -57,8 +64,8 @@ export default function CourseNavCard(
         const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
         console.log(`\tgoing to delete enrollment - ${JSON.stringify(enrollment)}`);
 
-        await enrollmentClient.removeEnrollment(enrollment.user, enrollment.course);
         dispatch(removeEnrollment(enrollment))
+        await enrollmentClient.removeEnrollment(enrollment.user, enrollment.course);
     }
 
     const navigate = useNavigate();

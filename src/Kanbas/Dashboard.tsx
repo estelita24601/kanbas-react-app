@@ -1,26 +1,29 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import { Link, NavigateFunction } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Enrollment } from "./Types";
 import { useNavigate } from "react-router-dom";
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
-
+import * as coursesClient from "./Courses/client";
 
 
 export default function Dashboard(
   {
-    courses, //Dashboard state variable updated by server --> here
-    course, //Dashboard state variable
-    setCourse, //setter for the Dashboard state variable
-    addNewCourse, //updates server and Dashboard state variable
-    deleteCourse, //updates server and Dashboard state variable
-    updateCourse //updates server and Dashboard state variable
+    courses, //state variable from index that has courses for the current user
+    course, //state variable from index
+    fetchCourses, //func from index that gets courses for current user
+    setCourse, //setter for the state variable
+    addNewCourse, //updates server and state variable
+    deleteCourse, //updates server and state variable
+    updateCourse //updates server and state variable
   }:
     {
       courses: any[];
       course: any;
+      fetchCourses: () => Promise<void>;
       setCourse: (course: any) => void;
       addNewCourse: () => Promise<void>;
       deleteCourse: (course: any) => Promise<void>;
@@ -33,14 +36,44 @@ export default function Dashboard(
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
+
   //STATE VARIABLES
   const [enrollmentMode, setEnrollmentMode] = useState(false);
+  const [coursesToDisplay, setCoursesToDisplay] = useState<any[]>(courses);
+
+  //function that has us display ALL courses
+  const fetchAllCourses = async () => {
+    const allCourses = await coursesClient.fetchAllCourses();
+    setCoursesToDisplay(allCourses);
+  }
 
   // function that swaps enrollment mode
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
-    console.log(`enrollment mode set to ${!enrollmentMode}`);
+    console.log(`enrollment mode set to ${enrollmentMode}`);
   }
+
+  //whenever enrollmentMode changes update the courses we want to display
+  useEffect(() => {
+    if (enrollmentMode) {
+      console.log("\tgoing to display all courses");
+      fetchAllCourses();
+    } else {
+      console.log("\tonly going to display courses already enrolled in")
+      setCoursesToDisplay(courses);
+    }
+  }, [enrollmentMode, courses]);
+
+  //whenever courses we're displaying changes put it in the log
+  useEffect(() => {
+    console.debug(`\tcourses user is enrolled in =\n${JSON.stringify(courses.map(c => c._id))}`);
+    console.debug(`\tcourses to display =\n${JSON.stringify(coursesToDisplay.map(c => c._id))}`);
+  }, [coursesToDisplay]);
+
+  //whenever enrollments change update the state variable for courses the user is enrolled in
+  useEffect(() => {
+    fetchCourses();
+  }, [enrollments]);
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -53,12 +86,12 @@ export default function Dashboard(
         <button className="btn btn-primary float-end" onClick={switchEnrollmentView}>Enrollments</button>
       </StudentPrivileges>
 
-      <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
+      <h2 id="wd-dashboard-published">Published Courses ({coursesToDisplay.length})</h2> <hr />
 
       <div id="wd-dashboard-courses" className="row">
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {courses.map((currCourse) => { return dashboardCourseMapper(currCourse, enrollments, enrollmentMode, currentUser, setCourse, deleteCourse, navigate); })}
+          {coursesToDisplay.map((currCourse) => { return dashboardCourseMapper(currCourse, enrollments, enrollmentMode, currentUser, setCourse, deleteCourse, navigate); })}
         </div>
 
       </div>
@@ -117,8 +150,6 @@ function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
   return sameUser && sameCourse;
 }
 function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMode: boolean, currentUser: any, setCourse: (course: any) => void, deleteCourse: (course: any) => void, navigate: NavigateFunction) {
-  console.log(`MAPPING COURSE ${courseToMap._id} TO A NAVIGATION CARD`);
-
   //see if current user is enrolled in this specific course
   const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, courseToMap));
 
@@ -158,47 +189,3 @@ function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMod
     );
   }
 }
-
-
-/*
-course => {
-            //see if current user is enrolled in this specific course
-            const isEnrolled = enrollments?.some((entry: Enrollment) => entry.user_id === currentUser._id && entry.course_id === course._id) || false;
-
-            if (enrollmentMode && !isEnrolled) {
-              console.log(`not enrolled in ${course._id}`)
-              return (
-                <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-                  <div className="card rounded-3 overflow-hidden">
-                    <CourseNavCard
-                      course={course}
-                      enrollmentStatus={isEnrolled}
-                      enrollmentMode={enrollmentMode}
-                      deleteCourse={deleteCourse}
-                      setCourse={setCourse}
-                    />
-                  </div>
-                </div>
-              );
-            }
-            else {
-              return (
-                <div key={`dashboard-course-${course._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-                  <div className="card rounded-3 overflow-hidden">
-                    <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                      className="wd-dashboard-course-link text-decoration-none text-dark"
-                    >
-                      <CourseNavCard
-                        course={course}
-                        enrollmentStatus={isEnrolled}
-                        enrollmentMode={enrollmentMode}
-                        deleteCourse={deleteCourse}
-                        setCourse={setCourse}
-                      />
-                    </Link>
-                  </div>
-                </div>
-              );
-            }
-          }
-*/

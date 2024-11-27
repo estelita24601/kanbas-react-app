@@ -9,7 +9,6 @@ export const addEnrollment = async (userID: string, courseID: string) => {
     return data;
 };
 
-//fixme
 export const removeEnrollment = async (userID: string, courseID: string) => {
     console.log(`CLIENT - removeEnrollment ${API}/un-enroll/${userID}/${courseID}`)
     const { data } = await axios.delete(`${API}/un-enroll/${userID}/${courseID}`);

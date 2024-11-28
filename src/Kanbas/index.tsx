@@ -92,7 +92,7 @@ export default function Kanbas() {
 
     //get enrollments from the server and use it to update redux
     const fetchEnrollments = async () => {
-        console.debug(`\tfetching enrollments for user:\n${JSON.stringify(currentUser)}`);
+        console.debug(`\tfetching enrollments for ${currentUser.username}`);
         const serverEnrollments = await enrollmentsClient.getEnrollmentsForUser(currentUser._id);
         dispatch(setEnrollments(serverEnrollments));
     }

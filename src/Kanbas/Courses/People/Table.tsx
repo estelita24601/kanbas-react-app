@@ -1,17 +1,8 @@
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import PeopleDetails from "./Details";
-import { useEffect } from "react";
 
 export default function PeopleTable({ users = [] }: { users?: any[] }) {
-    //get the enrollments from the redux state
-    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-
-    //FIXME: remove later, this is just for debugging
-    useEffect(() => {
-        console.debug(`PEOPLE TABLE users =\n${JSON.stringify(users)}`);
-    }, [users]);
 
     return (
         <div id="wd-people-table" className="ms-4">
@@ -26,14 +17,15 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
                 </thead>
 
                 <tbody>
-                    {/* FIXME: users.map is not a function */}
                     {users.map(
                         (user) =>
                             <tr key={user._id}>
                                 <td className="wd-full-name text-nowrap">
-                                    <FaUserCircle className="me-2 fs-1 text-secondary" />
-                                    <span className="wd-first-name">{user.firstName} </span>
-                                    <span className="wd-last-name">{user.lastName}</span>
+                                    <Link to={`/Kanbas/Account/Users/${user._id}`} className="text-decoration-none">
+                                        <FaUserCircle className="me-2 fs-1 text-secondary" />
+                                        <span className="wd-first-name">{user.firstName} </span>
+                                        <span className="wd-last-name">{user.lastName}</span>
+                                    </ Link>
                                 </td>
 
                                 <td className="wd-login-id">{user.loginId}</td>

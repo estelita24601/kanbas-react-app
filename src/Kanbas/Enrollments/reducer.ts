@@ -19,7 +19,7 @@ const enrollmentsSlice = createSlice({
     reducers: {
         setEnrollments: (state, action) => {
             console.log("ENROLLMENTS REDUCER - setting enrollments");
-            console.log(`${JSON.stringify(action.payload, null, 2)}`);
+            // console.log(`${JSON.stringify(action.payload, null, 2)}`);
             state.enrollments = action.payload;
         },
         addEnrollment: (state, { payload: enrollment }) => {

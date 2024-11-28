@@ -10,7 +10,7 @@ export default function Session({ children }: { children: any }) {
             const currentUser = await client.getProfile();
             dispatch(setCurrentUser(currentUser));
         } catch (err: any) {
-            console.log(`unable to get current user - ${err.toString()}`);
+            console.log(`SESSION unable to get current user - ${err.toString()}`);
         }
         setPending(false);
     };

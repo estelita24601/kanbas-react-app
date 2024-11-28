@@ -50,7 +50,7 @@ export default function Dashboard(
   // function that swaps enrollment mode
   const switchEnrollmentView = () => {
     setEnrollmentMode(!enrollmentMode);
-    console.log(`enrollment mode set to ${enrollmentMode}`);
+    console.log(`DASHBOARD enrollment mode set to ${enrollmentMode}`);
   }
 
   //whenever enrollmentMode changes update the courses we want to display

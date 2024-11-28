@@ -104,7 +104,6 @@ export default function AssignmentEditor() {
                 </StudentPrivileges>
                 <FacultyPrivileges>
                   <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                    {/* FIXME: is saving when it shouldn't */}
                     <button type="button"
                       className="btn btn-secondary btn-lg mx-2"
                       onClick={e => { cancelAssignment(); }}

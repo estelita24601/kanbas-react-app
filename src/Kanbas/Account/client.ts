@@ -5,19 +5,29 @@ export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
 
 export const signin = async (credentials: any) => {
-    console.log(`CLIENT signin - ${USERS_API}/signin`);
+    console.log(`ACCOUNT CLIENT signin - ${USERS_API}/signin`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
     return response;
 };
 
 export const signup = async (user: any) => {
-    console.log(`CLIENT signup - ${USERS_API}/signup`);
+    console.log(`ACCOUNT CLIENT signup - ${USERS_API}/signup`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signup`, user);
     return response.data;
 };
 
 export const updateUser = async (user: any) => {
     const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
+    return response.data;
+};
+
+export const createUser = async (user: any) => {
+    const response = await axios.post(`${USERS_API}`, user);
+    return response.data;
+};
+
+export const deleteUser = async (userId: string) => {
+    const response = await axios.delete(`${USERS_API}/${userId}`);
     return response.data;
 };
 

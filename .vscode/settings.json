@@ -9,5 +9,32 @@
         "nociceptors",
         "reduxjs",
         "todos"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#c9c9ff",
+        "activityBar.background": "#c9c9ff",
+        "statusBar.background": "#9696ff",
+        "statusBarItem.hoverBackground": "#6363ff",
+        "statusBarItem.remoteBackground": "#9696ff",
+        "titleBar.activeBackground": "#9696ff",
+        "titleBar.inactiveBackground": "#9696ff99",
+        "editorGroup.border": "#c9c9ff",
+        "sash.hoverBorder": "#c9c9ff",
+        "tab.activeBorder": "#c9c9ff",
+        "statusBar.border": "#9696ff",
+        "titleBar.border": "#9696ff",
+        "activityBarBadge.background": "#ff4040",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "commandCenter.border": "#15202b99",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#9696ff",
+    "workbench.preferredDarkColorTheme": "Catppuccin Mocha",
+    "workbench.preferredLightColorTheme": "Quiet Light",
+    "workbench.iconTheme": "material-icon-theme"
 }

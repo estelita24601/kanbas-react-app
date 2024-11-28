@@ -64,11 +64,11 @@ export default function Dashboard(
     }
   }, [enrollmentMode, courses]);
 
-  //whenever courses we're displaying changes put it in the log
-  useEffect(() => {
-    console.debug(`\tcourses user is enrolled in =\n${JSON.stringify(courses.map(c => c._id))}`);
-    console.debug(`\tcourses to display =\n${JSON.stringify(coursesToDisplay.map(c => c._id))}`);
-  }, [coursesToDisplay]);
+  //debug: log whenever the courses we display on the dashboard changes
+  // useEffect(() => {
+  //   console.debug(`\tcourses user is enrolled in =\n${JSON.stringify(courses.map(c => c._id))}`);
+  //   console.debug(`\tcourses to display =\n${JSON.stringify(coursesToDisplay.map(c => c._id))}`);
+  // }, [coursesToDisplay]);
 
   //whenever enrollments change update the state variable for courses the user is enrolled in
   useEffect(() => {

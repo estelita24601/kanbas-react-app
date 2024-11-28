@@ -10,10 +10,24 @@ export default function AccountNavigation() {
         <div className="wd list-group fs-5 rounded-0 me-2">
             {links.map((navOption) => (
                 <Link
-                    to={`/Kanbas/Account/${navOption}`} className={`list-group-item border border-0 ${pathname.includes(navOption) ? `active` : `text-danger`}`} key={`acount-nav-${navOption}`}>
+                    to={`/Kanbas/Account/${navOption}`}
+                    className={`list-group-item border border-0 ${pathname.includes(navOption) ? `active` : `text-danger`}`}
+                    key={`account-nav-${navOption}`}
+                >
                     {navOption}
                 </Link>)
             )}
+
+            {currentUser && currentUser.role === "ADMIN"
+                && (
+                    <Link
+                        to={`/Kanbas/Account/Users`}
+                        className={`list-group-item border border-0 ${pathname.includes("Users") ? `active` : `text-danger`}`}>
+                        Users
+                    </Link>
+                )
+            }
+
         </div>
     );
 }

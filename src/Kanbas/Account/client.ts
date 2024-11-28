@@ -10,42 +10,54 @@ export const signin = async (credentials: any) => {
     return response;
 };
 
-//4.2.2
 export const signup = async (user: any) => {
     console.log(`CLIENT signup - ${USERS_API}/signup`);
     const response = await axiosWithCredentials.post(`${USERS_API}/signup`, user);
     return response.data;
 };
 
-//4.2.3
 export const updateUser = async (user: any) => {
     const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
     return response.data;
 };
 
-//4.2.4
 export const getProfile = async () => {
     const response = await axiosWithCredentials.post(`${USERS_API}/profile`);
     return response.data;
 };
 
-//4.2.5
 export const signout = async () => {
     const response = await axiosWithCredentials.post(`${USERS_API}/signout`);
     return response.data;
 };
 
-//4.4.1
 export const findMyCourses = async () => {
     const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
     return data;
 };
 
-//4.4.2
 export const createCourse = async (course: any) => {
     //on the backend this also creates a new enrollment
     const { data } = await axiosWithCredentials.post(`${USERS_API}/current/courses`, course);
     return data;
 };
 
+export const findAllUsers = async () => {
+    const response = await axiosWithCredentials.get(USERS_API);
+    return response.data;
+};
 
+export const findUsersByRole = async (role: string) => {
+    const response = await axios.get(`${USERS_API}?role=${role}`);
+    return response.data;
+};
+
+export const findUsersByPartialName = async (name: string) => {
+    const response = await axios.get(`${USERS_API}?name=${name}`);
+    return response.data;
+};
+
+export const findUserById = async (id: string) => {
+    const response = await axios.get(`${USERS_API}/${id}`);
+    return response.data;
+};

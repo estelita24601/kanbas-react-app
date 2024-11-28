@@ -19,7 +19,7 @@ import KanbasNavigation from "./Navigation"
 import Courses from "./Courses";
 
 //redux stuff
-import { setEnrollments, addEnrollment, removeEnrollment } from './Enrollments/reducer';
+import { setEnrollments } from './Enrollments/reducer';
 
 
 export default function Kanbas() {
@@ -92,6 +92,7 @@ export default function Kanbas() {
 
     //get enrollments from the server and use it to update redux
     const fetchEnrollments = async () => {
+        console.debug(`\tfetching enrollments for user:\n${JSON.stringify(currentUser)}`);
         const serverEnrollments = await enrollmentsClient.getEnrollmentsForUser(currentUser._id);
         dispatch(setEnrollments(serverEnrollments));
     }

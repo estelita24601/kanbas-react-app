@@ -15,7 +15,6 @@ export default function ArrayStateVariable() {
         setArray(array.filter((item, i) => i !== index));
     };
 
-    //TODO: add bootstrap classes for formatting
     return (
         <div id="wd-array-state-variables" className="container">
 

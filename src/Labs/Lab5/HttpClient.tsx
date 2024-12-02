@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as client from "./client";
 
-const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER_A6;
 
 export default function HttpClient() {
     //state variable for welcome message after a button click

@@ -24,21 +24,10 @@ export default function PeopleDetails() {
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
 
-    const fetchUser = async () => {
-        if (!uid) return;
-        const user = await client.findUserById(uid);
-        setUser(user);
-
-        //QUESTION: why didn't this work?
-        // setName(`${user.firstName} ${user.lastName}`);
-        // setRole(user.role);
-        // setEmail(user.email);
-    };
-
     const saveUser = async () => {
         const [firstName, lastName] = name.split(" ");
         const updatedUser = { ...user, firstName, lastName, role, email };
-        console.debug(`updated user =${JSON.stringify(updatedUser)}`);
+        console.debug(`updated user =${JSON.stringify(updatedUser, null, 2)}`);
 
         await client.updateUser(updatedUser);
         setUser(updatedUser);
@@ -51,13 +40,23 @@ export default function PeopleDetails() {
         navigate(-1);
     };
 
+    const fetchUser = async () => {
+        if (!uid) return;
+        const user = await client.findUserById(uid);
+        setUser(user);
+    };
+
     //if user ID changes then fetch the user from the server again
     useEffect(() => {
         if (uid) fetchUser();
     }, [uid]);
 
-    //debug only
-    //useEffect(() => { console.debug(`showing details for ${JSON.stringify(user,null,2)}`); }, [user]);
+    useEffect(() => {
+        console.log("PEOPLE DETAILS - updating state variables with new user")
+        setName(`${user.firstName} ${user.lastName}`);
+        setRole(user.role);
+        setEmail(user.email);
+    }, [user]);
 
     if (!uid) return null;
 

@@ -1,13 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Enrollment } from "../Types";
 
-/*
-export interface Enrollment {
-    user_id: string,
-    course_id: string
-}
-*/
-
 //state.enrollments is a list of Enrollment objects
 const initialState: { enrollments: Enrollment[] } = {
     enrollments: []

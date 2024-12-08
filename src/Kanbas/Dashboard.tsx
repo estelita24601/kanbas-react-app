@@ -18,7 +18,9 @@ export default function Dashboard(
     setCourse, //setter for the state variable
     addNewCourse, //updates server and state variable
     deleteCourse, //updates server and state variable
-    updateCourse //updates server and state variable
+    updateCourse, //updates server and state variable
+    enrolling, //state variable for enrollment mode
+    setEnrolling //set enrollment mode
   }:
     {
       courses: any[];
@@ -28,45 +30,19 @@ export default function Dashboard(
       addNewCourse: () => Promise<void>;
       deleteCourse: (course: any) => Promise<void>;
       updateCourse: () => Promise<void>;
+      enrolling: boolean;
+      setEnrolling: (enrolling: boolean) => void;
     }
 ) {
-  const navigate = useNavigate();
-
   //REDUX
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
+  //if enrolling mode show all courses, else filter to only show enrolled courses
+  const coursesToDisplay = enrolling ? courses : courses.filter(c => c.enrolled === true);
 
-  //STATE VARIABLES
-  const [enrollmentMode, setEnrollmentMode] = useState(false);
-  const [coursesToDisplay, setCoursesToDisplay] = useState<any[]>(courses);
-
-  //function that has us display ALL courses
-  const fetchAllCourses = async () => {
-    const allCourses = await coursesClient.fetchAllCourses();
-    setCoursesToDisplay(allCourses);
-  }
-
-  // function that swaps enrollment mode
-  const switchEnrollmentView = () => {
-    setEnrollmentMode(!enrollmentMode);
-    console.log(`DASHBOARD enrollment mode set to ${enrollmentMode}`);
-  }
-
-  //whenever enrollmentMode changes update the courses we want to display
   useEffect(() => {
-    if (enrollmentMode) {
-      console.log("\tgoing to display all courses");
-      fetchAllCourses();
-    } else {
-      console.log("\tonly going to display courses already enrolled in")
-      setCoursesToDisplay(courses);
-    }
-  }, [enrollmentMode, courses]);
-
-  //whenever enrollments change update the state variable for courses the user is enrolled in
-  useEffect(() => {
-    fetchCourses();
+    console.log("Dashboard useEffect - fetchCourses after enrollments change");
+    fetchCourses(); //returns ALL courses and marks which ones current user is enrolled in
   }, [enrollments]);
 
   return (
@@ -77,7 +53,9 @@ export default function Dashboard(
       {dashboardCourseControls(course, addNewCourse, setCourse, updateCourse)}
 
       <StudentPrivileges>
-        <button className="btn btn-primary float-end" onClick={switchEnrollmentView}>Enrollments</button>
+        <button className="btn btn-primary float-end" onClick={e => setEnrolling(!enrolling)}>
+          {enrolling? "Show My Courses" : "Show All Courses"}
+        </button>
       </StudentPrivileges>
 
       <h2 id="wd-dashboard-published">Published Courses ({coursesToDisplay.length})</h2> <hr />
@@ -85,7 +63,9 @@ export default function Dashboard(
       <div id="wd-dashboard-courses" className="row">
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {coursesToDisplay.map((currCourse) => { return dashboardCourseMapper(currCourse, enrollments, enrollmentMode, currentUser, setCourse, deleteCourse, navigate); })}
+          {coursesToDisplay
+            .filter((currCourse) => enrolling || currCourse.enrolled === true || currCourse.status === "ENROLLED") //show course if user is enrolled in it OR if we're in enrollment mode
+            .map((currCourse) => { return dashboardCourseMapper(currCourse, enrolling, setCourse, deleteCourse); })}
         </div>
 
       </div>
@@ -138,30 +118,22 @@ function dashboardCourseControls(course: any, addNewCourse: () => Promise<void>,
   );
 }
 
-function isUserEnrolled(currentUser: any, enrollment: any, course: any) {
-  const sameUser = enrollment.user_id === currentUser._id;
-  const sameCourse = enrollment.course_id === course._id;
-  return sameUser && sameCourse;
-}
-function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMode: boolean, currentUser: any, setCourse: (course: any) => void, deleteCourse: (course: any) => void, navigate: NavigateFunction) {
-  //see if current user is enrolled in this specific course
-  const isEnrolled = enrollments.some((e: Enrollment) => isUserEnrolled(currentUser, e, courseToMap));
-
-  if (isEnrolled) {
+function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: (course: any) => void, deleteCourse: (course: any) => void) {
+  if (courseToMap.enrolled === true || courseToMap.status === "ENROLLED") {
+    //if enrolled wrap course card in link to the homepage
     return (
       <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-        <div className="card rounded-3 overflow-hidden"
-        >
-          <Link to={`/Kanbas/Courses/${courseToMap._id}/Home`}
+        <div className="card rounded-3 overflow-hidden">
+          <Link
+            to={`/Kanbas/Courses/${courseToMap._id}/Home`}
             className="wd-dashboard-course-link text-decoration-none text-dark"
           >
             <CourseNavCard
               course={courseToMap}
-              enrollmentMode={enrollmentMode}
+              enrollmentMode={enrolling}
               deleteCourse={deleteCourse}
               setCourse={setCourse}
             />
-
           </Link>
         </div>
       </div >
@@ -169,17 +141,15 @@ function dashboardCourseMapper(courseToMap: any, enrollments: any, enrollmentMod
   } else {
     return (
       <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>
-        <div className="card rounded-3 overflow-hidden"
-        >
+        <div className="card rounded-3 overflow-hidden">
           <CourseNavCard
             course={courseToMap}
-            enrollmentMode={enrollmentMode}
+            enrollmentMode={enrolling}
             deleteCourse={deleteCourse}
             setCourse={setCourse}
           />
         </div>
       </div>
-
     );
   }
 }

@@ -41,9 +41,16 @@ export const signout = async () => {
     return response.data;
 };
 
+//FIXME: can't find this route in the backend
 export const findMyCourses = async () => {
     const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
     return data;
+};
+
+//a6
+export const findCoursesForUser = async (userId: string) => {
+    const response = await axiosWithCredentials.get(`${USERS_API}/${userId}/courses`);
+    return response.data;
 };
 
 export const createCourse = async (course: any) => {

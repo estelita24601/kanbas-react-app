@@ -35,7 +35,6 @@ export default function Modules() {
     fetchModules();
   }, []);
 
-  //4.5.2 - create new module
   const createModuleForCourse = async () => {
     if (!cid) return;
     const newModule = { name: moduleName, course: cid };
@@ -43,14 +42,13 @@ export default function Modules() {
     dispatch(addModule(module));
   };
 
-  //4.5.3 - delete a module
   const removeModule = async (moduleId: string) => {
     await modulesClient.deleteModule(moduleId);
     dispatch(deleteModule(moduleId));
   };
 
-  //4.5.4
   const saveModule = async (module: any) => {
+    console.log(`modules index - saveModule\n${JSON.stringify(module, null, 2)}`);
     await modulesClient.updateModule(module);
     dispatch(updateModule(module));
   };
@@ -75,11 +73,11 @@ export default function Modules() {
                 <BsGripVertical className="me-2 fs-3 float-start" />
 
                 <div className=" fw-bold">
-                  {/*NOTE: if module name becomes too long it ruins the layout */}
                   {!module.editing && module.name}
                   {module.editing && (
                     <input className="form-control w-50 d-inline-block"
                       onChange={(e) =>
+                        // FIXME: unselects after every character
                         dispatch(
                           updateModule({ ...module, name: e.target.value })
                         )
@@ -119,67 +117,3 @@ export default function Modules() {
     </div>
   );
 }
-
-
-
-// old way of getting value for modules
-// const [modules, setModules] = useState<any[]>(
-//   db.modules.filter((module: any) => module.course === cid.cid)
-// );
-
-
-// const addModule = () => {
-//   console.log("adding new module")
-
-//   setModules([...modules, {
-//     _id: new Date().getTime().toString(),
-//     name: moduleName, course: cid, lessons: []
-//   }]);
-//   setModuleName("");
-// };
-
-// const deleteModule = (moduleId: string) => {
-//   console.log(`deleting module #${moduleId}`)
-//   setModules(modules.filter((m) => m._id !== moduleId));
-// };
-
-// const editModule = (moduleId: string) => {
-//   //module we want to edit is set to have editing attribute equal true
-//   console.log(`setting module #${moduleId} to be editable`)
-//   setModules(modules.map((m) => (m._id === moduleId ? { ...m, editing: true } : m)));
-// };
-
-// const updateModule = (updated_module: any) => {
-//   //update the `modules` state array
-//   console.log(`updating module #${updated_module._id}`)
-//   setModules(modules.map((curr_module) => (curr_module._id === updated_module._id ? updated_module : curr_module)));
-// };
-
-// note: my custom solution to 3.3.3 (editing a module)
-// const getEditNameComponent = (curr_module: any) => {
-//   //double check we should be making the input field
-//   if (!curr_module.editing) {
-//     console.log(`Tried to create input for for module #${curr_module} but it should not have one`)
-//     return (curr_module.name)
-//   }
-
-//   return (
-//     <input className="form-control" defaultValue={curr_module.name}
-//       onChange={(changeEvent) => {
-//         changeEvent.preventDefault();
-//         let inputValue = changeEvent.target.value
-//         console.log(`old module name = ${curr_module.name}\nnew module name = ${inputValue}`)
-//         curr_module.name = inputValue;
-//         updateModule(curr_module);
-//       }}
-//       onKeyUp={(keyEvent) => {
-//         keyEvent.preventDefault();
-//         if (keyEvent.key === "Enter") {
-//           curr_module.editing = false;
-//           updateModule(curr_module);
-//           console.log(`\tediting = ${curr_module.editing} for module #${curr_module._id}`);
-//         }
-//       }}
-//     />);
-// }
-// {/* {module.editing ? getEditNameComponent(module) : module.name} */}

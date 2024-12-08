@@ -37,6 +37,7 @@ export default function Kanbas() {
             description: "New Description"
         }
     );
+    const [enrolling, setEnrolling] = useState<boolean>(false);
 
     //REDUX
     const dispatch = useDispatch();
@@ -46,7 +47,7 @@ export default function Kanbas() {
     const addNewCourse = async () => {
 
         //4.4.2 get object for the new course from the server
-        const newCourse = await userClient.createCourse(course);
+        const newCourse = await courseClient.createCourse(course);
 
         //update value of the state variable
         setCourses([...courses, { ...course, ...newCourse }])
@@ -55,7 +56,8 @@ export default function Kanbas() {
     //delete a course from the server and the state variable
     const deleteCourse = async (courseId: string) => {
         //send delete request to server
-        await courseClient.deleteCourse(courseId);
+        const status = await courseClient.deleteCourse(courseId);
+        console.debug(`delete course status = ${status}`);
 
         //update state variable
         setCourses(
@@ -80,15 +82,36 @@ export default function Kanbas() {
         );
     };
 
-    //get courses from the server to update the state variable
-    const fetchCourses = async () => {
+    //only get courses the user is enrolled in
+    const findCoursesForUser = async () => {
         try {
-            const courses = await userClient.findMyCourses();
+            const courses = await userClient.findCoursesForUser(currentUser._id);
             setCourses(courses);
         } catch (error) {
-            console.log(`unable to get courses - ${error}`);
+            console.error(error);
         }
     };
+
+    //gets ALL courses and uses boolean attribute to mark the enrolled ones
+    const fetchCourses = async () => {
+        try {
+            const allCourses = await courseClient.fetchAllCourses();
+            const enrolledCourses = await userClient.findCoursesForUser(currentUser._id);
+
+            //don't remove any courses just give boolean flag to mark enrolled courses
+            const courses = allCourses.map((course: any) => {
+                if (enrolledCourses.find((c: any) => c._id === course._id)) {
+                    return { ...course, enrolled: true };
+                } else {
+                    return course;
+                }
+            });
+            setCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     //get enrollments from the server and use it to update redux
     const fetchEnrollments = async () => {
@@ -100,12 +123,16 @@ export default function Kanbas() {
     //if currentUser changes then fetch courses and enrollments for that user
     useEffect(() => {
         if (currentUser) {
-            fetchCourses();
             fetchEnrollments();
+            if (enrolling) {
+                fetchCourses();
+            } else {
+                findCoursesForUser();
+            }
         } else {
             console.log("current user doesn't exist so not going to fetch courses or enrollments");
         }
-    }, [currentUser]);
+    }, [currentUser, enrolling]);
 
     return (
         <Session>
@@ -127,7 +154,9 @@ export default function Kanbas() {
                                     setCourse={setCourse}
                                     addNewCourse={addNewCourse}
                                     deleteCourse={deleteCourse}
-                                    updateCourse={updateCourse} />
+                                    updateCourse={updateCourse}
+                                    enrolling={enrolling}
+                                    setEnrolling={setEnrolling}/>
                             </ProtectedRoute>
                         } />
                         <Route path="/Courses/:cid/*" element={

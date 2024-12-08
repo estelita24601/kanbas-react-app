@@ -24,6 +24,7 @@ import { setEnrollments } from './Enrollments/reducer';
 
 export default function Kanbas() {
     //STATE VARIABLES
+    const [enrolling, setEnrolling] = useState<boolean>(false);
     const [courses, setCourses] = useState<any[]>([]);
     const [course, setCourse] = useState<any>(
         // initial is an object with the default values for a course
@@ -37,7 +38,6 @@ export default function Kanbas() {
             description: "New Description"
         }
     );
-    const [enrolling, setEnrolling] = useState<boolean>(false);
 
     //REDUX
     const dispatch = useDispatch();
@@ -112,13 +112,30 @@ export default function Kanbas() {
         }
     };
 
-
     //get enrollments from the server and use it to update redux
     const fetchEnrollments = async () => {
         console.debug(`\tfetching enrollments for ${currentUser.username}`);
         const serverEnrollments = await enrollmentsClient.getEnrollmentsForUser(currentUser._id);
         dispatch(setEnrollments(serverEnrollments));
     }
+
+
+    const updateEnrollment = async (courseId: string, enrolled: boolean) => {
+        if (enrolled) {
+            await userClient.enrollIntoCourse(currentUser._id, courseId);
+        } else {
+            await userClient.unenrollFromCourse(currentUser._id, courseId);
+        }
+        setCourses(
+            courses.map((course) => {
+                if (course._id === courseId) {
+                    return { ...course, enrolled: enrolled };
+                } else {
+                    return course;
+                }
+            })
+        );
+    };
 
     //if currentUser changes then fetch courses and enrollments for that user
     useEffect(() => {
@@ -156,7 +173,8 @@ export default function Kanbas() {
                                     deleteCourse={deleteCourse}
                                     updateCourse={updateCourse}
                                     enrolling={enrolling}
-                                    setEnrolling={setEnrolling}/>
+                                    setEnrolling={setEnrolling}
+                                    updateEnrollment={updateEnrollment}/>
                             </ProtectedRoute>
                         } />
                         <Route path="/Courses/:cid/*" element={

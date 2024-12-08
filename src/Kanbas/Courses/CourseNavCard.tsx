@@ -1,71 +1,40 @@
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import FacultyPrivileges from "../Account/FacultyPrivileges";
-import { Enrollment } from "../Types";
-import { useSelector } from "react-redux";
-import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
-import * as enrollmentClient from "../Enrollments/client";
+// import { Enrollment } from "../Types";
+// import { useSelector } from "react-redux";
+// import { addEnrollment, removeEnrollment } from "../Enrollments/reducer";
+// import * as enrollmentClient from "../Enrollments/client";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 export default function CourseNavCard(
     {
         course, //received from dashboard, current course we're turning into a nav card
         enrollmentMode, //is user allowed to modify their enrollment?
         deleteCourse, //connects to server and updates `courses` state variable from the index
-        setCourse //sets the `course` state variable from the index
+        setCourse, //sets the `course` state variable from the index
+        updateEnrollment
     }:
         {
             course: any;
             enrollmentMode: boolean;
             deleteCourse: (course: any) => void;
             setCourse: (course: any) => void;
+            updateEnrollment: (courseId: string, enrolled: boolean) => void;
         }
 ) {
-
     //REDUX
-    const dispatch = useDispatch();
-    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
-
-    //STATE VARIABLE
-    const [isEnrolled, setIsEnrolled] = useState<boolean>(
-        enrollments.some(
-            (enrollment: any) => {
-                const sameUser = enrollment.user === currentUser._id;
-                const sameCourse = enrollment.course === course._id;
-                return sameUser && sameCourse;
-            }
-        )
-    );
-
-    useEffect(() => {
-        setIsEnrolled(enrollments.some(
-            (enrollment: any) => {
-                const sameUser = enrollment.user === currentUser._id;
-                const sameCourse = enrollment.course === course._id;
-                return sameUser && sameCourse;
-            })
-        );
-        //console.log(`\t\tuseEffect --> ${course._id} = ${isEnrolled}`);
-    }, [enrollments]);
-
+    // const dispatch = useDispatch();
+    // const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    // const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     //add enrollment to the server and to the redux
     const newEnrollment = async () => {
-        const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
-        console.log(`\tnew enrollment - ${JSON.stringify(enrollment)}`);
-
-        dispatch(addEnrollment(enrollment))
-        await enrollmentClient.addEnrollment(enrollment.user, enrollment.course);
+        course = updateEnrollment(course._id, true);
     }
 
-    //remove enrollment from the server and from the redux
     const deleteEnrollment = async () => {
-        const enrollment = { user: currentUser._id, course: course._id } as Enrollment;
-        console.log(`\tgoing to delete enrollment - ${JSON.stringify(enrollment)}`);
-
-        dispatch(removeEnrollment(enrollment))
-        await enrollmentClient.removeEnrollment(enrollment.user, enrollment.course);
+        course = updateEnrollment(course._id, false);
     }
 
     const navigate = useNavigate();
@@ -96,7 +65,7 @@ export default function CourseNavCard(
 
     const getCourseButtons = (courseId: string) => {
         if (enrollmentMode) {
-            if (isEnrolled === true) {
+            if (course.enrolled === true) {
                 return (
                     <span>
                         {goButton}
@@ -113,7 +82,7 @@ export default function CourseNavCard(
 
     return (
         <div id={`course-card-${course._id}`}>
-            <img src="/images/reactjs.jpg" width="100%" height={160} />
+            <img src="/images/reactjs.jpg" width="100%" height={160} alt="" />
             <div className="card-body">
                 <h5 className="wd-dashboard-course-title card-title fw-bold"  >
                     {course.name}

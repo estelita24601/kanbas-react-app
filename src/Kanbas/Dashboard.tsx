@@ -20,7 +20,8 @@ export default function Dashboard(
     deleteCourse, //updates server and state variable
     updateCourse, //updates server and state variable
     enrolling, //state variable for enrollment mode
-    setEnrolling //set enrollment mode
+    setEnrolling, //set enrollment mode
+    updateEnrollment
   }:
     {
       courses: any[];
@@ -32,6 +33,7 @@ export default function Dashboard(
       updateCourse: () => Promise<void>;
       enrolling: boolean;
       setEnrolling: (enrolling: boolean) => void;
+      updateEnrollment: (courseId: string, enrolled: boolean) => void;
     }
 ) {
   //REDUX
@@ -65,7 +67,7 @@ export default function Dashboard(
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {coursesToDisplay
             .filter((currCourse) => enrolling || currCourse.enrolled === true || currCourse.status === "ENROLLED") //show course if user is enrolled in it OR if we're in enrollment mode
-            .map((currCourse) => { return dashboardCourseMapper(currCourse, enrolling, setCourse, deleteCourse); })}
+            .map((currCourse) => { return dashboardCourseMapper(currCourse, enrolling, setCourse, deleteCourse, updateEnrollment); })}
         </div>
 
       </div>
@@ -118,7 +120,7 @@ function dashboardCourseControls(course: any, addNewCourse: () => Promise<void>,
   );
 }
 
-function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: (course: any) => void, deleteCourse: (course: any) => void) {
+function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: (course: any) => void, deleteCourse: (course: any) => void, updateEnrollment: (courseId: string, enrolled: boolean) => void) {
   if (courseToMap.enrolled === true || courseToMap.status === "ENROLLED") {
     //if enrolled wrap course card in link to the homepage
     return (
@@ -133,6 +135,7 @@ function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: 
               enrollmentMode={enrolling}
               deleteCourse={deleteCourse}
               setCourse={setCourse}
+              updateEnrollment={updateEnrollment}
             />
           </Link>
         </div>
@@ -147,6 +150,7 @@ function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: 
             enrollmentMode={enrolling}
             deleteCourse={deleteCourse}
             setCourse={setCourse}
+            updateEnrollment={updateEnrollment}
           />
         </div>
       </div>

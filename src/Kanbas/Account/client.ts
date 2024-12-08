@@ -41,13 +41,6 @@ export const signout = async () => {
     return response.data;
 };
 
-//FIXME: can't find this route in the backend
-export const findMyCourses = async () => {
-    const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
-    return data;
-};
-
-//a6
 export const findCoursesForUser = async (userId: string) => {
     const response = await axiosWithCredentials.get(`${USERS_API}/${userId}/courses`);
     return response.data;
@@ -76,5 +69,19 @@ export const findUsersByPartialName = async (name: string) => {
 
 export const findUserById = async (id: string) => {
     const response = await axios.get(`${USERS_API}/${id}`);
+    return response.data;
+};
+
+//used for updateEnrollment inside of index and Dashboard
+export const enrollIntoCourse = async (userId: string, courseId: string) => {
+    console.log(`ACCOUNT CLIENT - ${USERS_API}/${userId}/courses/${courseId}`);
+    const response = await axiosWithCredentials.post(`${USERS_API}/${userId}/courses/${courseId}`);
+    return response.data;
+};
+
+//used for updateEnrollment inside of index and Dashboard
+export const unenrollFromCourse = async (userId: string, courseId: string) => {
+    console.log(`ACCOUNT CLIENT - ${USERS_API}/${userId}/courses/${courseId}`);
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}/courses/${courseId}`);
     return response.data;
 };

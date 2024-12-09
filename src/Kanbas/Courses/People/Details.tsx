@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck, FaUserCircle } from "react-icons/fa";
 import * as client from "../../Account/client";
+import FacultyPrivileges from "../../Account/FacultyPrivileges";
 
 
 export default function PeopleDetails() {
@@ -71,21 +72,24 @@ export default function PeopleDetails() {
             </div><hr />
 
             <div className="text-danger fs-4">
-                {!editing && (
-                    <FaPencil onClick={() => setEditing(true)}
-                        className="float-end fs-5 mt-2 wd-edit text-primary" />)
-                }
-                {editing && (
-                    <FaCheck onClick={() => saveUser()}
-                        className="float-end fs-4 mt-2 me-2 wd-save text-success" />)
-                }
+
+                <FacultyPrivileges>
+                    {!editing && (
+                        <FaPencil onClick={() => setEditing(true)}
+                            className="float-end fs-5 mt-2 wd-edit text-primary" />)
+                    }
+                    {editing && (
+                        <FaCheck onClick={() => saveUser()}
+                            className="float-end fs-4 mt-2 me-2 wd-save text-success" />)
+                    }
+                </FacultyPrivileges>
+
                 {!editing && (
                     <div className="wd-name"
                         onClick={() => setEditing(true)}>
                         {user.firstName} {user.lastName}</div>)
                 }
                 {user && editing && (
-                    // FIXME: randomly losing the first name?
                     <input className="form-control w-50 wd-edit-name"
                         defaultValue={`${user.firstName} ${user.lastName}`}
                         onChange={(e) => setName(e.target.value)}
@@ -107,7 +111,6 @@ export default function PeopleDetails() {
 
                 {/* if we ARE editing then show dropdown menu */}
                 {user && editing && (
-                    // FIXME: not working
                     <span className="wd-role">
                         <label htmlFor="wd-role" className="fw-bold">Role: </label>
                         <select id="wd-role"
@@ -130,7 +133,6 @@ export default function PeopleDetails() {
 
                 {/* otherwise have the email inside of an input box */}
                 {user && editing && (
-                    // fixme: not working
                     <span className="wd-email">
                         <label htmlFor="wd-user-email" className="fw-bold">Email: </label>
                         <input id="wd-user-email"
@@ -152,16 +154,18 @@ export default function PeopleDetails() {
             <span className="wd-total-activity">{user.totalActivity}</span>
 
             <hr />
-            <button onClick={() => deleteUser(uid)}
-                className="btn btn-danger float-end wd-delete" >
-                Delete
-            </button>
+            <FacultyPrivileges>
+                <button onClick={() => deleteUser(uid)}
+                    className="btn btn-danger float-end wd-delete" >
+                    Delete
+                </button>
 
-            {/* question: assignment says we need this button but it does the same thing as the x on the top right? */}
-            <button onClick={() => navigate(-1)}
-                className="btn btn-secondary float-start float-end me-2 wd-cancel" >
-                Cancel
-            </button>
+                {/* question: assignment says we need this button but it does the same thing as the x on the top right? */}
+                <button onClick={() => navigate(-1)}
+                    className="btn btn-secondary float-start float-end me-2 wd-cancel" >
+                    Cancel
+                </button>
+            </FacultyPrivileges>
 
         </div >
     );

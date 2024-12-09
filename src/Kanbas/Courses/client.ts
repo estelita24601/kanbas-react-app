@@ -14,9 +14,23 @@ export const deleteCourse = async (id: string) => {
     return data;
 };
 
+//a6 - 5.1.2
+export const createCourse = async (course: any) => {
+    console.log(`COURSES CLIENT createCourse - ${COURSES_API}`);
+    const { data } = await axiosWithCredentials.post(COURSES_API, course);
+    console.log(`\tresponse = ${JSON.stringify(data)}`);
+    return data;
+};
+
 export const updateCourse = async (course: any) => {
     const { data } = await axiosWithCredentials.put(`${COURSES_API}/${course._id}`, course);
     return data;
+};
+
+export const findUsersForCourse = async (courseId: string) => {
+    console.log(`COURSES CLIENT - ${COURSES_API}/${courseId}/users`);
+    const response = await axios.get(`${COURSES_API}/${courseId}/users`);
+    return response.data;
 };
 
 export const findModulesForCourse = async (courseId: string) => {
@@ -31,12 +45,4 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
         module
     );
     return response.data;
-};
-
-//a6 - 5.1.2
-export const createCourse = async (course: any) => {
-    console.log(`COURSES CLIENT createCourse - ${COURSES_API}`);
-    const { data } = await axiosWithCredentials.post(COURSES_API, course);
-    console.log(`\tresponse = ${JSON.stringify(data)}`);
-    return data;
 };

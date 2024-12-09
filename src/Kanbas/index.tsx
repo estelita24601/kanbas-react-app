@@ -45,7 +45,6 @@ export default function Kanbas() {
 
     //add course to our server and our state variable
     const addNewCourse = async () => {
-
         //4.4.2 get object for the new course from the server
         const newCourse = await courseClient.createCourse(course);
 
@@ -103,7 +102,7 @@ export default function Kanbas() {
                 if (enrolledCourses.find((c: any) => c._id === course._id)) {
                     return { ...course, enrolled: true };
                 } else {
-                    return course;
+                    return {...course, enrolled:false};
                 }
             });
             setCourses(courses);
@@ -174,7 +173,7 @@ export default function Kanbas() {
                                     updateCourse={updateCourse}
                                     enrolling={enrolling}
                                     setEnrolling={setEnrolling}
-                                    updateEnrollment={updateEnrollment}/>
+                                    updateEnrollment={updateEnrollment} />
                             </ProtectedRoute>
                         } />
                         <Route path="/Courses/:cid/*" element={

@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { useEffect } from "react";
-import { Link, NavigateFunction } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Enrollment } from "./Types";
-import { useNavigate } from "react-router-dom";
 import CourseNavCard from "./Courses/CourseNavCard";
 import StudentPrivileges from "./Account/StudentPrivileges";
 import FacultyPrivileges from "./Account/FacultyPrivileges";
-import * as coursesClient from "./Courses/client";
 
 
 export default function Dashboard(
@@ -43,9 +39,9 @@ export default function Dashboard(
   const coursesToDisplay = enrolling ? courses : courses.filter(c => c.enrolled === true);
 
   useEffect(() => {
-    console.log("Dashboard useEffect - fetchCourses after enrollments change");
+    // console.log("Dashboard useEffect - fetchCourses after enrollments change");
     fetchCourses(); //returns ALL courses and marks which ones current user is enrolled in
-  }, [enrollments]);
+  }, [courses, enrollments]);
 
   return (
     <div id="wd-dashboard" className="ms-4">
@@ -66,7 +62,7 @@ export default function Dashboard(
 
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {coursesToDisplay
-            .filter((currCourse) => enrolling || currCourse.enrolled === true || currCourse.status === "ENROLLED") //show course if user is enrolled in it OR if we're in enrollment mode
+            .filter((currCourse) => currCourse && (enrolling || currCourse.enrolled === true)) //show course if it exists and user is allowed to see it
             .map((currCourse) => { return dashboardCourseMapper(currCourse, enrolling, setCourse, deleteCourse, updateEnrollment); })}
         </div>
 
@@ -121,7 +117,7 @@ function dashboardCourseControls(course: any, addNewCourse: () => Promise<void>,
 }
 
 function dashboardCourseMapper(courseToMap: any, enrolling: boolean, setCourse: (course: any) => void, deleteCourse: (course: any) => void, updateEnrollment: (courseId: string, enrolled: boolean) => void) {
-  if (courseToMap.enrolled === true || courseToMap.status === "ENROLLED") {
+  if (courseToMap.enrolled === true) {
     //if enrolled wrap course card in link to the homepage
     return (
       <div key={`dashboard-course-${courseToMap._id}`} className="wd-dashboard-course col" style={{ width: "300px" }}>

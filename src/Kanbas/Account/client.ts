@@ -42,6 +42,7 @@ export const signout = async () => {
 };
 
 export const findCoursesForUser = async (userId: string) => {
+    console.log(`ACCOUNT CLIENT - ${USERS_API}/${userId}/courses`);
     const response = await axiosWithCredentials.get(`${USERS_API}/${userId}/courses`);
     return response.data;
 };

@@ -2,11 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteAssignment, updateAssignment } from "./reducer";
+import { updateAssignment } from "./reducer";
 import FacultyPrivileges from "../../Account/FacultyPrivileges";
 import StudentPrivileges from "../../Account/StudentPrivileges";
 import * as assignmentsClient from "./client";
-import { Assignment, canBeAssignment } from "./assignment.type";
+import { Assignment } from "./assignment.type";
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
@@ -15,15 +15,19 @@ export default function AssignmentEditor() {
 
   //REDUX
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
   //STATE VARIABLES
   const [assignmentEdits, setAssignmentEdits] = useState<any>();
   const [currentAssignment, setCurrentAssignment] = useState<Assignment>();
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   //get the assignment only when the page first loads
   const fetchAssignment = async () => {
     if (typeof cid === "string" && typeof aid === "string") {
       const serverAssignment = await assignmentsClient.getAssignment(aid, cid);
+      console.log(`Assignment Editor\nassignment = ${JSON.stringify(serverAssignment)}`);
       setCurrentAssignment(serverAssignment);
+      setSelectedOptions(serverAssignment.entry_options);
     } else {
       throw new Error("unable to find assignment!");
     }
@@ -34,7 +38,7 @@ export default function AssignmentEditor() {
   const saveAssignment = async () => {
     console.log(`edits to assignment =\n${JSON.stringify(assignmentEdits, null, 3)}`)
 
-    const editedAssignment = { ...currentAssignment, ...assignmentEdits };
+    const editedAssignment = { ...currentAssignment, ...assignmentEdits, entry_options: selectedOptions };
     console.log(`after applying edits:\n${JSON.stringify(editedAssignment, null, 3)}`)
 
     //make sure we at least have a title
@@ -48,13 +52,24 @@ export default function AssignmentEditor() {
     }
   };
 
-  // //if we were making a new assignment but changed our mind cancel making the new assignment
-  // const cancelAssignment = async () => {
-  //   if (mode === "new") {
-  //     await assignmentsClient.deleteAssignment(aid as string);
-  //     dispatch(deleteAssignment(aid));
-  //   }
-  // };
+  //if one checkbox is clicked/unclicked then update the entryOptions state variable
+  const handleCheckBoxChange = (isChecked: boolean, value: string) => {
+    console.log(`checkbox ${value} = ${isChecked}`);
+    if (isChecked) {
+      if (!selectedOptions?.includes(value)) {
+        //if not already in the list then add it
+        setSelectedOptions([...selectedOptions, value]);
+        console.log(`\tafter adding new option: ${selectedOptions}`);
+      }
+    }
+    else {
+      if (selectedOptions.includes(value)) {
+        //if it's in the list then remove it
+        setSelectedOptions(selectedOptions.filter(x => x !== value));
+        console.log(`\tafter removing an option: ${selectedOptions}`);
+      }
+    }
+  };
 
   return (
 
@@ -70,7 +85,7 @@ export default function AssignmentEditor() {
             {pointsEditor(currentAssignment, assignmentEdits, setAssignmentEdits, currentUser)}
             {assignmentGroupEditor(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
             {gradeDisplayChooser(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
-            {submissionTypeChooser(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits)}
+            {submissionTypeChooser(currentAssignment, currentUser, assignmentEdits, setAssignmentEdits, selectedOptions, handleCheckBoxChange)}
 
             {/* Assign Section */}
             <div className="row my-4">
@@ -108,10 +123,7 @@ export default function AssignmentEditor() {
 
                   {/* CANCEL BUTTON */}
                   <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                    <button type="button"
-                      className="btn btn-secondary btn-lg mx-2"
-                    // onClick={e => { cancelAssignment(); }}
-                    >
+                    <button type="button" className="btn btn-secondary btn-lg mx-2" >
                       Cancel
                     </button>
                   </Link>
@@ -248,7 +260,6 @@ function assignmentGroupEditor(assignment: any, currentUser: any, assignmentEdit
   );
 }
 
-
 function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
   const gradeDisplayOptions = ["Percentage", "Letter Grade"];
@@ -276,8 +287,7 @@ function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits:
   </div>;
 }
 
-
-function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
+function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any, selectedOptions: string[], handleCheckboxChange: any) {
   const isStudent = currentUser.role === "STUDENT";
   const submissionTypeOptions = ["Online", "Physical"];
   const entryOptions = ["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Uploads"];
@@ -307,41 +317,38 @@ function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdit
       </select>
 
       <b>Online Entry Options</b>
-      {entryOptionsEditor(entryOptions, assignment, currentUser, assignmentEdits, setEditedAssignment)}
+      {entryOptionsEditor(entryOptions, assignment, currentUser, assignmentEdits, setEditedAssignment, selectedOptions, handleCheckboxChange)}
     </div>
   </div>;
 }
 
-//TODO
-function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
+//FIXME
+function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any, selectedOptions: string[], handleCheckboxChange: any) {
   const isStudent = currentUser.role === "STUDENT";
 
   return (
     <form className="form-check" >
-      {entryOptions.map((entry) => {
-        if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
+      {entryOptions
+        .map((entry) => {
           return (
             <div>
               <label className="form-check-label my-2">
-                <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
+                <input id="wd-text-entry"
+                  key={`option-${entry}`}
+                  value={entry}
+                  checked={selectedOptions.includes(entry)}
+                  name="wd-entry-options"
+                  type="checkbox"
+                  className="form-check-input"
+                  disabled={isStudent}
+                  onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)}
+                />
                 {entry}
               </label>
               <br />
             </div>
           );
-        }
-        else {
-          return (
-            <div>
-              <label className="form-check-label my-2">
-                <input defaultChecked={true} name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
-                {entry}
-              </label>
-              <br />
-            </div>
-          );
-        }
-      })}
+        })}
     </form>);
 }
 

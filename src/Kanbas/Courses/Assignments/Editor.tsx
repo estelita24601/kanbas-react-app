@@ -11,18 +11,19 @@ import { Assignment, canBeAssignment } from "./assignment.type";
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { cid, aid, mode } = useParams();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+  //REDUX
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  //STATE VARIABLES
   const [assignmentEdits, setAssignmentEdits] = useState<any>();
   const [currentAssignment, setCurrentAssignment] = useState<Assignment>();
 
+  //get the assignment only when the page first loads
   const fetchAssignment = async () => {
     if (typeof cid === "string" && typeof aid === "string") {
       const serverAssignment = await assignmentsClient.getAssignment(aid, cid);
       setCurrentAssignment(serverAssignment);
-      //console.log(`assignment from server = \n${JSON.stringify(serverAssignment, null, 2)}`)
     } else {
       throw new Error("unable to find assignment!");
     }
@@ -36,24 +37,24 @@ export default function AssignmentEditor() {
     const editedAssignment = { ...currentAssignment, ...assignmentEdits };
     console.log(`after applying edits:\n${JSON.stringify(editedAssignment, null, 3)}`)
 
-    //make sure we have required fields first
-    if (canBeAssignment(editedAssignment)) {
+    //make sure we at least have a title
+    if (editedAssignment.title !== null || editedAssignment.title !== "") {
       await assignmentsClient.replaceAssignment(aid as string, editedAssignment);
       dispatch(updateAssignment(editedAssignment));
       return true;
     } else {
-      console.log("unable to save assignment")
+      console.log("unable to save assignment");
       return false;
     }
   };
 
-  //if we were making a new assignment but changed our mind cancel making the new assignment
-  const cancelAssignment = async () => {
-    if (mode === "new") {
-      await assignmentsClient.deleteAssignment(aid as string);
-      dispatch(deleteAssignment(aid));
-    }
-  };
+  // //if we were making a new assignment but changed our mind cancel making the new assignment
+  // const cancelAssignment = async () => {
+  //   if (mode === "new") {
+  //     await assignmentsClient.deleteAssignment(aid as string);
+  //     dispatch(deleteAssignment(aid));
+  //   }
+  // };
 
   return (
 
@@ -95,6 +96,7 @@ export default function AssignmentEditor() {
             <div className="row my-5">
               <hr />
               <div className="d-flex justify-content-end">
+                {/* BACK BUTTON */}
                 <StudentPrivileges>
                   <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
                     <button type="button" className="btn btn-secondary btn-lg mx-2">
@@ -103,15 +105,18 @@ export default function AssignmentEditor() {
                   </Link>
                 </StudentPrivileges>
                 <FacultyPrivileges>
+
+                  {/* CANCEL BUTTON */}
                   <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
                     <button type="button"
                       className="btn btn-secondary btn-lg mx-2"
-                      onClick={e => { cancelAssignment(); }}
+                    // onClick={e => { cancelAssignment(); }}
                     >
                       Cancel
                     </button>
                   </Link>
 
+                  {/* SAVE BUTTON */}
                   <button
                     type="button"
                     className="btn btn-danger btn-large btn-lg mx-2"
@@ -120,7 +125,7 @@ export default function AssignmentEditor() {
                       saveAssignment().then((value) => {
                         if (value === false) {
                           console.log("FAILED TO SAVE ASSIGNMENT - I don't want to leave this page!")
-                          window.alert("Assignment must have a name, number of points and value for all dates!");
+                          window.alert("Assignment must have a title!");
                         } else {
                           navigate(`/Kanbas/Courses/${cid}/Assignments`);
                         }
@@ -206,41 +211,44 @@ function pointsEditor(assignment: any, assignmentEdits: any, setEditedAssignment
   </div>;
 }
 
-//TODO
 function assignmentGroupEditor(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
 
   const groupOptions = ["ASSIGNMENTS", "QUIZZES", "EXAMS", "PROJECTS"];
 
-  return <div className="row my-4">
-    <div className="col d-flex align-items-center justify-content-end">
-      <label htmlFor="wd-group" className="form-label">
-        <h5>Assignment Group</h5>
-      </label>
-    </div>
+  return (
+    <div className="row my-4">
 
-    {/* NOTE: Use the `defaultValue` or `value` props on <select> instead of setting `selected` on <option> */}
-    <div className="col align-items-center d-flex align-items-center">
-      <select id="wd-group" className="form-select" onChange={(e) => { setEditedAssignment({ ...assignmentEdits, group: e.target.value }) }}>
-        {groupOptions.map((group) => {
-          if (assignment.group === group) {
-            return (
-              <option selected value={group} disabled={isStudent} key={group}>
-                {group}
-              </option>);
-          } else {
-            return (
-              <option value={group} disabled={isStudent} key={group}>
-                {group}
-              </option>);
-          }
-        })}
-      </select>
+      <div className="col d-flex align-items-center justify-content-end">
+        <label htmlFor="wd-group" className="form-label">
+          <h5>Assignment Group</h5>
+        </label>
+      </div>
+
+      <div className="col align-items-center d-flex align-items-center">
+        <select id="wd-group" className="form-select" onChange={(e) => { setEditedAssignment({ ...assignmentEdits, group: e.target.value }) }}>
+
+          {groupOptions.map((group) => {
+            if (assignment.group === group) {
+              return (
+                <option selected value={group} disabled={isStudent} key={group}>
+                  {group}
+                </option>);
+            } else {
+              return (
+                <option value={group} disabled={isStudent} key={group}>
+                  {group}
+                </option>);
+            }
+          })}
+
+        </select>
+      </div>
     </div>
-  </div>;
+  );
 }
 
-//TODO?
+
 function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
   const gradeDisplayOptions = ["Percentage", "Letter Grade"];
@@ -254,6 +262,7 @@ function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits:
 
     <div className="col align-items-center d-flex align-items-center">
       <select id="wd-display-group-as" className="form-select" onChange={(e) => setEditedAssignment({ ...assignmentEdits, grade_display: e.target.value })}>
+
         {gradeDisplayOptions.map((display) => {
           if (assignment.grade_display === display) {
             return (<option selected value={display} disabled={isStudent}>{display}</option>);
@@ -261,12 +270,13 @@ function gradeDisplayChooser(assignment: any, currentUser: any, assignmentEdits:
             return (<option value={display} disabled={isStudent}>{display}</option>);
           }
         })}
+
       </select>
     </div>
   </div>;
 }
 
-//TODO
+
 function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
   const submissionTypeOptions = ["Online", "Physical"];
@@ -306,32 +316,33 @@ function submissionTypeChooser(assignment: any, currentUser: any, assignmentEdit
 function entryOptionsEditor(entryOptions: string[], assignment: any, currentUser: any, assignmentEdits: any, setEditedAssignment: any) {
   const isStudent = currentUser.role === "STUDENT";
 
-  return <form className="form-check" >
-    {entryOptions.map((entry) => {
-      if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
-        return (
-          <div>
-            <label className="form-check-label my-2">
-              <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
-              {entry}
-            </label>
-            <br />
-          </div>
-        );
-      }
-      else {
-        return (
-          <div>
-            <label className="form-check-label my-2">
-              <input defaultChecked={true} name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
-              {entry}
-            </label>
-            <br />
-          </div>
-        );
-      }
-    })}
-  </form>;
+  return (
+    <form className="form-check" >
+      {entryOptions.map((entry) => {
+        if (assignment.entry_options === null || assignment.entry_options === undefined || !assignment.entry_options.includes(entry)) {
+          return (
+            <div>
+              <label className="form-check-label my-2">
+                <input name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
+                {entry}
+              </label>
+              <br />
+            </div>
+          );
+        }
+        else {
+          return (
+            <div>
+              <label className="form-check-label my-2">
+                <input defaultChecked={true} name="wd-entry-options" type="checkbox" id="wd-text-entry" className="form-check-input" disabled={isStudent} />
+                {entry}
+              </label>
+              <br />
+            </div>
+          );
+        }
+      })}
+    </form>);
 }
 
 function assignmentDateEditors(assignment: any, assignmentEdits: any, setEditedAssignment: any, currentUser: any) {

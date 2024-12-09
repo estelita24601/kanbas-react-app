@@ -5,7 +5,7 @@ export type Assignment = {
     course: string;
     available_date: string;
     due_by_date: string;
-    points: string;
+    points: number;
     //optional attributes
     due_by_time?: string;
     available_time?: string;
@@ -27,7 +27,7 @@ export const canBeAssignment = (obj: any) => {
         typeof obj.course === "string" &&
         typeof obj.available_date === "string" &&
         typeof obj.due_by_date === "string" &&
-        typeof obj.points === "string");
+        typeof obj.points === "number");
 
     const empty: boolean = (
         obj._id === "" ||

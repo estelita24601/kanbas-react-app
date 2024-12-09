@@ -34,12 +34,13 @@ export const findUsersForCourse = async (courseId: string) => {
 };
 
 export const findModulesForCourse = async (courseId: string) => {
-    //console.log(`COURSES CLIENT - looking for modules from course ${courseId}`)
+    console.log(`COURSES CLIENT - looking for modules from course ${courseId}`)
     const response = await axiosWithCredentials.get(`${COURSES_API}/${courseId}/modules`);
     return response.data;
 };
 
 export const createModuleForCourse = async (courseId: string, module: any) => {
+    console.log(`COURSES CLIENT - create new module\n${JSON.stringify(module, null, 1)}`);
     const response = await axiosWithCredentials.post(
         `${COURSES_API}/${courseId}/modules`,
         module

@@ -26,33 +26,43 @@ export default function Modules() {
     if (typeof cid === "string") {
       const serverModules = await coursesClient.findModulesForCourse(cid);
       dispatch(setModules(serverModules));
+      console.log(`${JSON.stringify(serverModules, null, 1)}`);
     } else {
       throw new TypeError(`'cid' should be a string but is actually ${typeof cid}`)
     }
   };
+
   //automatically fetch modules from the server when we load this component
   useEffect(() => {
     fetchModules();
   }, []);
 
+  useEffect(
+    () => {console.log(`MODULES REDUX - ${JSON.stringify(modules, null, 1)}`)}, [modules]
+  );
+
   const createModuleForCourse = async () => {
     if (!cid) return;
     const newModule = { name: moduleName, course: cid };
-    const module = await coursesClient.createModuleForCourse(cid, newModule);
-    dispatch(addModule(module));
+    const serverModule = await coursesClient.createModuleForCourse(cid, newModule);
+    dispatch(addModule(serverModule));
+    console.log(`REDUX AFTER CREATING NEW - ${JSON.stringify(modules, null, 1)}`);
   };
 
   const removeModule = async (moduleId: string) => {
     await modulesClient.deleteModule(moduleId);
     dispatch(deleteModule(moduleId));
+    console.log(`REDUX AFTER DELETING A MODULE - ${JSON.stringify(modules, null, 1)}`);
   };
 
   const saveModule = async (module: any) => {
-    console.log(`modules index - saveModule\n${JSON.stringify(module, null, 2)}`);
+    console.log(`modules - saveModule\n${JSON.stringify(module, null, 2)}`);
+    console.log(`${module._id} - ${typeof module._id}`); //fixme: we lost the _id
+
     await modulesClient.updateModule(module);
     dispatch(updateModule(module));
+    console.log(`REDUX AFTER SAVING MODULE CHANGES - ${JSON.stringify(modules, null, 1)}`);
   };
-
 
   return (
     <div className="d-flex flex-column">
@@ -61,7 +71,6 @@ export default function Modules() {
         moduleName={moduleName}
         addModule={createModuleForCourse}
       />
-
 
       <ul id="wd-modules" className="list-group rounded-0">
         {modules.map((module: any) => {
@@ -77,7 +86,6 @@ export default function Modules() {
                   {module.editing && (
                     <input className="form-control w-50 d-inline-block"
                       onChange={(e) =>
-                        // FIXME: unselects after every character
                         dispatch(
                           updateModule({ ...module, name: e.target.value })
                         )
